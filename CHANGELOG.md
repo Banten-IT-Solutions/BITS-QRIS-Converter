@@ -1,3 +1,9 @@
+## [1.1.1](https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/compare/v1.1.0...v1.1.1) (2026-08-31)
+
+### 🐛 Bug Fixes
+
+- test OIDC provenance via semantic-release ([d18d176](https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/commit/d18d176c97f0cd5ca857ac920119e606de909c33))
+
 ## [1.1.0](https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/compare/v1.0.0...v1.1.0) (2026-08-31)
 
 ### ✨ Features
