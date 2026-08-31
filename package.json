@@ -75,12 +75,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/bits-id/qris-converter"
+    "url": "https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter"
   },
   "bugs": {
-    "url": "https://github.com/bits-id/qris-converter/issues"
+    "url": "https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/issues"
   },
-  "homepage": "https://github.com/bits-id/qris-converter#readme",
+  "homepage": "https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter#readme",
   "engines": {
     "node": ">=16.0.0"
   },
@@ -89,7 +89,7 @@
     "qrcode": "^1.5.4"
   },
   "devDependencies": {
-    "@commitlint/cli": "^20.1.0",
+    "@commitlint/cli": "^21.2.2",
     "@commitlint/config-conventional": "^21.2.2",
     "@eslint/js": "^10.0.1",
     "@semantic-release/changelog": "^7.0.0",
