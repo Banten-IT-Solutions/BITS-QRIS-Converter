@@ -1,7 +1,7 @@
 {
   "name": "bits-qris",
   "version": "1.0.0",
-  "description": "QRIS Static \u2192 Dynamic converter \u2014 parse, validate, convert + cetak gambar struk. Hybrid terbaik: Core TLV presisi + Cetak Struk siap print.",
+  "description": "QRIS Static → Dynamic converter — parse, validate, convert + cetak gambar struk. Hybrid terbaik: Core TLV presisi + Cetak Struk siap print.",
   "type": "commonjs",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
