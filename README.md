@@ -87,7 +87,7 @@ node -e "import('bits-qris-converter').then(m=>console.log(Object.keys(m).slice(
 import { convertQris, parseQris, validateQris } from 'bits-qris-converter';
 
 const staticQris =
-  '00020101021126560014ID.CO.QRIS.WWW0115ID10231625260990215ID10231625260995204581253033605802ID5914TOKO BITS JAYA6007JAKARTA61051234563049BBB';
+  '00020101021126560014ID.CO.QRIS.WWW0115ID10231625260990215ID10231625260995204581253033605802ID5919BANTEN IT SOLUTIONS6006SERANG6304DA44';
 
 // 1. Validasi dulu (opsional tapi disarankan)
 const { valid, errors } = validateQris(staticQris);
@@ -95,8 +95,8 @@ if (!valid) console.error(errors);
 
 // 2. Parse info merchant
 const info = parseQris(staticQris);
-console.log(info.merchantName); // TOKO BITS JAYA
-console.log(info.merchantCity); // JAKARTA
+console.log(info.merchantName); // BANTEN IT SOLUTIONS
+console.log(info.merchantCity); // SERANG
 console.log(info.method); // static
 
 // 3. Convert → Dynamic
@@ -145,7 +145,7 @@ console.log(qrDataUrl.slice(0, 30)); // data:image/png;base64,iVBORw...
 // 4. Info merchant untuk overlay kustom
 const merchant = getMerchantInfo(staticQris);
 console.log(merchant.nmid); // ID1023162526099
-console.log(merchant.merchantName); // TOKO BITS JAYA
+console.log(merchant.merchantName); // BANTEN IT SOLUTIONS
 console.log(merchant.nns); // 8-char NNS
 
 // 5. Template kustom
@@ -197,7 +197,7 @@ npx bits-qris --validate "000201010211..."
 # {"valid":true,"errors":[]}
 
 npx bits-qris --parse "000201010211..."
-# {"merchantName":"TOKO BITS JAYA", "merchantCity":"JAKARTA", ...}
+# {"merchantName":"BANTEN IT SOLUTIONS", "merchantCity":"SERANG", ...}
 
 npx bits-qris --convert "000201010211..." 50000
 # 000201010212...540550000...6304ABCD
@@ -224,7 +224,7 @@ Copy ini ke `package.json` project kamu (Next.js / SvelteKit / Express):
     "qris:parse": "bits-qris --parse",
     "qris:convert": "bits-qris --convert",
     "qris:interactive": "bits-qris",
-    "qris:demo": "bits-qris --convert \"00020101021126560014ID.CO.QRIS.WWW0115ID10231625260990215ID10231625260995204581253033605802ID5914TOKO BITS JAYA6007JAKARTA61051234563049BBB\" 25000 --image output/demo.jpg"
+    "qris:demo": "bits-qris --convert \"00020101021126560014ID.CO.QRIS.WWW0115ID10231625260990215ID10231625260995204581253033605802ID5919BANTEN IT SOLUTIONS6006SERANG6304DA44\" 25000 --image output/demo.jpg"
   }
 }
 ```
@@ -332,13 +332,13 @@ node examples/legacy.cjs     # CJS legacy
 import { convertQris, makeFile, parseQris } from 'bits-qris-converter';
 
 const QRIS =
-  '00020101021126560014ID.CO.QRIS.WWW0115ID10231625260990215ID10231625260995204581253033605802ID5914TOKO BITS JAYA6007JAKARTA61051234563049BBB';
+  '00020101021126560014ID.CO.QRIS.WWW0115ID10231625260990215ID10231625260995204581253033605802ID5919BANTEN IT SOLUTIONS6006SERANG6304DA44';
 
 const dynamic = convertQris(QRIS, { amount: 25_000 });
 console.log(parseQris(dynamic).amount); // 25000
 
 const file = await makeFile(QRIS, { amount: 25_000 });
-console.log('Struk:', file); // output/TOKO_BITS_JAYA-...jpg
+console.log('Struk:', file); // output/BANTEN_IT_SOLUTIONS-...jpg
 ```
 
 ---

@@ -96,7 +96,7 @@ function render() {
     </div>
     <div class="hero-card">
       <div class="k">Contoh QRIS Statis (valid)</div>
-      <div class="v" id="sampleQris">00020101021126560014ID.CO.QRIS.WWW0115ID10231625260990215ID10231625260995204581253033605802ID5914TOKO BITS JAYA6007JAKARTA61051234563049BBB</div>
+      <div class="v" id="sampleQris">00020101021126560014ID.CO.QRIS.WWW0115ID10231625260990215ID10231625260995204581253033605802ID5919BANTEN IT SOLUTIONS6006SERANG6304DA44</div>
       <div class="sep"></div>
       <div class="k">Hasil Dynamic 25.000</div>
       <div class="v" id="sampleDynamic" style="opacity:0.7">— klik Convert —</div>
