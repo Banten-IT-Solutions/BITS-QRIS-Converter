@@ -1,7 +1,7 @@
-# Default owners for everything
-* @Banten-IT-Solutions
+# Default owners for everything — use user with write access (org itself is not a CODEOWNER)
+* @bitscoid
 
 # Require review for critical paths
-/src/core/ @Banten-IT-Solutions
-/src/image/ @Banten-IT-Solutions
-/assets/ @Banten-IT-Solutions
+/src/core/ @bitscoid
+/src/image/ @bitscoid
+/assets/ @bitscoid
