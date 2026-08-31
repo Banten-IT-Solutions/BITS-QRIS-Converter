@@ -1,3 +1,9 @@
+## [1.1.0](https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/compare/v1.0.0...v1.1.0) (2026-08-31)
+
+### ✨ Features
+
+- terapkan opsi 2-5 — OIDC docs, unit test core, monitoring, badges ([552f6e3](https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/commit/552f6e324fdfc3f09867cec25fb59b3d0ac3bf31))
+
 ## 1.0.0 (2026-08-31)
 
 ### ⚠ BREAKING CHANGES
