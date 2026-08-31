@@ -123,5 +123,9 @@
   "workspaces": [
     "apps/*"
   ],
-  "private": true
+  "private": true,
+  "funding": {
+    "type": "saweria",
+    "url": "https://saweria.co/bantenitsolutions"
+  }
 }

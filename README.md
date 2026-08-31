@@ -13,6 +13,7 @@
 <p align="center">
   <a href="https://www.npmjs.com/package/bits-qris-converter"><img src="https://img.shields.io/npm/v/bits-qris-converter?style=flat-square&color=0ea5e9&label=npm" alt="npm version" /></a>
   <a href="./LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow?style=flat-square" alt="License MIT" /></a>
+  <a href="https://saweria.co/bantenitsolutions"><img src="https://img.shields.io/badge/Saweria-Donate-ffae00?style=flat-square&logo=heart&logoColor=white" alt="Saweria Donate" /></a>
   <img src="https://img.shields.io/badge/TypeScript-5.7-3178c6?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript" />
   <img src="https://img.shields.io/badge/Node-%3E%3D16-339933?style=flat-square&logo=node.js&logoColor=white" alt="Node" />
   <img src="https://img.shields.io/badge/ESM%20%26%20CJS-dual-blueviolet?style=flat-square" alt="dual" />
@@ -34,15 +35,15 @@
 
 Kami audit **5 repo QRIS** paling populer (razisek, agungjsp, verssache, Adytm404, justpiple). BITS mengambil **yang terbaik**, membuang yang fragile.
 
-| Masalah Repo Lama | Solusi BITS |
-|---|---|
-| `split("5802ID")` — gagal jika `Country != ID` | ✅ Parser **TLV rekursif** sesuai spec EMVCo |
-| `jimp@0.16.1` vulnerable, `slice(-3)` bug, crash null | ✅ `jimp@1.6.0` + CRC fix + null-safe |
-| Tidak ada validator | ✅ `validateQris()` cek **8 required tags + CRC + merchant 26–51** |
-| Hanya string, tanpa struk | ✅ `makeFile()` → JPG 1080×1920 + `base64` |
-| Hanya CLI sederhana / tanpa CLI | ✅ CLI **interactive + flags** lengkap |
-| Hanya CJS atau ESM | ✅ **Dual ESM & CJS** (`import` & `require`) |
-| Aset berantakan `font/BebasNeue` | ✅ `assets/fonts/kebab-case` + `assets/images/qris-receipt-template.png` |
+| Masalah Repo Lama                                     | Solusi BITS                                                              |
+| ----------------------------------------------------- | ------------------------------------------------------------------------ |
+| `split("5802ID")` — gagal jika `Country != ID`        | ✅ Parser **TLV rekursif** sesuai spec EMVCo                             |
+| `jimp@0.16.1` vulnerable, `slice(-3)` bug, crash null | ✅ `jimp@1.6.0` + CRC fix + null-safe                                    |
+| Tidak ada validator                                   | ✅ `validateQris()` cek **8 required tags + CRC + merchant 26–51**       |
+| Hanya string, tanpa struk                             | ✅ `makeFile()` → JPG 1080×1920 + `base64`                               |
+| Hanya CLI sederhana / tanpa CLI                       | ✅ CLI **interactive + flags** lengkap                                   |
+| Hanya CJS atau ESM                                    | ✅ **Dual ESM & CJS** (`import` & `require`)                             |
+| Aset berantakan `font/BebasNeue`                      | ✅ `assets/fonts/kebab-case` + `assets/images/qris-receipt-template.png` |
 
 > **Hasil:** Library paling **presisi, aman, dan siap produksi** untuk ekosistem QRIS Indonesia.
 
@@ -84,7 +85,8 @@ node -e "import('bits-qris-converter').then(m=>console.log(Object.keys(m).slice(
 ```typescript
 import { convertQris, parseQris, validateQris } from 'bits-qris-converter';
 
-const staticQris = '00020101021126560014ID.CO.QRIS.WWW0115ID10231625260990215ID10231625260995204581253033605802ID5914TOKO BITS JAYA6007JAKARTA61051234563049BBB';
+const staticQris =
+  '00020101021126560014ID.CO.QRIS.WWW0115ID10231625260990215ID10231625260995204581253033605802ID5914TOKO BITS JAYA6007JAKARTA61051234563049BBB';
 
 // 1. Validasi dulu (opsional tapi disarankan)
 const { valid, errors } = validateQris(staticQris);
@@ -94,12 +96,12 @@ if (!valid) console.error(errors);
 const info = parseQris(staticQris);
 console.log(info.merchantName); // TOKO BITS JAYA
 console.log(info.merchantCity); // JAKARTA
-console.log(info.method);       // static
+console.log(info.method); // static
 
 // 3. Convert → Dynamic
 const dynamic = convertQris(staticQris, {
   amount: 50_000,
-  fee: { type: 'fixed', value: 1000 } // atau { type: 'percentage', value: 2.5 }
+  fee: { type: 'fixed', value: 1000 }, // atau { type: 'percentage', value: 2.5 }
 });
 console.log(dynamic); // ...540550000...6304ABCD (CRC baru)
 ```
@@ -141,9 +143,9 @@ console.log(qrDataUrl.slice(0, 30)); // data:image/png;base64,iVBORw...
 
 // 4. Info merchant untuk overlay kustom
 const merchant = getMerchantInfo(staticQris);
-console.log(merchant.nmid);        // ID1023162526099
+console.log(merchant.nmid); // ID1023162526099
 console.log(merchant.merchantName); // TOKO BITS JAYA
-console.log(merchant.nns);         // 8-char NNS
+console.log(merchant.nns); // 8-char NNS
 
 // 5. Template kustom
 await makeFile(staticQris, {
@@ -154,13 +156,13 @@ await makeFile(staticQris, {
 
 **Output Node.js:** QR 512×512 di-composite ke `assets/images/qris-receipt-template.png` (1080×1920) + teks `NMID`, `ID`, `Merchant Name`, `NNS | City`.
 
-| Font | File | Fungsi |
-|---|---|---|
-| `title-bebas-neue` (90) | `assets/fonts/title-bebas-neue/...` | Nama merchant pendek |
-| `title-bebas-neue-compact` (60) | `assets/fonts/title-bebas-neue-compact/...` | Nama panjang >18 char |
-| `body-roboto-large` (35) | `assets/fonts/body-roboto-large/...` | NMID & ID |
-| `body-roboto-medium` | `assets/fonts/body-roboto-medium/...` | Fallback |
-| `caption-roboto-small` | `assets/fonts/caption-roboto-small/...` | Footer `Dicetak oleh: NNS` |
+| Font                            | File                                        | Fungsi                     |
+| ------------------------------- | ------------------------------------------- | -------------------------- |
+| `title-bebas-neue` (90)         | `assets/fonts/title-bebas-neue/...`         | Nama merchant pendek       |
+| `title-bebas-neue-compact` (60) | `assets/fonts/title-bebas-neue-compact/...` | Nama panjang >18 char      |
+| `body-roboto-large` (35)        | `assets/fonts/body-roboto-large/...`        | NMID & ID                  |
+| `body-roboto-medium`            | `assets/fonts/body-roboto-medium/...`       | Fallback                   |
+| `caption-roboto-small`          | `assets/fonts/caption-roboto-small/...`     | Footer `Dicetak oleh: NNS` |
 
 > Di **Browser** `makeFile` otomatis fallback ke `QR DataURL` (template butuh `fs`). Selalu pakai `{ base64: true }`.
 
@@ -246,16 +248,16 @@ npm run qris:demo
 
 ### Core
 
-| Fungsi | Params | Return | Deskripsi |
-|---|---|---|---|
-| `parseTlv(data)` | `string` | `TlvElement[]` | Low-level TLV EMVCo |
-| `parseQris(qris)` | `string` | `QrisData` | Parse struktur lengkap |
-| `validateQris(qris)` | `string` | `{valid, errors}` | Validasi 8 required tags + CRC |
-| `isValidQris(qris)` | `string` | `boolean` | Shortcut |
-| `calculateCrc16(str)` | `string` | `string` | CRC16-CCITT `0x1021` |
-| `convertQris(qris, opts)` | `string, ConvertOptions` | `string` | **Static → Dynamic** |
-| `makeString(qris, opts)` | `string, opts` | `string` | Alias legacy+modern |
-| `getMerchantInfo(qris)` | `string` | `MerchantInfo` | NMID, printer, NNS |
+| Fungsi                    | Params                   | Return            | Deskripsi                      |
+| ------------------------- | ------------------------ | ----------------- | ------------------------------ |
+| `parseTlv(data)`          | `string`                 | `TlvElement[]`    | Low-level TLV EMVCo            |
+| `parseQris(qris)`         | `string`                 | `QrisData`        | Parse struktur lengkap         |
+| `validateQris(qris)`      | `string`                 | `{valid, errors}` | Validasi 8 required tags + CRC |
+| `isValidQris(qris)`       | `string`                 | `boolean`         | Shortcut                       |
+| `calculateCrc16(str)`     | `string`                 | `string`          | CRC16-CCITT `0x1021`           |
+| `convertQris(qris, opts)` | `string, ConvertOptions` | `string`          | **Static → Dynamic**           |
+| `makeString(qris, opts)`  | `string, opts`           | `string`          | Alias legacy+modern            |
+| `getMerchantInfo(qris)`   | `string`                 | `MerchantInfo`    | NMID, printer, NNS             |
 
 **Deprecated uppercase alias tetap ada** untuk kompatibilitas: `parseQRIS`, `convertQRIS`, `validateQRIS`, `calculateCRC16`.
 
@@ -282,28 +284,36 @@ type QrisData = {
 
 ### Image
 
-| Fungsi | Params | Return |
-|---|---|---|
-| `makeFile(qris, opts)` | `ImageOptions` | `Promise<string>` — path atau base64 |
-| `makeImage` / `generateStruk` | — | alias `makeFile` |
-| `makeQrDataUrl(qris, opts)` | `QrOnlyOptions` | `Promise<string>` DataURL |
-| `makeQrBuffer(qris, opts)` | `QrOnlyOptions` | `Promise<Buffer>` |
-| `formatRupiah(v)` | `number\|string` | `string` `Rp 50.000` |
+| Fungsi                        | Params           | Return                               |
+| ----------------------------- | ---------------- | ------------------------------------ |
+| `makeFile(qris, opts)`        | `ImageOptions`   | `Promise<string>` — path atau base64 |
+| `makeImage` / `generateStruk` | —                | alias `makeFile`                     |
+| `makeQrDataUrl(qris, opts)`   | `QrOnlyOptions`  | `Promise<string>` DataURL            |
+| `makeQrBuffer(qris, opts)`    | `QrOnlyOptions`  | `Promise<Buffer>`                    |
+| `formatRupiah(v)`             | `number\|string` | `string` `Rp 50.000`                 |
 
 ```typescript
 type ImageOptions = ConvertOptions & {
   nominal?: string | number; // legacy alias
   taxtype?: 'p' | 'r';
-  base64?: boolean;          // default false
+  base64?: boolean; // default false
   path?: string;
-  templatePath?: string;     // default assets/images/qris-receipt-template.png
+  templatePath?: string; // default assets/images/qris-receipt-template.png
 };
 ```
 
 ### Shared
 
 ```typescript
-import { QrisError, QrisParseError, QrisConvertError, QrisImageError, formatRupiah, padLength, sanitizeFilename } from 'bits-qris-converter';
+import {
+  QrisError,
+  QrisParseError,
+  QrisConvertError,
+  QrisImageError,
+  formatRupiah,
+  padLength,
+  sanitizeFilename,
+} from 'bits-qris-converter';
 ```
 
 ---
@@ -320,7 +330,8 @@ node examples/legacy.cjs     # CJS legacy
 // examples/basic.mjs
 import { convertQris, makeFile, parseQris } from 'bits-qris-converter';
 
-const QRIS = '00020101021126560014ID.CO.QRIS.WWW0115ID10231625260990215ID10231625260995204581253033605802ID5914TOKO BITS JAYA6007JAKARTA61051234563049BBB';
+const QRIS =
+  '00020101021126560014ID.CO.QRIS.WWW0115ID10231625260990215ID10231625260995204581253033605802ID5914TOKO BITS JAYA6007JAKARTA61051234563049BBB';
 
 const dynamic = convertQris(QRIS, { amount: 25_000 });
 console.log(parseQris(dynamic).amount); // 25000
@@ -347,6 +358,7 @@ flowchart LR
 ```
 
 **Struktur Project — Clean & Maintainable:**
+
 ```
 bits-qris-converter/
 ├── src/
@@ -404,14 +416,14 @@ bits-qris-converter/
 
 ## ⚙️ Tech Stack
 
-| Layer | Tech |
-|---|---|
-| Language | TypeScript 5.7 (strict) |
-| QR Generate | `qrcode` 1.5.4 |
-| Image | `jimp` 1.6.0 |
-| Build | `tsc` dual ESM/CJS |
-| Lint/Format | ESLint 9 + Prettier 3 |
-| Runtime | Node ≥16, Browser ES2022 |
+| Layer       | Tech                     |
+| ----------- | ------------------------ |
+| Language    | TypeScript 5.7 (strict)  |
+| QR Generate | `qrcode` 1.5.4           |
+| Image       | `jimp` 1.6.0             |
+| Build       | `tsc` dual ESM/CJS       |
+| Lint/Format | ESLint 9 + Prettier 3    |
+| Runtime     | Node ≥16, Browser ES2022 |
 
 ---
 
@@ -438,6 +450,16 @@ PR sangat diterima!
 4. Commit `feat: ...` → Push → PR
 
 **Custom template:** taruh `1080×1920` PNG di `assets/images/custom.png` dan panggil `makeFile(qris,{amount, templatePath:'assets/images/custom.png'})`. Font `.fnt` taruh di `assets/fonts/<kebab-case>/`.
+
+---
+
+## 💝 Dukung BITS
+
+Jika library ini membantu bisnismu, traktir kopi untuk maintainer via **Saweria** — 100% untuk pengembangan QRIS open-source 🇮🇩
+
+<p align="center">
+  <a href="https://saweria.co/bantenitsolutions"><img src="https://img.shields.io/badge/Saweria.co-bantenitsolutions-ffae00?style=for-the-badge&logo=heart&logoColor=white" alt="Saweria" /></a>
+</p>
 
 ---
 
