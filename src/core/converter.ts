@@ -3,7 +3,7 @@
  * TLV-based, CRC recalculation — tidak pakai split fragile
  */
 
-import { QrisConvertError } from '../shared/errors.js';
+import { QrisConvertError, QrisParseError } from '../shared/errors.js';
 import { padLength } from '../shared/format.js';
 import { calculateCrc16 } from './crc16.js';
 import { CRC_PLACEHOLDER, POINT_OF_INITIATION, TAG, TIP_INDICATOR } from './constants.js';
@@ -57,7 +57,7 @@ export function convertQris(qrisString: string, options: ConvertOptions): string
   const elements = parseTlv(qrisString);
 
   if (elements.length === 0) {
-    throw new QrisConvertError('Invalid QRIS: failed to parse TLV structure');
+    throw new QrisParseError('Invalid QRIS: failed to parse TLV structure');
   }
 
   const result: TlvElement[] = [];

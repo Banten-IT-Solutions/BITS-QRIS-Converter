@@ -1,20 +1,13 @@
 /**
- * Image utils — backward compatibility wrapper
- * @deprecated Import from './merchant-info.js' or './qr-renderer.js' or '../shared/format.js' instead
+ * Legacy compatibility helper — normalize qris-dinamis 1.x options
+ * @deprecated Use ConvertOptions directly; this shim will be removed in v2
  */
 
 import type { ConvertOptions } from '../core/types.js';
 import type { ImageOptions, QrOnlyOptions } from './types.js';
 
-// Re-export merchant info
-export { getMerchantInfo } from './merchant-info.js';
-
-// Re-export formatting
-export { formatRupiah, padLength, sanitizeFilename } from '../shared/format.js';
-
 /**
  * Normalize legacy (nominal/taxtype/fee) and modern (amount/fee) options
- * Keeps backward compatibility with qris-dinamis 1.x
  */
 export function normalizeLegacyOptions(options: ImageOptions | QrOnlyOptions): ConvertOptions {
   const anyOptions = options as ImageOptions & Record<string, unknown>;

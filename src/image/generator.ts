@@ -1,16 +1,9 @@
 /**
- * @deprecated — legacy entry point for backward compatibility
- * Use imports from './qr-renderer.js' and './receipt-generator.js' instead
- * This file re-exports to keep `bits-qris-converter/dist/.../generator.js` working
+ * @deprecated Legacy entry point — kept for backward compatibility with v1 imports
+ * Use `bits-qris-converter/image` or `bits-qris-converter` directly
+ * @example import { makeFile } from 'bits-qris-converter/image/receipt-generator.js'
  */
 
-export {
-  makeString,
-  makeQrDataUrl,
-  makeQRDataURL,
-  makeQrBuffer,
-  makeQRBuffer as makeQRBufferAlias,
-  generateBrowserQr,
-} from './qr-renderer.js';
-export { makeFile, makeImage, generateStruk } from './receipt-generator.js';
+export { generateBrowserQr, makeQrBuffer, makeQRBuffer, makeQrDataUrl, makeQRDataURL, makeString } from './qr-renderer.js';
+export { generateStruk, makeFile, makeImage } from './receipt-generator.js';
 export type { ImageOptions, QrOnlyOptions, QROnlyOptions } from './types.js';

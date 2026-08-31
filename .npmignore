@@ -1,7 +1,6 @@
+# Source - not needed in publish (files whitelist in package.json handles it)
 src/
 examples/
-.gitignore
-tsconfig*.json
+__tests__/
 *.log
-.output/
-.output
+*.tgz
