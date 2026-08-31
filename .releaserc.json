@@ -6,9 +6,19 @@
       {
         "preset": "conventionalcommits",
         "releaseRules": [
-          { "type": "docs", "scope": "README", "release": "patch" },
-          { "type": "refactor", "release": "patch" },
-          { "type": "style", "release": "patch" }
+          {
+            "type": "docs",
+            "scope": "README",
+            "release": "patch"
+          },
+          {
+            "type": "refactor",
+            "release": "patch"
+          },
+          {
+            "type": "style",
+            "release": "patch"
+          }
         ]
       }
     ],
@@ -18,14 +28,46 @@
         "preset": "conventionalcommits",
         "presetConfig": {
           "types": [
-            { "type": "feat", "section": "✨ Features", "hidden": false },
-            { "type": "fix", "section": "🐛 Bug Fixes", "hidden": false },
-            { "type": "perf", "section": "⚡ Performance", "hidden": false },
-            { "type": "refactor", "section": "♻️ Refactors", "hidden": false },
-            { "type": "docs", "section": "📚 Docs", "hidden": false },
-            { "type": "chore", "section": "🔧 Chores", "hidden": true },
-            { "type": "ci", "section": "👷 CI", "hidden": true },
-            { "type": "test", "section": "✅ Tests", "hidden": false }
+            {
+              "type": "feat",
+              "section": "\u2728 Features",
+              "hidden": false
+            },
+            {
+              "type": "fix",
+              "section": "\ud83d\udc1b Bug Fixes",
+              "hidden": false
+            },
+            {
+              "type": "perf",
+              "section": "\u26a1 Performance",
+              "hidden": false
+            },
+            {
+              "type": "refactor",
+              "section": "\u267b\ufe0f Refactors",
+              "hidden": false
+            },
+            {
+              "type": "docs",
+              "section": "\ud83d\udcda Docs",
+              "hidden": false
+            },
+            {
+              "type": "chore",
+              "section": "\ud83d\udd27 Chores",
+              "hidden": true
+            },
+            {
+              "type": "ci",
+              "section": "\ud83d\udc77 CI",
+              "hidden": true
+            },
+            {
+              "type": "test",
+              "section": "\u2705 Tests",
+              "hidden": false
+            }
           ]
         }
       }
@@ -34,7 +76,7 @@
     [
       "@semantic-release/npm",
       {
-        "npmPublish": true,
+        "npmPublish": false,
         "tarballDir": "dist"
       }
     ],

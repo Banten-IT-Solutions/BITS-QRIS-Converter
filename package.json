@@ -1,7 +1,7 @@
 {
   "name": "bits-qris",
   "version": "1.0.0",
-  "description": "QRIS Static → Dynamic converter — parse, validate, convert + cetak gambar struk. Hybrid terbaik: Core TLV presisi + Cetak Struk siap print.",
+  "description": "QRIS Static \u2192 Dynamic converter \u2014 parse, validate, convert + cetak gambar struk. Hybrid terbaik: Core TLV presisi + Cetak Struk siap print.",
   "type": "commonjs",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
@@ -29,7 +29,7 @@
     }
   },
   "bin": {
-    "bits-qris": "./dist/cjs/cli.js"
+    "bits-qris": "dist/cjs/cli.js"
   },
   "files": [
     "dist",
@@ -38,7 +38,7 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "npm run clean && npm run build:esm && npm run build:cjs && npm run copy:assets",
+    "build": "npm run clean && npm run build:esm && npm run build:cjs && npm run copy:assets && chmod +x dist/cjs/cli.js",
     "build:esm": "tsc -p tsconfig.json",
     "build:cjs": "tsc -p tsconfig.cjs.json",
     "clean": "rm -rf dist",
@@ -75,7 +75,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter"
+    "url": "git+https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter.git"
   },
   "bugs": {
     "url": "https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/issues"
@@ -109,7 +109,8 @@
     "typescript-eslint": "^8.69.0"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": false
   },
   "lint-staged": {
     "src/**/*.{ts,js}": [
