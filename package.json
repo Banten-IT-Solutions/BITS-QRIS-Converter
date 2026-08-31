@@ -82,7 +82,7 @@
   },
   "homepage": "https://bits.co.id",
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=22.0.0"
   },
   "dependencies": {
     "jimp": "^1.6.1",

@@ -54,9 +54,7 @@ async function generateNodeReceipt(
   const merchantName = merchantInfo.merchantName;
 
   const Jimp = (await getJimpInstance()) as {
-    read: (
-      input: Buffer | string,
-    ) => Promise<{
+    read: (input: Buffer | string) => Promise<{
       bitmap: { width: number; height: number };
       resize: (opts: { w: number; h: number }) => void;
       composite: (img: unknown, x: number, y: number) => unknown;
