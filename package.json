@@ -110,7 +110,7 @@
   },
   "publishConfig": {
     "access": "public",
-    "provenance": true
+    "provenance": false
   },
   "lint-staged": {
     "src/**/*.{ts,js}": [
