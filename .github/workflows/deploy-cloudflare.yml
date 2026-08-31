@@ -48,13 +48,13 @@ jobs:
       - name: Build web
         run: npm run build --workspace=@bits/web
 
-      - name: Deploy to Cloudflare Workers
+      - name: Deploy to Cloudflare Workers (qris.bits.co.id)
         uses: cloudflare/wrangler-action@v4
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           workingDirectory: apps/web
-          command: deploy
+          command: deploy --config wrangler.jsonc
           packageManager: npm
 
   preview:

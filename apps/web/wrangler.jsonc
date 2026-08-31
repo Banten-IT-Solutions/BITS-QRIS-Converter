@@ -8,6 +8,16 @@
     "directory": "./dist/client",
     "not_found_handling": "single-page-application"
   },
+  "routes": [
+    {
+      "pattern": "qris.bits.co.id/*",
+      "zone_name": "bits.co.id"
+    }
+  ],
+  "vars": {
+    "WORKER_NAME": "bits-qris-converter",
+    "CUSTOM_DOMAIN": "qris.bits.co.id"
+  },
   "observability": {
     "enabled": true
   }
