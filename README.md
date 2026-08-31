@@ -5,6 +5,12 @@
       <img src="https://img.shields.io/badge/qris.bits.co.id-Online-00C853?style=for-the-badge&logo=cloudflare&logoColor=white" alt="qris.bits.co.id Online" />
     </a>
   </p>
+  <p>
+    <a href="https://www.npmjs.com/package/bits-qris"><img src="https://img.shields.io/npm/v/bits-qris?logo=npm&logoColor=white&label=npm&color=CB3837" alt="npm version" /></a>
+    <a href="https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/actions/workflows/ci.yml"><img src="https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
+    <a href="https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/actions/workflows/deploy-cloudflare.yml"><img src="https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/actions/workflows/deploy-cloudflare.yml/badge.svg" alt="Deploy" /></a>
+    <a href="https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/actions/workflows/uptime.yml"><img src="https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/actions/workflows/uptime.yml/badge.svg" alt="Uptime" /></a>
+  </p>
   <p>Hybrid terbaik — Core TLV presisi + Cetak Struk siap print. Convert QRIS Static → Dynamic dengan parser EMVCo, validator CRC, dan generator QR untuk produksi.</p>
   <br>
   <p>

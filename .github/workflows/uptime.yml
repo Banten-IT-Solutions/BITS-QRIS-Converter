@@ -1,0 +1,21 @@
+name: 🩺 Uptime
+
+on:
+  schedule:
+    - cron: '*/5 * * * *' # every 5 minutes
+  workflow_dispatch:
+
+jobs:
+  check:
+    name: Check qris.bits.co.id
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check /api/health
+        run: |
+          curl -fsS https://qris.bits.co.id/api/health | grep -q '"ok":true'
+          echo "✅ qris.bits.co.id is up"
+
+      - name: Check main page
+        run: |
+          curl -fsS https://qris.bits.co.id/ | grep -q "BITS QRIS"
+          echo "✅ Main page OK"

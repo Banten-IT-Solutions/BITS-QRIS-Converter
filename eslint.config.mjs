@@ -32,6 +32,14 @@ export default tseslint.config(
     },
   },
   {
+    files: ['**/*.test.ts'],
+    languageOptions: {
+      parserOptions: {
+        projectService: false,
+      },
+    },
+  },
+  {
     ignores: ['dist/', 'node_modules/', 'output/'],
   },
 );

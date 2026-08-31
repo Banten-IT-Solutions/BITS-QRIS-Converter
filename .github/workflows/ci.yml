@@ -77,8 +77,24 @@ jobs:
           node -e "const m=require('./dist/cjs/index.js'); if(!m.convertQris) throw new Error('CJS missing')"
           node --input-type=module -e "import('./dist/esm/index.js').then(m=>{if(!m.convertQris) throw new Error('ESM missing')})"
 
-      - name: Check pack size
-        run: npm pack --dry-run 2>&1 | tail -n 20
+      - name: Run unit tests
+        run: npm test
+
+      - name: Check pack size (fail if > 1.1MB)
+        run: |
+          npm pack --dry-run 2>&1 | tail -n 20
+          SIZE_KB=$(npm pack --dry-run 2>&1 | grep "package size" | grep -oE "[0-9.]+ kB" | grep -oE "[0-9.]+")
+          SIZE_MB=$(echo "$SIZE_KB / 1024" | bc -l 2>/dev/null || echo "0")
+          echo "📦 Package size: ${SIZE_KB} kB (~${SIZE_MB} MB)"
+          # Warn if > 1MB, fail if > 1.5MB
+          if (( $(echo "$SIZE_KB > 1536" | bc -l) )); then
+            echo "❌ Package too large > 1.5MB"
+            exit 1
+          elif (( $(echo "$SIZE_KB > 1100" | bc -l) )); then
+            echo "⚠️ Package > 1.1MB, consider optimizing"
+          else
+            echo "✅ Size OK"
+          fi
 
   security:
     name: Security Audit
