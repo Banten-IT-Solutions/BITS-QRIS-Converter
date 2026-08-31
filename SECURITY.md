@@ -11,7 +11,7 @@
 
 Jangan buka Issue publik untuk vulnerability.
 
-1. Email ke **security@bits-id.com** (atau DM maintainer)
+1. Email ke **security@bits.co.id** (atau DM maintainer)
 2. Sertakan deskripsi, PoC, dan dampak
 3. Kami akan respon dalam **48 jam** dan fix dalam 7 hari jika valid
 

@@ -1,7 +1,7 @@
 # Default owners for everything
-* @bits-id
+* @Banten-IT-Solutions
 
 # Require review for critical paths
-/src/core/ @bits-id
-/src/image/ @bits-id
-/assets/ @bits-id
+/src/core/ @Banten-IT-Solutions
+/src/image/ @Banten-IT-Solutions
+/assets/ @Banten-IT-Solutions

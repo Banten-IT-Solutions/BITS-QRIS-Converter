@@ -11,6 +11,7 @@
 </p>
 
 <p align="center">
+  <a href="https://bits.co.id"><img src="https://img.shields.io/badge/Website-bits.co.id-0B1D3A?style=flat-square" alt="Website" /></a>
   <a href="https://www.npmjs.com/package/bits-qris-converter"><img src="https://img.shields.io/npm/v/bits-qris-converter?style=flat-square&color=0ea5e9&label=npm" alt="npm version" /></a>
   <a href="./LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow?style=flat-square" alt="License MIT" /></a>
   <a href="https://saweria.co/bantenitsolutions"><img src="https://img.shields.io/badge/Saweria-Donate-ffae00?style=flat-square&logo=heart&logoColor=white" alt="Saweria Donate" /></a>

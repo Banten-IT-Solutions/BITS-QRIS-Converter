@@ -71,7 +71,7 @@
     "dynamic-qris",
     "struk"
   ],
-  "author": "BITS <bits@qris.dev>",
+  "author": "Banten IT Solutions <hello@bits.co.id>",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -80,7 +80,7 @@
   "bugs": {
     "url": "https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/issues"
   },
-  "homepage": "https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter#readme",
+  "homepage": "https://bits.co.id",
   "engines": {
     "node": ">=16.0.0"
   },

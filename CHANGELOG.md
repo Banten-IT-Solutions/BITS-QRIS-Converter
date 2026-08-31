@@ -28,4 +28,4 @@ dan proyek ini mengikuti [Semantic Versioning](https://semver.org/lang/id/) + [C
 - README total rewrite (hero, quick start, cetak struk, CLI, API, arsitektur)
 - LICENSE MIT 2026 BITS
 
-[1.0.0]: https://github.com/bits-id/qris-converter/releases/tag/v1.0.0
+[1.0.0]: https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/releases/tag/v1.0.0

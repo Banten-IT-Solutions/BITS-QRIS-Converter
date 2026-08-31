@@ -30,7 +30,7 @@ updates:
       prefix: 'chore'
       include: 'scope'
     reviewers:
-      - 'bits-id'
+      - 'Banten-IT-Solutions'
 
   # GitHub Actions — weekly
   - package-ecosystem: 'github-actions'

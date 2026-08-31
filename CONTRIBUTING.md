@@ -12,7 +12,7 @@ Terima kasih sudah mau berkontribusi! 🎉
 1. Fork & clone
 
    ```bash
-   git clone https://github.com/bits-id/qris-converter.git
+   git clone https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter.git
    cd qris-converter
    npm ci
    ```
