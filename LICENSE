@@ -3,11 +3,6 @@ MIT License
 Copyright (c) 2026 Banten IT Solutions (BITS) — https://bits.co.id
 Crafted with passion for the Indonesian QRIS ecosystem.
 
-Original inspirations (all MIT):
-- verssache/qris-dinamis — Robust TLV core & validator
-- agungjsp/Dynamic-QRIS — Struk template engine & Jimp integration
-- razisek/Qris-Dinamis — Initial concept & legacy API
-
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights

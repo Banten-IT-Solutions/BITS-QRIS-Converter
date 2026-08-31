@@ -15,7 +15,7 @@ export async function runInteractive(): Promise<void> {
   try {
     console.log('\n╔══════════════════════════════════════════════╗');
     console.log('║   BITS QRIS Static → Dynamic Converter       ║');
-    console.log('║   Hybrid: verssache core + Cetak Struk       ║');
+    console.log('║   Hybrid: Core TLV presisi + Cetak Struk     ║');
     console.log('╚══════════════════════════════════════════════╝\n');
 
     const qris = await ask('[?] Input QRIS string: ');

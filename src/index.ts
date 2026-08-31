@@ -1,6 +1,6 @@
 /**
  * BITS-QRIS-Converter — public barrel export
- * Hybrid: Core TLV proper (verssache) + Cetak Struk (Dynamic-QRIS)
+ * Hybrid: Core TLV presisi + Cetak Struk siap print
  *
  * @packageDocumentation
  * @example

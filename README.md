@@ -153,8 +153,6 @@ const file = await makeFile(staticQris, { nominal: '50000', base64: false });
 
 ## 🖨️ Cetak Struk
 
-Fitur unggulan BITS — tidak ada di `verssache`.
-
 ```typescript
 import { makeFile, makeQrDataUrl, getMerchantInfo } from 'bits-qris-converter';
 
