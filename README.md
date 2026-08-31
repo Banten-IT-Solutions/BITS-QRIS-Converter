@@ -478,14 +478,10 @@ Jika library ini membantu bisnismu, traktir kopi via **Saweria** — 100% untuk 
 
 ## 📄 License
 
-**MIT © 2026 Banten IT Solutions (BITS) — https://bits.co.id**
-
-Original inspirations (MIT): `verssache/qris-dinamis` • `agungjsp/Dynamic-QRIS` • `razisek/Qris-Dinamis` — terima kasih!
-
-Lihat [`LICENSE`](./LICENSE).
+MIT License. See `LICENSE`.
 
 ---
 
-<p align="center">
-  Dibuat dengan ❤️ untuk ekosistem QRIS Indonesia — <strong>BITS: Bikin QRIS Jadi Dinamis, Clean & Siap Produksi.</strong> • <a href="https://bits.co.id">bits.co.id</a> • <a href="https://qris.bits.co.id">qris.bits.co.id</a>
-</p>
+<div align="center">
+  <strong>BITS QRIS Converter</strong> · Dibuat dengan ❤️ oleh <a href="https://banten-it-solutions.github.io"><strong>Banten IT Solutions</strong></a>
+</div>
