@@ -208,6 +208,38 @@ npx bits-qris --convert "000201010211..." 50000 --base64
 npx bits-qris --help
 ```
 
+### 📦 Tambahkan ke `package.json` (biar `npm run` lebih singkat)
+
+Copy ini ke `package.json` project kamu (Next.js / SvelteKit / Express):
+
+```json
+{
+  "scripts": {
+    "qris": "bits-qris",
+    "qris:help": "bits-qris --help",
+    "qris:validate": "bits-qris --validate",
+    "qris:parse": "bits-qris --parse",
+    "qris:convert": "bits-qris --convert",
+    "qris:interactive": "bits-qris",
+    "qris:demo": "bits-qris --convert \"00020101021126560014ID.CO.QRIS.WWW0115ID10231625260990215ID10231625260995204581253033605802ID5914TOKO BITS JAYA6007JAKARTA61051234563049BBB\" 25000 --image output/demo.jpg"
+  }
+}
+```
+
+Pakai dengan `--` double-dash agar argumen diteruskan:
+
+```bash
+npm run qris:interactive
+npm run qris:validate -- "000201010211..."
+npm run qris:parse -- "000201010211..."
+npm run qris:convert -- "000201010211..." 50000
+npm run qris:convert -- "000201010211..." 50000 --fee 1000 --type fixed
+npm run qris:convert -- "000201010211..." 50000 --fee 2.5 --type percentage --image output/struk.jpg --base64
+npm run qris:demo
+```
+
+> Tips: Untuk QRIS panjang, simpan di `.env` → `QRIS_STATIC="000201..."` lalu `npm run qris:convert -- "$QRIS_STATIC" 50000`
+
 ---
 
 ## 📚 API Reference
