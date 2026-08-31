@@ -3,15 +3,17 @@
   "name": "bits-qris",
   "main": "src/index.ts",
   "compatibility_date": "2026-08-31",
-  "compatibility_flags": ["nodejs_compat"],
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
   "assets": {
     "directory": "./dist/client",
     "not_found_handling": "single-page-application"
   },
   "routes": [
     {
-      "pattern": "qris.bits.co.id/*",
-      "zone_name": "bits.co.id"
+      "pattern": "qris.bits.co.id",
+      "custom_domain": true
     }
   ],
   "vars": {
