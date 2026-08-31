@@ -1,65 +1,114 @@
 /**
- * BITS-QRIS-Converter
- * Hybrid terbaik: Core TLV proper dari verssache + Cetak Struk Jimp dari Dynamic-QRIS
- * 
+ * BITS-QRIS-Converter — public barrel export
+ * Hybrid: Core TLV proper (verssache) + Cetak Struk (Dynamic-QRIS)
+ *
  * @packageDocumentation
+ * @example
+ * import { convertQris, parseQris, validateQris, makeFile } from 'bits-qris-converter';
  */
 
-// Core — parse, validate, convert (TLV proper)
-export { parseQRIS, parseTLV } from "./core/parser.js";
-export { convertQRIS, makeStringLegacy } from "./core/converter.js";
-export { validateQRIS, isValidQRIS } from "./core/validator.js";
-export { calculateCRC16, toCRC16 } from "./core/crc16.js";
-export type {
-  TLV,
-  QRISData,
-  MerchantAccountInfo,
-  ConvertOptions,
-  LegacyConvertOptions,
-  ValidationResult,
-  MerchantInfo,
-} from "./core/types.js";
-
-// Image — cetak struk & QR generation
+// Core — canonical (kebab/camelCase) + deprecated uppercase aliases for backward compat
 export {
-  makeFile,
-  makeImage,
-  generateStruk,
-  makeString,
-  makeQRDataURL,
-  makeQRBuffer,
-} from "./image/generator.js";
-export { getMerchantInfo, formatRupiah } from "./image/utils.js";
-export type { ImageOptions } from "./image/generator.js";
+  // CRC
+  calculateCrc16,
+  calculateCRC16,
+  toCRC16,
+} from './core/crc16.js';
 
-// Re-export untuk kompatibilitas legacy `qris-dinamis` 1.x
-// Usage: import { makeString, makeFile } from "bits-qris-converter"
-//        makeString(qris, { nominal: "50000" })
-//        makeFile(qris, { nominal: "50000", base64: true })
-
-// Default export bundling semua
-import { parseQRIS, parseTLV } from "./core/parser.js";
-import { convertQRIS, makeStringLegacy } from "./core/converter.js";
-import { validateQRIS, isValidQRIS } from "./core/validator.js";
-import { calculateCRC16 } from "./core/crc16.js";
-import { getMerchantInfo } from "./image/utils.js";
-import { makeFile, makeString, makeQRDataURL, makeQRBuffer } from "./image/generator.js";
-
-const BITS_QRIS = {
-  // core
+export {
+  // Parser
+  parseQris,
   parseQRIS,
+  parseTlv,
   parseTLV,
+} from './core/parser.js';
+
+export {
+  // Converter
+  convertQris,
   convertQRIS,
+  makeStringLegacy,
+} from './core/converter.js';
+
+export {
+  // Validator
+  validateQris,
+  validateQRIS,
+  isValidQris,
+  isValidQRIS,
+} from './core/validator.js';
+
+export type {
+  ConvertOptions,
+  FeeType,
+  LegacyConvertOptions,
+  MerchantAccountInfo,
+  MerchantInfo,
+  QrisData,
+  QRISData,
+  TlvElement,
+  TLV,
+  ValidationResult,
+} from './core/types.js';
+
+export * from './core/constants.js';
+
+// Image — canonical
+export { getMerchantInfo } from './image/merchant-info.js';
+export {
+  generateBrowserQr,
+  makeQrBuffer,
+  makeQRBuffer,
+  makeQrDataUrl,
+  makeQRDataURL,
+  makeString,
+} from './image/qr-renderer.js';
+export { makeFile, makeImage, generateStruk } from './image/receipt-generator.js';
+export type { ImageOptions, QrOnlyOptions, QROnlyOptions } from './image/types.js';
+
+// Shared utilities
+export { formatRupiah, padLength, sanitizeFilename } from './shared/format.js';
+export {
+  QrisConvertError,
+  QrisError,
+  QrisImageError,
+  QrisParseError,
+  QrisValidationError,
+} from './shared/errors.js';
+
+// Legacy image utils wrapper — kept for `import { getMerchantInfo } from 'bits-qris-converter'` via utils path
+export { normalizeLegacyOptions } from './image/utils.js';
+
+// Default export — named bundle for `import pkg from 'bits-qris-converter'` compat (deprecated, prefer named imports)
+import { calculateCrc16 } from './core/crc16.js';
+import { convertQris, makeStringLegacy } from './core/converter.js';
+import { parseQris, parseTlv } from './core/parser.js';
+import { isValidQris, validateQris } from './core/validator.js';
+import { getMerchantInfo } from './image/merchant-info.js';
+import { makeString, makeQrBuffer, makeQrDataUrl } from './image/qr-renderer.js';
+import { makeFile as makeFileReceipt } from './image/receipt-generator.js';
+
+const BitsQris = {
+  // core
+  parseQris,
+  parseTlv,
+  parseTLV: parseTlv,
+  parseQRIS: parseQris,
+  convertQris,
+  convertQRIS: convertQris,
   makeString,
   makeStringLegacy,
-  validateQRIS,
-  isValidQRIS,
-  calculateCRC16,
+  validateQris,
+  validateQRIS: validateQris,
+  isValidQris,
+  isValidQRIS: isValidQris,
+  calculateCrc16,
+  calculateCRC16: calculateCrc16,
   getMerchantInfo,
   // image
-  makeFile,
-  makeQRDataURL,
-  makeQRBuffer,
-};
+  makeFile: makeFileReceipt,
+  makeQrDataUrl,
+  makeQrBuffer,
+} as const;
 
-export default BITS_QRIS;
+export default BitsQris;

@@ -1,145 +1,146 @@
-import { calculateCRC16 } from "./crc16.js";
-import { parseTLV } from "./parser.js";
-import type { ConvertOptions, TLV } from "./types.js";
-
 /**
- * Rebuild a QRIS string from TLV elements (without CRC).
+ * QRIS Static → Dynamic converter
+ * TLV-based, CRC recalculation — tidak pakai split fragile
  */
-function buildTLVString(elements: TLV[]): string {
+
+import { QrisConvertError } from '../shared/errors.js';
+import { padLength } from '../shared/format.js';
+import { calculateCrc16 } from './crc16.js';
+import { CRC_PLACEHOLDER, POINT_OF_INITIATION, TAG, TIP_INDICATOR } from './constants.js';
+import { parseTlv } from './parser.js';
+import type { ConvertOptions, TlvElement } from './types.js';
+
+const MANAGED_TAGS = new Set<string>([
+  TAG.TRANSACTION_AMOUNT,
+  TAG.TIP_INDICATOR,
+  TAG.FEE_FIXED,
+  TAG.FEE_PERCENTAGE,
+  TAG.CRC,
+]);
+
+function buildTlvString(elements: TlvElement[]): string {
   return elements
-    .map((el) => {
-      const value = el.children ? buildTLVString(el.children) : el.value;
-      const length = value.length.toString().padStart(2, "0");
-      return `${el.tag}${length}${value}`;
+    .map((element) => {
+      const value = element.children ? buildTlvString(element.children) : element.value;
+      return `${element.tag}${padLength(value.length)}${value}`;
     })
-    .join("");
+    .join('');
 }
 
-/**
- * Create a TLV element.
- */
-function makeTLV(tag: string, value: string, name = ""): TLV {
+function createTlv(tag: string, value: string, name = ''): TlvElement {
   return { tag, name, length: value.length, value };
 }
 
-/**
- * Convert a static QRIS string to dynamic by injecting amount and optional fee.
- * Proper TLV-based — bukan split("5802ID") fragile.
- *
- * Steps:
- * 1. Parse TLV structure
- * 2. Change Point of Initiation Method from "11" (static) to "12" (dynamic)
- * 3. Insert/replace Transaction Amount (tag 54)
- * 4. Optionally insert Tip Indicator (tag 55) and fee value (tag 56/57)
- * 5. Recalculate CRC16 checksum (tag 63)
- */
-export function convertQRIS(
-  qrisString: string,
-  options: ConvertOptions
-): string {
-  if (!qrisString) throw new Error('Parameter "qris" is required.');
-  if (options.amount === undefined || options.amount === null || String(options.amount).trim() === "") {
-    throw new Error('Parameter "amount" / "nominal" is required.');
+function validateAmount(amount: ConvertOptions['amount']): number {
+  if (amount === undefined || amount === null || String(amount).trim() === '') {
+    throw new QrisConvertError('Parameter "amount" / "nominal" is required.');
   }
 
-  const amountNum = Number(options.amount);
-  if (isNaN(amountNum) || amountNum <= 0) {
-    throw new Error('Invalid amount: must be positive number. Got: ' + options.amount);
+  const numericAmount = Number(amount);
+
+  if (Number.isNaN(numericAmount) || numericAmount <= 0) {
+    throw new QrisConvertError(`Invalid amount: must be positive number. Got: ${amount}`);
   }
 
-  const elements = parseTLV(qrisString);
-
-  if (elements.length === 0) {
-    throw new Error("Invalid QRIS: failed to parse TLV structure");
-  }
-
-  // Build the new TLV array preserving order, injecting/replacing as needed
-  const result: TLV[] = [];
-  let amountInserted = false;
-
-  // Tags to skip (we'll re-insert them with correct values)
-  const managedTags = new Set(["54", "55", "56", "57", "63"]);
-
-  for (const el of elements) {
-    if (managedTags.has(el.tag)) continue;
-
-    if (el.tag === "01") {
-      // Change static → dynamic (11 → 12). If already 12, keep 12.
-      result.push(makeTLV("01", "12", "Point of Initiation Method"));
-      continue;
-    }
-
-    // Insert amount + fee before tag 58 (Country Code) — sesuai spec EMVCo urutan tag harus numeric
-    if (el.tag === "58" && !amountInserted) {
-      const amountStr = String(Math.trunc(amountNum)); // QRIS amount tanpa decimal, tanpa leading zero
-      result.push(makeTLV("54", amountStr, "Transaction Amount"));
-
-      if (options.fee && Number(options.fee.value) > 0) {
-        const feeVal = String(options.fee.value);
-        if (options.fee.type === "fixed") {
-          result.push(makeTLV("55", "02", "Tip or Convenience Indicator"));
-          result.push(
-            makeTLV("56", feeVal, "Value of Convenience Fee (Fixed)")
-          );
-        } else {
-          result.push(makeTLV("55", "03", "Tip or Convenience Indicator"));
-          result.push(
-            makeTLV("57", feeVal, "Value of Convenience Fee (%)")
-          );
-        }
-      }
-
-      amountInserted = true;
-    }
-
-    result.push(el);
-  }
-
-  // Fallback: if tag 58 tidak ditemukan (QRIS malformed), append sebelum CRC
-  if (!amountInserted) {
-    const amountStr = String(Math.trunc(amountNum));
-    result.push(makeTLV("54", amountStr, "Transaction Amount"));
-    if (options.fee && Number(options.fee.value) > 0) {
-      const feeVal = String(options.fee.value);
-      if (options.fee.type === "fixed") {
-        result.push(makeTLV("55", "02", "Tip or Convenience Indicator"));
-        result.push(makeTLV("56", feeVal, "Value of Convenience Fee (Fixed)"));
-      } else {
-        result.push(makeTLV("55", "03", "Tip or Convenience Indicator"));
-        result.push(makeTLV("57", feeVal, "Value of Convenience Fee (%)"));
-      }
-    }
-  }
-
-  // Sort check: pastikan tag 54,55,56,57 berada sebelum 58 dan setelah 53
-  // Karena kita sudah insert sebelum 58, urutan sudah benar ( ...53,54,55,56/57,58... )
-
-  // Build string without CRC, then append CRC
-  const withoutCRC = buildTLVString(result);
-  const crcInput = withoutCRC + "6304";
-  const crc = calculateCRC16(crcInput);
-
-  return crcInput + crc;
+  return numericAmount;
 }
 
 /**
- * Legacy wrapper: makeString(qris, { nominal, taxtype, fee })
- * Untuk kompatibilitas dengan API qris-dinamis 1.x / Dynamic-QRIS
+ * Convert static QRIS → dynamic by injecting amount & optional fee
+ */
+export function convertQris(qrisString: string, options: ConvertOptions): string {
+  if (!qrisString) {
+    throw new QrisConvertError('Parameter "qris" is required.');
+  }
+
+  const amountNumber = validateAmount(options.amount);
+  const elements = parseTlv(qrisString);
+
+  if (elements.length === 0) {
+    throw new QrisConvertError('Invalid QRIS: failed to parse TLV structure');
+  }
+
+  const result: TlvElement[] = [];
+  let amountInserted = false;
+
+  for (const element of elements) {
+    if (MANAGED_TAGS.has(element.tag)) continue;
+
+    if (element.tag === TAG.POINT_OF_INITIATION) {
+      result.push(
+        createTlv(
+          TAG.POINT_OF_INITIATION,
+          POINT_OF_INITIATION.DYNAMIC,
+          'Point of Initiation Method',
+        ),
+      );
+      continue;
+    }
+
+    if (element.tag === TAG.COUNTRY_CODE && !amountInserted) {
+      insertAmountAndFee(result, amountNumber, options.fee);
+      amountInserted = true;
+    }
+
+    result.push(element);
+  }
+
+  if (!amountInserted) {
+    insertAmountAndFee(result, amountNumber, options.fee);
+  }
+
+  const withoutCrc = buildTlvString(result);
+  const crcInput = `${withoutCrc}${CRC_PLACEHOLDER}`;
+  const crc = calculateCrc16(crcInput);
+
+  return `${crcInput}${crc}`;
+}
+
+/** @deprecated Use convertQris */
+export const convertQRIS = convertQris;
+
+function insertAmountAndFee(
+  target: TlvElement[],
+  amountNumber: number,
+  fee: ConvertOptions['fee'],
+): void {
+  const amountString = String(Math.trunc(amountNumber));
+  target.push(createTlv(TAG.TRANSACTION_AMOUNT, amountString, 'Transaction Amount'));
+
+  if (!fee || Number(fee.value) <= 0) return;
+
+  const feeValue = String(fee.value);
+
+  if (fee.type === 'fixed') {
+    target.push(createTlv(TAG.TIP_INDICATOR, TIP_INDICATOR.FIXED, 'Tip or Convenience Indicator'));
+    target.push(createTlv(TAG.FEE_FIXED, feeValue, 'Value of Convenience Fee (Fixed)'));
+  } else {
+    target.push(
+      createTlv(TAG.TIP_INDICATOR, TIP_INDICATOR.PERCENTAGE, 'Tip or Convenience Indicator'),
+    );
+    target.push(createTlv(TAG.FEE_PERCENTAGE, feeValue, 'Value of Convenience Fee (%)'));
+  }
+}
+
+/**
+ * Legacy wrapper — qris-dinamis 1.x compatibility: makeString(qris,{nominal,taxtype,fee})
  */
 export function makeStringLegacy(
   qris: string,
-  opts: { nominal: string | number; taxtype?: "p" | "r"; fee?: string | number }
+  options: { nominal: string | number; taxtype?: 'p' | 'r'; fee?: string | number },
 ): string {
-  const amount = opts.nominal;
-  let fee: ConvertOptions["fee"] | undefined = undefined;
-  if (opts.fee && String(opts.fee) !== "0" && String(opts.fee).trim() !== "") {
-    const feeVal = Number(opts.fee);
-    if (!isNaN(feeVal) && feeVal > 0) {
+  const amount = options.nominal;
+  let fee: ConvertOptions['fee'] | undefined;
+
+  if (options.fee && String(options.fee) !== '0' && String(options.fee).trim() !== '') {
+    const feeNumber = Number(options.fee);
+    if (!Number.isNaN(feeNumber) && feeNumber > 0) {
       fee = {
-        type: opts.taxtype === "r" ? "fixed" : "percentage",
-        value: feeVal,
+        type: options.taxtype === 'r' ? 'fixed' : 'percentage',
+        value: feeNumber,
       };
     }
   }
-  return convertQRIS(qris, { amount, fee });
+
+  return convertQris(qris, { amount, fee });
 }

@@ -1,93 +1,87 @@
-import { calculateCRC16 } from "./crc16.js";
-import { parseTLV } from "./parser.js";
-import type { ValidationResult } from "./types.js";
+/**
+ * QRIS validator
+ * Checks: prefix, length, CRC, required tags, merchant info
+ */
+
+import { calculateCrc16 } from './crc16.js';
+import { REQUIRED_TAGS } from './constants.js';
+import { parseTlv } from './parser.js';
+import type { ValidationResult } from './types.js';
+
+const MIN_QRIS_LENGTH = 20;
+const PAYLOAD_PREFIX = '000201';
+const CRC_LENGTH = 4;
 
 /**
- * Validate a QRIS string for structural correctness.
- * Checks: prefix, length, CRC, required tags, merchant account info.
+ * Validate QRIS string structure
  */
-export function validateQRIS(qrisString: string): ValidationResult {
+export function validateQris(qrisString: string): ValidationResult {
   const errors: string[] = [];
 
   if (!qrisString || qrisString.trim().length === 0) {
-    return { valid: false, errors: ["QRIS string is empty"] };
+    return { valid: false, errors: ['QRIS string is empty'] };
   }
 
-  const str = qrisString.trim();
+  const normalized = qrisString.trim();
 
-  // Must start with payload format indicator "000201"
-  if (!str.startsWith("000201")) {
-    errors.push(
-      'QRIS must start with Payload Format Indicator "000201"'
-    );
+  if (!normalized.startsWith(PAYLOAD_PREFIX)) {
+    errors.push(`QRIS must start with Payload Format Indicator "${PAYLOAD_PREFIX}"`);
   }
 
-  // Minimum length check (header + CRC = at least 20 chars)
-  if (str.length < 20) {
-    errors.push("QRIS string is too short");
+  if (normalized.length < MIN_QRIS_LENGTH) {
+    errors.push('QRIS string is too short');
     return { valid: false, errors };
   }
 
-  // CRC validation
-  const dataWithoutCRC = str.substring(0, str.length - 4);
-  const declaredCRC = str.substring(str.length - 4);
-  const calculatedCRC = calculateCRC16(dataWithoutCRC);
+  const dataWithoutCrc = normalized.slice(0, -CRC_LENGTH);
+  const declaredCrc = normalized.slice(-CRC_LENGTH);
+  const calculatedCrc = calculateCrc16(dataWithoutCrc);
 
-  if (declaredCRC.toUpperCase() !== calculatedCRC) {
-    errors.push(
-      `CRC mismatch: expected ${calculatedCRC}, got ${declaredCRC.toUpperCase()}`
-    );
+  if (declaredCrc.toUpperCase() !== calculatedCrc) {
+    errors.push(`CRC mismatch: expected ${calculatedCrc}, got ${declaredCrc.toUpperCase()}`);
   }
 
-  // Try to parse TLV structure
-  const elements = parseTLV(str);
+  const elements = parseTlv(normalized);
 
   if (elements.length === 0) {
-    errors.push("Failed to parse any TLV elements");
+    errors.push('Failed to parse any TLV elements');
     return { valid: false, errors };
   }
 
-  // Check required tags
-  const tags = new Set(elements.map((e) => e.tag));
+  const presentTags = new Set(elements.map((el) => el.tag));
 
-  const requiredTags = [
-    { tag: "00", name: "Payload Format Indicator" },
-    { tag: "01", name: "Point of Initiation Method" },
-    { tag: "52", name: "Merchant Category Code" },
-    { tag: "53", name: "Transaction Currency" },
-    { tag: "58", name: "Country Code" },
-    { tag: "59", name: "Merchant Name" },
-    { tag: "60", name: "Merchant City" },
-    { tag: "63", name: "CRC" },
-  ];
-
-  for (const req of requiredTags) {
-    if (!tags.has(req.tag)) {
-      errors.push(`Missing required tag ${req.tag} (${req.name})`);
+  for (const required of REQUIRED_TAGS) {
+    if (!presentTags.has(required.tag)) {
+      errors.push(`Missing required tag ${required.tag} (${required.name})`);
     }
   }
 
-  // Check Point of Initiation Method value
-  const method = elements.find((e) => e.tag === "01");
-  if (method && method.value !== "11" && method.value !== "12") {
-    errors.push(
-      `Invalid Point of Initiation Method: "${method.value}" (must be "11" or "12")`
-    );
+  const method = elements.find((el) => el.tag === '01');
+  if (method && method.value !== '11' && method.value !== '12') {
+    errors.push(`Invalid Point of Initiation Method: "${method.value}" (must be "11" or "12")`);
   }
 
-  // Check at least one merchant account info exists (tags 26-51)
-  const hasMerchant = elements.some((e) => {
-    const n = parseInt(e.tag, 10);
-    return n >= 26 && n <= 51;
+  const hasMerchantInfo = elements.some((element) => {
+    const tagNumber = Number.parseInt(element.tag, 10);
+    return tagNumber >= 26 && tagNumber <= 51;
   });
-  if (!hasMerchant) {
-    errors.push("No Merchant Account Information found (tags 26-51)");
+
+  if (!hasMerchantInfo) {
+    errors.push('No Merchant Account Information found (tags 26-51)');
   }
 
   return { valid: errors.length === 0, errors };
 }
 
-/** Check if QRIS is valid (boolean shortcut) */
-export function isValidQRIS(qrisString: string): boolean {
-  return validateQRIS(qrisString).valid;
+/** @deprecated Use validateQris */
+export const validateQRIS = validateQris;
+
+/**
+ * Boolean shortcut for validation
+ */
+export function isValidQris(qrisString: string): boolean {
+  return validateQris(qrisString).valid;
 }
+
+/** @deprecated Use isValidQris */
+export const isValidQRIS = isValidQris;

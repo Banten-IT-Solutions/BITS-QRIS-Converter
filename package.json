@@ -42,7 +42,13 @@
     "prepublishOnly": "npm run build",
     "test": "node --test dist/cjs/**/*.test.js 2>/dev/null || echo \"no tests yet\"",
     "cli": "tsx src/cli.ts",
-    "lint": "tsc --noEmit"
+    "lint": "tsc --noEmit",
+    "lint:eslint": "eslint src --ext .ts",
+    "lint:fix": "eslint src --ext .ts --fix",
+    "format": "prettier --check \"src/**/*.{ts,js,json,md}\"",
+    "format:fix": "prettier --write \"src/**/*.{ts,js,json,md}\"",
+    "check": "npm run lint && npm run format",
+    "check:fix": "npm run lint:fix && npm run format:fix"
   },
   "keywords": [
     "qris",
@@ -75,12 +81,15 @@
     "qrcode": "^1.5.4"
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.5",
     "@types/node": "^22.0.0",
     "@types/qrcode": "^1.5.6",
+    "eslint": "^9.39.5",
+    "prettier": "^3.9.6",
     "tsx": "^4.19.0",
-    "typescript": "^5.7.0"
+    "typescript": "^5.7.0",
+    "typescript-eslint": "^8.69.0"
   },
-  "peerDependencies": {},
   "publishConfig": {
     "access": "public"
   }

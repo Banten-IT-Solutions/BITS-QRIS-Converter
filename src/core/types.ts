@@ -1,52 +1,65 @@
-/** A single TLV (Tag-Length-Value) element from a QRIS payload */
-export interface TLV {
+/**
+ * Core type definitions for BITS-QRIS-Converter
+ * Mengikuti standard: PascalCase untuk interface/type, JSDoc untuk dokumentasi
+ */
+
+/** Single TLV (Tag-Length-Value) element */
+export interface TlvElement {
   tag: string;
   name: string;
   length: number;
   value: string;
-  children?: TLV[];
+  children?: TlvElement[];
 }
 
-/** Parsed QRIS data in a human-friendly structure */
-export interface QRISData {
+/** @deprecated Use TlvElement — kept for backward compatibility */
+export type TLV = TlvElement;
+
+/** Parsed QRIS data — human-friendly */
+export interface QrisData {
   version: string;
-  method: "static" | "dynamic";
+  method: 'static' | 'dynamic';
   merchantAccountInfo: MerchantAccountInfo[];
   merchantCategoryCode: string;
   currency: string;
   amount?: string;
-  tipIndicator?: "prompt" | "fixed" | "percentage";
+  tipIndicator?: 'prompt' | 'fixed' | 'percentage';
   tipFixed?: string;
   tipPercentage?: string;
   countryCode: string;
   merchantName: string;
   merchantCity: string;
   postalCode: string;
-  additionalData?: TLV[];
+  additionalData?: TlvElement[];
   crc: string;
-  raw: TLV[];
+  raw: TlvElement[];
 }
+
+/** @deprecated Use QrisData */
+export type QRISData = QrisData;
 
 export interface MerchantAccountInfo {
   tag: string;
   globallyUniqueId: string;
   merchantId?: string;
   merchantCriteria?: string;
-  fields: TLV[];
+  fields: TlvElement[];
 }
+
+export type FeeType = 'fixed' | 'percentage';
 
 export interface ConvertOptions {
   amount: number | string;
   fee?: {
-    type: "fixed" | "percentage";
+    type: FeeType;
     value: number | string;
   };
 }
 
-/** Legacy options for backward compatibility with qris-dinamis 1.x */
+/** Legacy options — qris-dinamis 1.x compatibility */
 export interface LegacyConvertOptions {
   nominal: string | number;
-  taxtype?: "p" | "r";
+  taxtype?: 'p' | 'r';
   fee?: string | number;
 }
 
