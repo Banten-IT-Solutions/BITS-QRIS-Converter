@@ -1,0 +1,15 @@
+{
+  "name": "BITS QRIS — Static → Dynamic",
+  "short_name": "BITS QRIS",
+  "description": "Convert QRIS Static ke Dynamic — parser EMVCo, validator CRC, generator QR presisi. Offline-capable.",
+  "theme_color": "#0B1D3A",
+  "background_color": "#FFFBF5",
+  "display": "standalone",
+  "scope": "/",
+  "start_url": "/",
+  "icons": [
+    { "src": "/pwa-192x192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/pwa-512x512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/pwa-512x512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

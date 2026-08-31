@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <rect width="32" height="32" rx="2" fill="#FFFBF5" stroke="#0B1D3A" stroke-width="1.5"/>
+  <rect x="6" y="6" width="20" height="20" fill="none" stroke="#0B1D3A" stroke-width="1.5"/>
+  <text x="16" y="19" text-anchor="middle" font-family="Georgia, serif" font-size="10" fill="#0B1D3A" letter-spacing="-0.02em">BITS</text>
+</svg>
