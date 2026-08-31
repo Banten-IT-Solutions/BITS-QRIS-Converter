@@ -1,0 +1,15 @@
+name: Feature Request
+description: Usulkan fitur
+labels: ['enhancement']
+body:
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposal
+      placeholder: Tambah output SVG...
+    validations:
+      required: true
+  - type: textarea
+    id: alternative
+    attributes:
+      label: Alternatif

@@ -1,0 +1,7 @@
+# Default owners for everything
+* @bits-id
+
+# Require review for critical paths
+/src/core/ @bits-id
+/src/image/ @bits-id
+/assets/ @bits-id

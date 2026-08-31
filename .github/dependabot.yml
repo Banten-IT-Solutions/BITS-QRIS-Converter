@@ -1,0 +1,48 @@
+version: 2
+updates:
+  # NPM dependencies — weekly, grouped, auto-label
+  - package-ecosystem: 'npm'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+      time: '03:00'
+      timezone: 'Asia/Jakarta'
+    open-pull-requests-limit: 10
+    groups:
+      dev-dependencies:
+        patterns:
+          - '@*'
+          - 'eslint*'
+          - 'prettier*'
+          - 'typescript*'
+        update-types:
+          - 'minor'
+          - 'patch'
+      prod-dependencies:
+        patterns:
+          - 'jimp'
+          - 'qrcode'
+    labels:
+      - 'dependencies'
+      - 'dependabot'
+    commit-message:
+      prefix: 'chore'
+      include: 'scope'
+    reviewers:
+      - 'bits-id'
+
+  # GitHub Actions — weekly
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+      time: '03:00'
+      timezone: 'Asia/Jakarta'
+    labels:
+      - 'github-actions'
+      - 'dependabot'
+    commit-message:
+      prefix: 'chore'
+      include: 'scope'

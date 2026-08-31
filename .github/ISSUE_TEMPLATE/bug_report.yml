@@ -1,0 +1,27 @@
+name: Bug Report
+description: Laporkan bug
+labels: ['bug']
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Deskripsi Bug
+      placeholder: QRIS tidak ter-convert...
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Cara Reproduce
+      placeholder: |
+        1. convertQris('000201...', {amount: 50000})
+        2. Error ...
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      placeholder: 1.0.0
+    validations:
+      required: true

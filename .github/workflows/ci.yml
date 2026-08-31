@@ -1,0 +1,92 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint-and-typecheck:
+    name: Lint & Typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: ESLint
+        run: npm run lint:eslint -- --max-warnings 0
+
+      - name: Prettier check
+        run: npm run format
+
+      - name: TypeCheck
+        run: npm run lint
+
+  build:
+    name: Build (Node ${{ matrix.node }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [18, 20, 22]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js ${{ matrix.node }}
+        uses: actions/setup-node@v5
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Verify dual build
+        run: |
+          test -f dist/cjs/index.js
+          test -f dist/esm/index.js
+          test -f dist/esm/package.json
+          test -f dist/assets/images/qris-receipt-template.png
+          echo "✅ Build artifacts ok"
+
+      - name: Test CLI
+        run: |
+          node ./dist/cjs/cli.js --help
+          node ./dist/cjs/cli.js --validate "00020101021126560014ID.CO.QRIS.WWW0115ID10231625260990215ID10231625260995204581253033605802ID5914TOKO BITS JAYA6007JAKARTA61051234563049BBB"
+
+      - name: Test imports (ESM & CJS)
+        run: |
+          node -e "const m=require('./dist/cjs/index.js'); if(!m.convertQris) throw new Error('CJS missing')"
+          node --input-type=module -e "import('./dist/esm/index.js').then(m=>{if(!m.convertQris) throw new Error('ESM missing')})"
+
+      - name: Check pack size
+        run: npm pack --dry-run 2>&1 | tail -n 20
+
+  security:
+    name: Security Audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm audit --audit-level=moderate

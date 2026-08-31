@@ -48,7 +48,8 @@
     "format": "prettier --check \"src/**/*.{ts,js,json,md}\"",
     "format:fix": "prettier --write \"src/**/*.{ts,js,json,md}\"",
     "check": "npm run lint && npm run format",
-    "check:fix": "npm run lint:fix && npm run format:fix"
+    "check:fix": "npm run lint:fix && npm run format:fix",
+    "prepare": "husky"
   },
   "keywords": [
     "qris",
@@ -88,9 +89,22 @@
     "prettier": "^3.9.6",
     "tsx": "^4.23.13",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.69.0"
+    "typescript-eslint": "^8.69.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.2",
+    "@commitlint/cli": "^20.1.0",
+    "@commitlint/config-conventional": "^20.0.0"
   },
   "publishConfig": {
     "access": "public"
+  },
+  "lint-staged": {
+    "src/**/*.{ts,js}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,yml,yaml}": [
+      "prettier --write --ignore-unknown"
+    ]
   }
 }
