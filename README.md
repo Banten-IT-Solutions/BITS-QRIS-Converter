@@ -15,7 +15,7 @@
   <a href="https://www.npmjs.com/package/bits-qris-converter"><img src="https://img.shields.io/npm/v/bits-qris-converter?style=flat-square&color=0ea5e9&label=npm" alt="npm version" /></a>
   <a href="./LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow?style=flat-square" alt="License MIT" /></a>
   <a href="https://saweria.co/bantenitsolutions"><img src="https://img.shields.io/badge/Saweria-Donate-ffae00?style=flat-square&logo=heart&logoColor=white" alt="Saweria Donate" /></a>
-  <img src="https://img.shields.io/badge/TypeScript-5.7-3178c6?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript" />
+  <img src="https://img.shields.io/badge/TypeScript-6.0-3178c6?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript" />
   <img src="https://img.shields.io/badge/Node-%3E%3D16-339933?style=flat-square&logo=node.js&logoColor=white" alt="Node" />
   <img src="https://img.shields.io/badge/ESM%20%26%20CJS-dual-blueviolet?style=flat-square" alt="dual" />
   <img src="https://img.shields.io/badge/tests-passing-brightgreen?style=flat-square" alt="tests" />
@@ -39,7 +39,7 @@ Kami audit **5 repo QRIS** paling populer (razisek, agungjsp, verssache, Adytm40
 | Masalah Repo Lama                                     | Solusi BITS                                                              |
 | ----------------------------------------------------- | ------------------------------------------------------------------------ |
 | `split("5802ID")` — gagal jika `Country != ID`        | ✅ Parser **TLV rekursif** sesuai spec EMVCo                             |
-| `jimp@0.16.1` vulnerable, `slice(-3)` bug, crash null | ✅ `jimp@1.6.0` + CRC fix + null-safe                                    |
+| `jimp@0.16.1` vulnerable, `slice(-3)` bug, crash null | ✅ `jimp@1.6.1` + CRC fix + null-safe                                    |
 | Tidak ada validator                                   | ✅ `validateQris()` cek **8 required tags + CRC + merchant 26–51**       |
 | Hanya string, tanpa struk                             | ✅ `makeFile()` → JPG 1080×1920 + `base64`                               |
 | Hanya CLI sederhana / tanpa CLI                       | ✅ CLI **interactive + flags** lengkap                                   |
@@ -410,7 +410,7 @@ bits-qris-converter/
 
 - CRC16-CCITT `0x1021` init `0xFFFF` — sesuai EMVCo
 - Validasi 8 required tags + merchant 26–51 + CRC mismatch
-- `jimp@1.6.0` (0 vuln) bukan `0.16.1` vulnerable
+- `jimp@1.6.1` (0 vuln) bukan `0.16.1` vulnerable
 - Tidak pernah `eval`, tidak `split("5802ID")` fragile
 
 ---
@@ -419,7 +419,7 @@ bits-qris-converter/
 
 | Layer       | Tech                     |
 | ----------- | ------------------------ |
-| Language    | TypeScript 5.7 (strict)  |
+| Language    | TypeScript 6.0 (strict)  |
 | QR Generate | `qrcode` 1.5.4           |
 | Image       | `jimp` 1.6.0             |
 | Build       | `tsc` dual ESM/CJS       |
@@ -466,7 +466,7 @@ Jika library ini membantu bisnismu, traktir kopi untuk maintainer via **Saweria*
 
 ## 📄 License
 
-MIT © 2026 BITS — Bina Inovasi Teknologi Solusi.<br/>
+MIT © 2026 Banten IT Solutions (BITS) — https://bits.co.id.<br/>
 Original inspirations (MIT): `verssache/qris-dinamis`, `agungjsp/Dynamic-QRIS`, `razisek/Qris-Dinamis` — terima kasih!
 
 Lihat [`LICENSE`](./LICENSE) untuk detail.
