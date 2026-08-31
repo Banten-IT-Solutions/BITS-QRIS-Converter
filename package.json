@@ -77,17 +77,17 @@
     "node": ">=16.0.0"
   },
   "dependencies": {
-    "jimp": "^1.6.0",
+    "jimp": "^1.6.1",
     "qrcode": "^1.5.4"
   },
   "devDependencies": {
-    "@eslint/js": "^9.39.5",
-    "@types/node": "^22.0.0",
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^26.4.0",
     "@types/qrcode": "^1.5.6",
-    "eslint": "^9.39.5",
+    "eslint": "^10.9.1",
     "prettier": "^3.9.6",
-    "tsx": "^4.19.0",
-    "typescript": "^5.7.0",
+    "tsx": "^4.23.13",
+    "typescript": "^6.0.3",
     "typescript-eslint": "^8.69.0"
   },
   "publishConfig": {
