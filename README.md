@@ -19,7 +19,7 @@ Dari 5 repo yang dianalisis, BITS menggabungkan kelebihan dan membuang kekuranga
 | `split("5802ID")` fragile — gagal kalau country != ID | ✅ Parser TLV rekursif proper sesuai EMVCo |
 | `jimp@0.16.1` vulnerable & `slice(-3)` bug | ✅ `jimp@1.6.0` + CRC fix + null-safe |
 | Tidak ada validator | ✅ `validateQRIS()` cek 8 required tags + CRC |
-| Cuma QR string, tidak ada gambar struk (verssache) | ✅ `makeFile()` dengan `template.png` + fonts + base64 |
+| Cuma QR string, tidak ada gambar struk (verssache) | ✅ `makeFile()` dengan `assets/images/qris-receipt-template.png` + `assets/fonts/` + base64 |
 | Cuma library, tidak ada CLI | ✅ CLI interactive + flags `--convert --image --base64` |
 | Hanya CommonJS / hanya ESM | ✅ Dual **ESM + CJS** (`import` & `require` both work) |
 
@@ -108,7 +108,7 @@ console.log(qrOnly); // data:image/png;base64,...
 // Custom template
 await makeFile(staticQRIS, {
   amount: 50000,
-  templatePath: 'assets/custom-template.png'
+  templatePath: 'assets/images/custom-template.png'
 });
 
 // Info merchant untuk overlay
@@ -116,7 +116,7 @@ const merchant = getMerchantInfo(staticQRIS);
 console.log(merchant.nmid, merchant.merchantName, merchant.nns);
 ```
 
-**Hasil `makeFile` di Node.js:** composite QR 512x512 di `assets/template.png` (1080x1920) + overlay `NMID`, `ID`, `Merchant Name`, `NNS` dengan font `BebasNeue/Roboto`. Di Browser otomatis fallback ke `QR DataURL` (tanpa template karena butuh fs).
+**Hasil `makeFile` di Node.js:** composite QR 512x512 di `assets/images/qris-receipt-template.png` (1080x1920) + overlay `NMID`, `ID`, `Merchant Name`, `NNS` dengan font `title-bebas-neue`/`body-roboto`/`caption-roboto`. Di Browser otomatis fallback ke `QR DataURL` (tanpa template karena butuh fs).
 
 ### 4. Browser
 
@@ -216,19 +216,40 @@ console.log('Struk:', file);
 bits-qris-converter/
 ├── src/
 │   ├── core/               # TLV proper (port verssache, improved)
-│   │   ├── parser.ts       # parseTLV, parseQRIS
-│   │   ├── converter.ts    # convertQRIS (TLV, bukan split)
-│   │   ├── validator.ts    # validateQRIS
-│   │   ├── crc16.ts        # CRC16-CCITT
-│   │   └── types.ts
+│   │   ├── constants.ts    # TAG, REQUIRED_TAGS, CRC constants
+│   │   ├── types.ts        # TlvElement, QrisData, ConvertOptions
+│   │   ├── crc16.ts        # calculateCrc16
+│   │   ├── parser.ts       # parseTlv, parseQris
+│   │   ├── converter.ts    # convertQris (TLV, bukan split)
+│   │   ├── validator.ts    # validateQris
+│   │   └── index.ts
+│   ├── shared/
+│   │   ├── errors.ts       # QrisError hierarchy
+│   │   └── format.ts       # padLength, formatRupiah
 │   ├── image/
-│   │   ├── generator.ts    # makeFile, makeQRDataURL (Jimp + qrcode)
-│   │   └── utils.ts        # getMerchantInfo
-│   ├── index.ts            # Main export (dual ESM/CJS)
-│   └── cli.ts              # CLI interactive + flags
+│   │   ├── types.ts        # ImageOptions, QrOnlyOptions
+│   │   ├── merchant-info.ts# getMerchantInfo
+│   │   ├── qr-renderer.ts  # makeQrDataUrl, makeQrBuffer
+│   │   ├── font-loader.ts  # loadReceiptFonts (cached)
+│   │   ├── template-resolver.ts
+│   │   ├── receipt-generator.ts # makeFile (Jimp + qrcode)
+│   │   └── index.ts
+│   ├── cli/
+│   │   ├── constants.ts
+│   │   ├── parser.ts
+│   │   ├── interactive.ts
+│   │   └── commands.ts
+│   ├── index.ts            # Public barrel (dual ESM/CJS)
+│   └── cli.ts              # Bin wrapper
 ├── assets/
-│   ├── template.png        # Template struk 1080x1920
-│   └── font/               # BebasNeue, Roboto
+│   ├── images/
+│   │   └── qris-receipt-template.png  # Template struk 1080x1920
+│   └── fonts/                         # kebab-case, semantic
+│       ├── title-bebas-neue/          # Merchant name (Bebas Neue 90)
+│       ├── title-bebas-neue-compact/  # Long name (60)
+│       ├── body-roboto-large/         # NMID (35)
+│       ├── body-roboto-medium/
+│       └── caption-roboto-small/      # Footer
 ├── examples/
 ├── dist/                   # Build output (esm + cjs)
 └── package.json
@@ -292,5 +313,5 @@ MIT © BITS — Based on MIT from `verssache/qris-dinamis` & `agungjsp/Dynamic-Q
 
 ## Contributing
 
-PR welcome! Untuk template struk custom, taruh PNG 1080x1920 di `assets/template.png` dan font `.fnt` di `assets/font/`.
+PR welcome! Untuk template struk custom, taruh PNG 1080x1920 di `assets/images/qris-receipt-template.png` dan font `.fnt` di `assets/fonts/<kebab-case>/` (e.g. `title-bebas-neue/`).
 

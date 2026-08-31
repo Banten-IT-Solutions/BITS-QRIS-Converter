@@ -6,8 +6,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-const DEFAULT_TEMPLATE = 'assets/template.png';
-const DIST_TEMPLATE = 'dist/assets/template.png';
+const DEFAULT_TEMPLATE = 'assets/images/qris-receipt-template.png';
+const DIST_TEMPLATE = 'dist/assets/images/qris-receipt-template.png';
 
 export function resolveTemplatePath(customPath?: string): string {
   const candidates: string[] = [

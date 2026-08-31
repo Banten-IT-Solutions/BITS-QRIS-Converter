@@ -59,26 +59,18 @@ export async function loadReceiptFonts(merchantName: string): Promise<LoadedFont
   const isVeryLong = merchantName.length > 28;
 
   const titleFontPath = isLongName
-    ? 'assets/font/BebasNeueSedang/BebasNeue-Regular.ttf.fnt'
-    : 'assets/font/BebasNeue/BebasNeue-Regular.ttf.fnt';
+    ? 'assets/fonts/title-bebas-neue-compact/title-bebas-neue-compact.fnt'
+    : 'assets/fonts/title-bebas-neue/title-bebas-neue.fnt';
 
   const midFontPath = isVeryLong
-    ? 'assets/font/RobotoSedang/Roboto-Regular.ttf.fnt'
-    : 'assets/font/RobotoBesar/Roboto-Regular.ttf.fnt';
+    ? 'assets/fonts/body-roboto-medium/body-roboto-medium.fnt'
+    : 'assets/fonts/body-roboto-large/body-roboto-large.fnt';
 
-  const smallFontPath = 'assets/font/RobotoKecil/Roboto-Regular.ttf.fnt';
+  const smallFontPath = 'assets/fonts/caption-roboto-small/caption-roboto-small.fnt';
 
-  const titleCandidates = [
-    titleFontPath,
-    `dist/${titleFontPath}`,
-    `dist/assets/${titleFontPath.replace('assets/', '')}`,
-  ];
-  const midCandidates = [
-    midFontPath,
-    `dist/${midFontPath}`,
-    `dist/assets/${midFontPath.replace('assets/', '')}`,
-  ];
-  const smallCandidates = [smallFontPath, `dist/assets/${smallFontPath.replace('assets/', '')}`];
+  const titleCandidates = [titleFontPath, `dist/${titleFontPath}`];
+  const midCandidates = [midFontPath, `dist/${midFontPath}`];
+  const smallCandidates = [smallFontPath, `dist/${smallFontPath}`];
 
   const titlePath = findExistingPath(titleCandidates);
   const midPath = findExistingPath(midCandidates);
