@@ -1,0 +1,87 @@
+{
+  "name": "bits-qris-converter",
+  "version": "1.0.0",
+  "description": "QRIS Static → Dynamic converter — parse, validate, convert + cetak gambar struk. Hybrid terbaik dari qris-dinamis (verssache) + Dynamic-QRIS template engine.",
+  "type": "commonjs",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/esm/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/esm/index.d.ts",
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js"
+    },
+    "./core": {
+      "types": "./dist/esm/core/index.d.ts",
+      "import": "./dist/esm/core/index.js",
+      "require": "./dist/cjs/core/index.js"
+    },
+    "./image": {
+      "types": "./dist/esm/image/index.d.ts",
+      "import": "./dist/esm/image/index.js",
+      "require": "./dist/cjs/image/index.js"
+    }
+  },
+  "bin": {
+    "bits-qris": "./dist/cjs/cli.js"
+  },
+  "files": [
+    "dist",
+    "assets",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "npm run clean && npm run build:esm && npm run build:cjs && npm run copy:assets",
+    "build:esm": "tsc -p tsconfig.json",
+    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "clean": "rm -rf dist",
+    "copy:assets": "mkdir -p dist/assets && cp -r assets/* dist/assets/ 2>/dev/null || true; echo '{\"type\":\"module\"}' > dist/esm/package.json",
+    "dev": "tsc -p tsconfig.json --watch",
+    "prepublishOnly": "npm run build",
+    "test": "node --test dist/cjs/**/*.test.js 2>/dev/null || echo \"no tests yet\"",
+    "cli": "tsx src/cli.ts",
+    "lint": "tsc --noEmit"
+  },
+  "keywords": [
+    "qris",
+    "qris-dinamis",
+    "qris-converter",
+    "qr-code",
+    "payment",
+    "indonesia",
+    "emvco",
+    "gpn",
+    "bits",
+    "dynamic-qris",
+    "struk"
+  ],
+  "author": "BITS <bits@qris.dev>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bits-id/qris-converter"
+  },
+  "bugs": {
+    "url": "https://github.com/bits-id/qris-converter/issues"
+  },
+  "homepage": "https://github.com/bits-id/qris-converter#readme",
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "dependencies": {
+    "jimp": "^1.6.0",
+    "qrcode": "^1.5.4"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/qrcode": "^1.5.6",
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0"
+  },
+  "peerDependencies": {},
+  "publishConfig": {
+    "access": "public"
+  }
+}

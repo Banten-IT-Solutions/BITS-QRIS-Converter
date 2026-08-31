@@ -1,0 +1,7 @@
+src/
+examples/
+.gitignore
+tsconfig*.json
+*.log
+.output/
+.output
