@@ -21,6 +21,11 @@
       "types": "./dist/esm/image/index.d.ts",
       "import": "./dist/esm/image/index.js",
       "require": "./dist/cjs/image/index.js"
+    },
+    "./image/qr-renderer": {
+      "types": "./dist/esm/image/qr-renderer.d.ts",
+      "import": "./dist/esm/image/qr-renderer.js",
+      "require": "./dist/cjs/image/qr-renderer.js"
     }
   },
   "bin": {

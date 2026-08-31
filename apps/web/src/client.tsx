@@ -1,5 +1,21 @@
 import './style.css';
-import { convertQris, parseQris, validateQris, makeQrDataUrl } from 'bits-qris-converter';
+import { convertQris, parseQris, validateQris } from 'bits-qris-converter/core';
+import { makeQrDataUrl } from 'bits-qris-converter/image/qr-renderer';
+import { registerSW } from 'virtual:pwa-register';
+
+// PWA — autoUpdate + offline
+registerSW({ immediate: true });
+
+let deferredPrompt: Event | null = null;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  document.getElementById('pwaBanner')?.classList.add('show');
+});
+window.addEventListener('appinstalled', () => {
+  deferredPrompt = null;
+  document.getElementById('pwaBanner')?.classList.remove('show');
+});
 
 // --- helpers: decode QR image via jsQR (loaded via CDN) ---
 declare global {
@@ -45,6 +61,13 @@ const $ = <T extends Element>(s: string) => document.querySelector(s) as T;
 
 function render() {
   document.querySelector('#app')!.innerHTML = `
+  <div class="pwa-banner" id="pwaBanner">
+    <span>📲 Install BITS QRIS — pakai offline tanpa sinyal</span>
+    <div style="display:flex;gap:8px">
+      <button id="pwaInstall">Install</button>
+      <button id="pwaDismiss" style="background:transparent;color:#fff;border:1px solid #fff">Nanti</button>
+    </div>
+  </div>
   <div class="topbar">
     <div class="topbar-inner">
       <div class="brand">
@@ -140,6 +163,21 @@ function render() {
     <div>Workers • Hono 4.13 • Vite 8 • Wrangler 4.127</div>
   </footer>
   `;
+
+  // PWA install handling
+  (document.getElementById('pwaInstall') as HTMLButtonElement)?.addEventListener('click', async () => {
+    if (!deferredPrompt) return;
+    (deferredPrompt as unknown as { prompt: () => void }).prompt();
+    // @ts-ignore
+    const choice = await (deferredPrompt as unknown as { userChoice: Promise<{ outcome: string }> }).userChoice;
+    if (choice.outcome === 'accepted') {
+      document.getElementById('pwaBanner')?.classList.remove('show');
+    }
+    deferredPrompt = null;
+  });
+  (document.getElementById('pwaDismiss') as HTMLButtonElement)?.addEventListener('click', () => {
+    document.getElementById('pwaBanner')?.classList.remove('show');
+  });
 
   // --- wiring ---
   const qrisEl = $('#qris') as HTMLTextAreaElement;
