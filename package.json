@@ -49,7 +49,9 @@
     "format:fix": "prettier --write \"src/**/*.{ts,js,json,md}\"",
     "check": "npm run lint && npm run format",
     "check:fix": "npm run lint:fix && npm run format:fix",
-    "prepare": "husky"
+    "prepare": "husky",
+    "release": "semantic-release",
+    "release:dry": "semantic-release --dry-run"
   },
   "keywords": [
     "qris",
@@ -82,18 +84,24 @@
     "qrcode": "^1.5.4"
   },
   "devDependencies": {
+    "@commitlint/cli": "^20.1.0",
+    "@commitlint/config-conventional": "^20.0.0",
     "@eslint/js": "^10.0.1",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^11.0.2",
+    "@semantic-release/npm": "^12.0.1",
     "@types/node": "^26.4.0",
     "@types/qrcode": "^1.5.6",
+    "conventional-changelog-conventionalcommits": "^8.0.0",
     "eslint": "^10.9.1",
-    "prettier": "^3.9.6",
-    "tsx": "^4.23.13",
-    "typescript": "^6.0.3",
-    "typescript-eslint": "^8.69.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.1.2",
-    "@commitlint/cli": "^20.1.0",
-    "@commitlint/config-conventional": "^20.0.0"
+    "prettier": "^3.9.6",
+    "semantic-release": "^24.2.0",
+    "tsx": "^4.23.13",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.69.0"
   },
   "publishConfig": {
     "access": "public"
