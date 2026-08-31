@@ -76,9 +76,17 @@ jobs:
           npm publish --access public || echo "⚠️ npm publish with token also failed — likely requires OTP/2FA. Please configure trusted publisher or use automation token."
         continue-on-error: true
 
+      - name: Get version for tag
+        id: version
+        run: echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
+
       - name: Create GitHub Release
+        # Only create release when triggered by tag push, or when version input creates a tag
+        # For workflow_dispatch without tag, skip or create tag first
+        if: github.ref_type == 'tag' || inputs.version != ''
         uses: softprops/action-gh-release@v3
         with:
+          tag_name: ${{ github.ref_type == 'tag' && github.ref_name || format('v{0}', steps.version.outputs.version) }}
           generate_release_notes: true
           files: |
             dist/**/*
