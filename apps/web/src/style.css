@@ -1,0 +1,131 @@
+/* BITS — Modern editorial, bukan AI Slop
+   Palet: kertas #FFFBF5, tinta #0A0A0A, garis #E8E0D6, aksen #0B1D3A (navy), #FF4D00 hanya untuk error
+   Tipografi: Instrument Serif (judul) + system sans + JetBrains Mono (QRIS string)
+   Prinsip: grid 12, border 1px, whitespace besar, tidak ada glass/gradient ungu generik
+*/
+
+:root {
+  --bg: #FFFBF5;
+  --fg: #0A0A0A;
+  --muted: #6B6B6B;
+  --line: #E8E0D6;
+  --line-strong: #1A1A1A;
+  --accent: #0B1D3A;
+  --accent-2: #FF4D00;
+  --card: #FFFFFF;
+  --radius: 2px;
+  --mono: "JetBrains Mono", ui-monospace, monospace;
+  --serif: "Instrument Serif", Georgia, serif;
+  --sans: ui-sans-system, -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: var(--bg); color: var(--fg); font-family: var(--sans); }
+a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
+a:hover { opacity: 0.7; }
+
+/* — Top bar: tinggi, tipis, editorial — */
+.topbar {
+  border-bottom: 1px solid var(--line-strong);
+  background: var(--bg);
+  position: sticky; top: 0; z-index: 10;
+}
+.topbar-inner {
+  max-width: 1180px; margin: 0 auto; padding: 14px 20px;
+  display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 16px;
+}
+.brand { display: flex; align-items: baseline; gap: 10px; }
+.brand-mark {
+  font-family: var(--serif); font-size: 22px; letter-spacing: -0.02em; line-height: 1;
+  border: 1.5px solid var(--line-strong); padding: 4px 8px; background: var(--card);
+}
+.brand-meta { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.nav { display: flex; gap: 14px; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; }
+
+/* — Hero: editorial, bukan centered AI — */
+.hero {
+  max-width: 1180px; margin: 0 auto; padding: 32px 20px 18px;
+  display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 32px;
+  border-bottom: 1px solid var(--line);
+}
+.hero h1 {
+  font-family: var(--serif); font-size: 52px; line-height: 0.95; letter-spacing: -0.03em;
+  margin: 0 0 10px; font-weight: 400;
+}
+.hero h1 i { font-style: italic; color: var(--muted); }
+.hero p { margin: 0; color: var(--muted); line-height: 1.6; max-width: 46ch; }
+.hero-meta {
+  display: grid; grid-template-columns: auto auto 1fr; gap: 8px; align-items: center;
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.02em; margin-top: 14px;
+}
+.badge { border: 1px solid var(--line-strong); padding: 3px 7px; background: var(--card); }
+.hero-card {
+  border: 1px solid var(--line-strong); background: var(--card); padding: 14px;
+  display: grid; gap: 8px;
+}
+.hero-card .k { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.hero-card .v { font-family: var(--mono); font-size: 12px; word-break: break-all; line-height: 1.5; }
+.hero-card .sep { height: 1px; background: var(--line); margin: 2px 0; }
+
+/* — Main grid — */
+.main {
+  max-width: 1180px; margin: 0 auto; padding: 18px 20px 40px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 18px;
+}
+@media (max-width: 860px) { .hero { grid-template-columns: 1fr; } .main { grid-template-columns: 1fr; } .hero h1 { font-size: 40px; } }
+
+/* — Cards: border tegas, tidak shadow — */
+.card {
+  border: 1px solid var(--line-strong); background: var(--card); padding: 16px;
+}
+.card-head {
+  display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: baseline;
+  border-bottom: 1px solid var(--line); padding-bottom: 10px; margin-bottom: 14px;
+}
+.card-head h2 { margin: 0; font-family: var(--serif); font-weight: 400; font-size: 22px; letter-spacing: -0.02em; }
+.card-head span { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+
+/* — Form — */
+.field { display: grid; gap: 6px; margin-bottom: 12px; }
+.field label { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.field input, .field select, .field textarea {
+  width: 100%; border: 1px solid var(--line-strong); background: #fff; padding: 10px 11px;
+  font-family: var(--sans); font-size: 14px; border-radius: var(--radius); outline: none;
+}
+.field textarea { font-family: var(--mono); font-size: 12px; line-height: 1.5; resize: vertical; }
+.field input:focus, .field select:focus, .field textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(11,29,58,0.08); }
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.hint { font-size: 12px; color: var(--muted); line-height: 1.5; }
+.uploader {
+  border: 1px dashed var(--line-strong); background: #fff; padding: 14px; display: grid; place-items: center; gap: 6px;
+  cursor: pointer; transition: background 0.15s;
+}
+.uploader:hover { background: #FFF8EC; }
+.uploader small { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+.btn {
+  appearance: none; border: 1px solid var(--line-strong); background: var(--accent); color: #fff;
+  padding: 11px 14px; font-family: var(--sans); font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase;
+  cursor: pointer; border-radius: var(--radius);
+}
+.btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.btn.secondary { background: #fff; color: var(--fg); }
+.actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* — Preview — */
+.qr-wrap { border: 1px solid var(--line-strong); background: #fff; padding: 12px; display: grid; place-items: center; min-height: 280px; }
+.qr-wrap img { width: 260px; height: 260px; image-rendering: pixelated; border: 1px solid var(--line); }
+.qr-empty { font-family: var(--mono); font-size: 12px; color: var(--muted); text-align: center; line-height: 1.6; }
+.meta { display: grid; gap: 8px; font-size: 13px; line-height: 1.6; }
+.meta b { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.code {
+  font-family: var(--mono); font-size: 11px; line-height: 1.6; word-break: break-all;
+  border: 1px solid var(--line); background: #FFFEFC; padding: 10px; max-height: 160px; overflow: auto;
+}
+.alert { border: 1px solid var(--accent-2); background: #FFF2EF; padding: 10px; font-size: 12px; line-height: 1.6; }
+.ok { border: 1px solid #0B6E4F; background: #EFF8F5; padding: 10px; font-size: 12px; }
+
+/* — Footer — */
+.foot {
+  max-width: 1180px; margin: 0 auto; padding: 14px 20px; border-top: 1px solid var(--line-strong);
+  display: grid; grid-template-columns: 1fr auto; gap: 12px; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted);
+}

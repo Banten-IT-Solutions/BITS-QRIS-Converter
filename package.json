@@ -114,5 +114,9 @@
     "*.{json,md,yml,yaml}": [
       "prettier --write --ignore-unknown"
     ]
-  }
+  },
+  "workspaces": [
+    "apps/*"
+  ],
+  "private": true
 }
