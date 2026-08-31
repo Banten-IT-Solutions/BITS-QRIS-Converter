@@ -1,4 +1,4 @@
-name: Release (Manual — prefer semantic-release)
+name: 🏷️ Manual
 
 on:
   push:
