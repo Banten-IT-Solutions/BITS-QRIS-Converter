@@ -50,14 +50,17 @@ jobs:
         if: ${{ inputs.version != '' }}
         run: npm version ${{ inputs.version }} --no-git-tag-version
 
-      - name: Publish to NPM (with provenance)
-        # NOTE: npm publish requires valid NPM_TOKEN with 2FA bypass or OIDC trusted publisher.
-        # For v1.0.0 we keep publish dry-run tolerant to allow GitHub Release creation even if token invalid.
+      - name: Publish to NPM (with provenance via OIDC trusted publisher)
         run: |
-          if [ -z "${{ secrets.NPM_TOKEN }}" ]; then
-            echo "⚠️ NPM_TOKEN not set — skipping npm publish (GitHub Release only)"
+          echo "📦 Attempting npm publish with OIDC provenance..."
+          # Try OIDC trusted publisher first (no token needed, uses id-token)
+          if npm publish --provenance --access public; then
+            echo "✅ Published via OIDC provenance"
+          elif [ -n "${{ secrets.NPM_TOKEN }}" ]; then
+            echo "⚠️ OIDC publish failed, trying with NPM_TOKEN..."
+            npm publish --access public || echo "⚠️ npm publish with token also failed — check 2FA/trusted publisher config"
           else
-            npm publish --access public || echo "⚠️ npm publish failed (likely OTP/2FA) — continuing to GitHub Release"
+            echo "⚠️ OIDC publish failed and no NPM_TOKEN — see https://docs.npmjs.com/trusted-publishers"
           fi
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
