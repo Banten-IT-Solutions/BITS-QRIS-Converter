@@ -1,6 +1,6 @@
 # BITS Web — Hono + Vite + Cloudflare Workers
 
-Demo production untuk `bits-qris-converter` — **modern, edge-native, bukan AI Slop**.
+Demo production untuk `bits-qris` — **modern, edge-native, bukan AI Slop**.
 
 ## Stack Latest (2026-08-31)
 

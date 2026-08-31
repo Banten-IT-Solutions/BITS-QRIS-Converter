@@ -1,5 +1,5 @@
 {
-  "name": "bits-qris-converter",
+  "name": "bits-qris",
   "version": "1.0.0",
   "description": "QRIS Static → Dynamic converter — parse, validate, convert + cetak gambar struk. Hybrid terbaik: Core TLV presisi + Cetak Struk siap print.",
   "type": "commonjs",
@@ -123,7 +123,6 @@
   "workspaces": [
     "apps/*"
   ],
-  "private": true,
   "funding": {
     "type": "saweria",
     "url": "https://saweria.co/bantenitsolutions"

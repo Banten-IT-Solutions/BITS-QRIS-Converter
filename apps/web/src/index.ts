@@ -1,5 +1,5 @@
 import { Hono } from 'hono';
-import { convertQris, validateQris, makeQrDataUrl } from 'bits-qris-converter';
+import { convertQris, validateQris, makeQrDataUrl } from 'bits-qris';
 
 type Bindings = {
   ASSETS: Fetcher;
@@ -35,7 +35,7 @@ app.get('/api/convert', async (c) => {
   }
 });
 
-app.get('/api/health', (c) => c.json({ ok: true, worker: 'bits-qris-converter', at: new Date().toISOString() }));
+app.get('/api/health', (c) => c.json({ ok: true, worker: 'bits-qris', at: new Date().toISOString() }));
 
 // Fallback to static assets (Vite client) — untuk Cloudflare Workers Assets
 app.get('*', async (c) => {

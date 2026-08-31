@@ -4,7 +4,7 @@
  *
  * @packageDocumentation
  * @example
- * import { convertQris, parseQris, validateQris, makeFile } from 'bits-qris-converter';
+ * import { convertQris, parseQris, validateQris, makeFile } from 'bits-qris';
  */
 
 // Core — canonical (kebab/camelCase) + deprecated uppercase aliases for backward compat
@@ -76,10 +76,10 @@ export {
   QrisValidationError,
 } from './shared/errors.js';
 
-// Legacy image utils wrapper — kept for `import { getMerchantInfo } from 'bits-qris-converter'` via utils path
+// Legacy image utils wrapper — kept for `import { getMerchantInfo } from 'bits-qris'` via utils path
 export { normalizeLegacyOptions } from './image/utils.js';
 
-// Default export — named bundle for `import pkg from 'bits-qris-converter'` compat (deprecated, prefer named imports)
+// Default export — named bundle for `import pkg from 'bits-qris'` compat (deprecated, prefer named imports)
 import { calculateCrc16 } from './core/crc16.js';
 import { convertQris, makeStringLegacy } from './core/converter.js';
 import { parseQris, parseTlv } from './core/parser.js';

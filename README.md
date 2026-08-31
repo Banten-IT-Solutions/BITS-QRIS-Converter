@@ -50,7 +50,7 @@
 ## 📁 Project Structure
 
 ```text
-bits-qris-converter/
+bits-qris/
 ├── src/
 │   ├── core/               # pure, no I/O
 │   │   ├── constants.ts    # TAG, REQUIRED_TAGS
@@ -99,12 +99,12 @@ bits-qris-converter/
 ## 📦 Instalasi
 
 ```bash
-npm i bits-qris-converter
-# yarn add bits-qris-converter
-# pnpm add bits-qris-converter
+npm i bits-qris
+# yarn add bits-qris
+# pnpm add bits-qris
 
 # cek instalasi
-node -e "import('bits-qris-converter').then(m=>console.log(Object.keys(m).slice(0,5)))"
+node -e "import('bits-qris').then(m=>console.log(Object.keys(m).slice(0,5)))"
 ```
 
 **Requirements:** Node.js `>=16`, modern browser (ES2022).
@@ -116,7 +116,7 @@ node -e "import('bits-qris-converter').then(m=>console.log(Object.keys(m).slice(
 ### Modern API (Direkomendasikan)
 
 ```typescript
-import { convertQris, parseQris, validateQris } from 'bits-qris-converter';
+import { convertQris, parseQris, validateQris } from 'bits-qris';
 
 const staticQris =
   '00020101021126560014ID.CO.QRIS.WWW0115ID10231625260990215ID10231625260995204581253033605802ID5919BANTEN IT SOLUTIONS6006SERANG6304DA44';
@@ -142,7 +142,7 @@ console.log(dynamic); // ...540550000...6304ABCD (CRC baru)
 ### Legacy API (Kompatibel `qris-dinamis 1.x`)
 
 ```typescript
-import { makeString, makeFile } from 'bits-qris-converter';
+import { makeString, makeFile } from 'bits-qris';
 
 // Tetap jalan
 const dynamic = makeString(staticQris, { nominal: '50000', taxtype: 'r', fee: '1000' });
@@ -154,7 +154,7 @@ const file = await makeFile(staticQris, { nominal: '50000', base64: false });
 ## 🖨️ Cetak Struk
 
 ```typescript
-import { makeFile, makeQrDataUrl, getMerchantInfo } from 'bits-qris-converter';
+import { makeFile, makeQrDataUrl, getMerchantInfo } from 'bits-qris';
 
 // 1. Simpan JPG struk (Node.js)
 const path = await makeFile(staticQris, {
@@ -202,12 +202,12 @@ await makeFile(staticQris, {
 ## 🌐 Browser
 
 ```typescript
-import { convertQris, validateQris } from 'bits-qris-converter';
+import { convertQris, validateQris } from 'bits-qris';
 
 const dynamic = convertQris(qris, { amount: 100_000 });
 console.log(validateQris(dynamic).valid); // true
 
-import { makeFile } from 'bits-qris-converter';
+import { makeFile } from 'bits-qris';
 const dataUrl = await makeFile(qris, { amount: 100_000, base64: true });
 document.querySelector<HTMLImageElement>('#qr')!.src = dataUrl;
 ```
@@ -220,7 +220,7 @@ document.querySelector<HTMLImageElement>('#qr')!.src = dataUrl;
 # Interactive wizard (parse → amount → fee → struk)
 npx bits-qris
 # atau
-npx bits-qris-converter
+npx bits-qris
 
 # One-liner
 npx bits-qris --validate "000201010211..."
@@ -344,7 +344,7 @@ import {
   formatRupiah,
   padLength,
   sanitizeFilename,
-} from 'bits-qris-converter';
+} from 'bits-qris';
 ```
 
 ---
@@ -359,7 +359,7 @@ node examples/legacy.cjs     # CJS legacy
 
 ```typescript
 // examples/basic.mjs
-import { convertQris, makeFile, parseQris } from 'bits-qris-converter';
+import { convertQris, makeFile, parseQris } from 'bits-qris';
 
 const QRIS =
   '00020101021126560014ID.CO.QRIS.WWW0115ID10231625260990215ID10231625260995204581253033605802ID5919BANTEN IT SOLUTIONS6006SERANG6304DA44';
@@ -391,7 +391,7 @@ flowchart LR
 **Struktur Project — Clean & Maintainable:**
 
 ```
-bits-qris-converter/
+bits-qris/
 ├── src/
 │   ├── core/               # pure, no I/O
 │   │   ├── constants.ts    # TAG, REQUIRED_TAGS

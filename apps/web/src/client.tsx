@@ -1,6 +1,6 @@
 import './style.css';
-import { convertQris, parseQris, validateQris } from 'bits-qris-converter/core';
-import { makeQrDataUrl } from 'bits-qris-converter/image/qr-renderer';
+import { convertQris, parseQris, validateQris } from 'bits-qris/core';
+import { makeQrDataUrl } from 'bits-qris/image/qr-renderer';
 import { registerSW } from 'virtual:pwa-register';
 
 // PWA — autoUpdate + offline
@@ -74,12 +74,12 @@ function render() {
         <div class="brand-mark">BITS</div>
         <div>
           <div style="font-family:var(--serif);font-size:13px;letter-spacing:-0.02em">QRIS Converter</div>
-          <div class="brand-meta">Static → Dynamic • Edge • bits-qris-converter@1.0.0</div>
+          <div class="brand-meta">Static → Dynamic • Edge • bits-qris@1.0.0</div>
         </div>
       </div>
       <nav class="nav">
         <a href="https://github.com/bits-id/qris-converter" target="_blank">GitHub</a>
-        <a href="https://www.npmjs.com/package/bits-qris-converter" target="_blank">NPM</a>
+        <a href="https://www.npmjs.com/package/bits-qris" target="_blank">NPM</a>
       </nav>
     </div>
   </div>

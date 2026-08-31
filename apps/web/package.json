@@ -12,7 +12,7 @@
     "check": "tsc --noEmit"
   },
   "dependencies": {
-    "bits-qris-converter": "file:../..",
+    "bits-qris": "file:../..",
     "hono": "^4.13.5"
   },
   "devDependencies": {

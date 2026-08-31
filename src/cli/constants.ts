@@ -14,7 +14,7 @@ Usage:
   ${CLI_NAME} --validate <QRIS>        Validate QRIS
   ${CLI_NAME} --parse <QRIS>           Parse QRIS
   ${CLI_NAME} --convert <QRIS> <AMOUNT> [--fee <VALUE> --type <fixed|percentage>] [--image <path>] [--base64]
-  npx bits-qris-converter --convert ...
+  npx bits-qris --convert ...
 
 Examples:
   ${CLI_NAME} --convert "000201010211..." 50000
@@ -22,5 +22,5 @@ Examples:
   ${CLI_NAME} --convert "000201010211..." 50000 --fee 2.5 --type percentage --base64
 
 API (programmatic):
-  import { convertQris, makeFile, parseQris, validateQris } from "bits-qris-converter";
+  import { convertQris, makeFile, parseQris, validateQris } from "bits-qris";
 `.trim();

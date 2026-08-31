@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "bits-qris-converter",
+  "name": "bits-qris",
   "main": "src/index.ts",
   "compatibility_date": "2026-08-31",
   "compatibility_flags": ["nodejs_compat"],
@@ -15,7 +15,7 @@
     }
   ],
   "vars": {
-    "WORKER_NAME": "bits-qris-converter",
+    "WORKER_NAME": "bits-qris",
     "CUSTOM_DOMAIN": "qris.bits.co.id"
   },
   "observability": {

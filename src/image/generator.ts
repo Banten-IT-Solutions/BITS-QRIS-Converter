@@ -1,7 +1,7 @@
 /**
  * @deprecated Legacy entry point — kept for backward compatibility with v1 imports
- * Use `bits-qris-converter/image` or `bits-qris-converter` directly
- * @example import { makeFile } from 'bits-qris-converter/image/receipt-generator.js'
+ * Use `bits-qris/image` or `bits-qris` directly
+ * @example import { makeFile } from 'bits-qris/image/receipt-generator.js'
  */
 
 export {
