@@ -21,24 +21,6 @@
 
 ---
 
-## ✨ Kenapa BITS?
-
-Kami audit **5 repo QRIS** paling populer (razisek, agungjsp, verssache, Adytm404, justpiple). BITS mengambil **yang terbaik**, membuang yang fragile.
-
-| Masalah Repo Lama                                     | Solusi BITS                                                              |
-| ----------------------------------------------------- | ------------------------------------------------------------------------ |
-| `split("5802ID")` — gagal jika `Country != ID`        | ✅ Parser **TLV rekursif** sesuai spec EMVCo                             |
-| `jimp@0.16.1` vulnerable, `slice(-3)` bug, crash null | ✅ `jimp@1.6.1` + CRC fix + null-safe                                    |
-| Tidak ada validator                                   | ✅ `validateQris()` cek **8 required tags + CRC + merchant 26–51**       |
-| Hanya string, tanpa struk                             | ✅ `makeFile()` → JPG 1080×1920 + `base64`                               |
-| Hanya CLI sederhana / tanpa CLI                       | ✅ CLI **interactive + flags** lengkap                                   |
-| Hanya CJS atau ESM                                    | ✅ **Dual ESM & CJS** (`import` & `require`)                             |
-| Aset berantakan `font/BebasNeue`                      | ✅ `assets/fonts/kebab-case` + `assets/images/qris-receipt-template.png` |
-
-> **Hasil:** Library paling **presisi, aman, dan siap produksi** untuk ekosistem QRIS Indonesia.
-
----
-
 ## ✨ Features
 
 | Feature              | Description                                                                        |
@@ -475,8 +457,6 @@ npm pack --dry-run   # 230 files, 952KB
 npm publish --access public
 ```
 
-Release otomatis via **semantic-release** — push `feat:`/`fix:` ke `main` → versi + `CHANGELOG.md` + GitHub Release + NPM publish.
-
 ## 🤝 Contributing
 
 PR sangat diterima!
@@ -498,13 +478,14 @@ Jika library ini membantu bisnismu, traktir kopi via **Saweria** — 100% untuk 
 
 ## 📄 License
 
-MIT © 2026 Banten IT Solutions (BITS) — https://bits.co.id<br/>
-Original inspirations (MIT): `verssache/qris-dinamis`, `agungjsp/Dynamic-QRIS`, `razisek/Qris-Dinamis` — terima kasih!
+**MIT © 2026 Banten IT Solutions (BITS) — https://bits.co.id**
+
+Original inspirations (MIT): `verssache/qris-dinamis` • `agungjsp/Dynamic-QRIS` • `razisek/Qris-Dinamis` — terima kasih!
 
 Lihat [`LICENSE`](./LICENSE).
 
+---
+
 <p align="center">
-  Dibuat dengan ❤️ untuk ekosistem QRIS Indonesia —<br/>
-  <strong>BITS: Bikin QRIS Jadi Dinamis, Clean & Siap Produksi.</strong><br/>
-  <a href="https://bits.co.id">bits.co.id</a> • <a href="https://qris.bits.co.id">qris.bits.co.id</a>
+  Dibuat dengan ❤️ untuk ekosistem QRIS Indonesia — <strong>BITS: Bikin QRIS Jadi Dinamis, Clean & Siap Produksi.</strong> • <a href="https://bits.co.id">bits.co.id</a> • <a href="https://qris.bits.co.id">qris.bits.co.id</a>
 </p>
