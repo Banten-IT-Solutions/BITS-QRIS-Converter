@@ -239,7 +239,7 @@ function render() {
         <div class="feature-icon" aria-hidden="true">✦</div>
         <h3>Gratis & Offline</h3>
         <p>Bisa dipakai tanpa internet. Gratis selamanya, tanpa iklan, tanpa tracking.</p>
-        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:auto;padding-top:8px;border-top:1px dashed var(--line);font-family:var(--mono);font-size:10px;color:var(--muted)"><span>PWA</span><span>•</span><span>Offline</span><span>•</span><span>MIT</span></div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:auto;padding-top:8px;border-top:1px dashed var(--line);font-family:var(--mono);font-size:10px;color:var(--muted)"><span>PWA</span><span>•</span><span>Offline</span><span>•</span><span>Gratis</span></div>
       </article>
     </div>
   </section>
@@ -318,51 +318,58 @@ function render() {
       <h2 id="playTitle" style="margin:0">Integrasi untuk Developer</h2>
       <span class="ascii-label">GET /api/convert • npm • npx</span>
     </div>
-    <div class="playground-grid">
-      <div class="terminal" role="region" aria-label="API playground terminal">
+    <div class="playground-grid" style="align-items:stretch">
+      <div class="terminal" role="region" aria-label="API playground terminal" style="display:flex;flex-direction:column;height:100%">
         <div class="terminal-bar">
           <span class="terminal-title"><b>curl</b> — https://qris.bits.co.id</span>
-          <div class="terminal-actions"><button id="copyCurl">Copy curl</button></div>
+          <div class="terminal-actions"><button id="copyCurl">Copy</button></div>
         </div>
-        <div class="terminal-body" style="padding:0">
-          <div class="code-block" style="border:none; margin:0; border-radius:0">
-            <button class="copy" id="copyCurl2">Copy</button>
-            <div style="color:var(--terminal-muted)"># GET — server-side convert (Hono + Cloudflare Workers)</div>
-            <div style="color:var(--terminal-fg)">curl -s "https://qris.bits.co.id/api/convert?amount=50000&amp;qris=000201010211..." | jq</div>
-            <div style="margin-top:10px; color:var(--terminal-muted)"># → response</div>
-            <div style="color:var(--terminal-green)">{</div>
+        <div class="terminal-body" style="padding:0;flex:1;display:flex;flex-direction:column">
+          <div class="code-block" style="flex:1;border:none;margin:0;border-radius:0;padding:14px">
+            <div style="color:var(--terminal-muted);font-size:11px"># GET — server-side convert (Hono + Cloudflare Workers)</div>
+            <div style="color:var(--terminal-fg);margin-top:4px;word-break:break-all">curl -s "https://qris.bits.co.id/api/convert?amount=50000&amp;qris=000201010211..." | jq</div>
+            <div style="margin-top:12px;color:var(--terminal-muted);font-size:11px"># → response</div>
+            <div style="color:var(--terminal-green);margin-top:4px">{</div>
             <div style="color:var(--terminal-green)">&nbsp;&nbsp;"valid": true,</div>
             <div style="color:var(--terminal-fg);opacity:0.9">&nbsp;&nbsp;"dynamic": "000201010212...6304ABCD",</div>
             <div style="color:var(--terminal-fg);opacity:0.9">&nbsp;&nbsp;"qrDataUrl": "data:image/png;base64,iVBORw..."</div>
             <div style="color:var(--terminal-green)">}</div>
           </div>
         </div>
-        <div style="padding:10px 12px; background:var(--terminal-bg-soft); border-top:1px solid var(--terminal-border); display:flex; gap:8px; flex-wrap:wrap">
-          <a href="/api/health" target="_blank" rel="noopener" class="chip" style="background:var(--terminal-bg-soft);color:var(--terminal-muted);border-color:var(--terminal-border);text-decoration:none">GET /api/health → 200 OK</a>
-          <span class="chip" style="background:var(--terminal-bg-soft);color:var(--terminal-muted);border-color:var(--terminal-border)">Hono 4.13 • Workers</span>
+        <div style="padding:10px 12px;background:var(--terminal-bg-soft);border-top:1px solid var(--terminal-border);display:flex;gap:8px;flex-wrap:wrap">
+          <a href="/api/health" target="_blank" rel="noopener" class="chip" style="background:var(--terminal-bg-soft);color:var(--terminal-muted);border-color:var(--terminal-border);text-decoration:none;font-size:10px">Status API • 200 OK</a>
+          <span class="chip" style="background:var(--terminal-bg-soft);color:var(--terminal-muted);border-color:var(--terminal-border);font-size:10px">Edge • Global</span>
         </div>
       </div>
 
-      <div style="display:grid; gap:14px">
-        <div class="playground-card">
-          <h3>NPM — code-first</h3>
-          <p>Gunakan sebagai library. ESM + CJS + types. Core & image terpisah — tree-shakeable.</p>
-          <div class="code-block">
-            <button class="copy" data-copy="npm">Copy</button>
-            <div id="codeNpm"><span style="color:#8a8f98"># install</span><br/>npm i bits-qris<br/><br/><span style="color:#8a8f98">// convert</span><br/><span style="color:#ff7ab2">import</span> { convertQris } <span style="color:#ff7ab2">from</span> <span style="color:#a7f3d0">'bits-qris/core'</span><br/>convertQris(qris, { amount: <span style="color:#ffb000">50000</span> })</div>
+      <div style="display:flex;flex-direction:column;gap:14px;height:100%">
+        <div class="terminal" style="flex:1;display:flex;flex-direction:column">
+          <div class="terminal-bar">
+            <span class="terminal-title"><b>npm</b> — bits-qris</span>
+            <div class="terminal-actions"><button data-copy="npm">Copy</button></div>
+          </div>
+          <div class="terminal-body" style="padding:0;flex:1;display:flex;flex-direction:column">
+            <div style="padding:10px 12px 0;color:var(--terminal-muted);font-size:11px;line-height:1.5">Gunakan sebagai library. ESM + CJS + types.</div>
+            <div class="code-block" style="flex:1;border:none;margin:0;border-radius:0;padding:10px 12px">
+              <div id="codeNpm"><span style="color:var(--terminal-muted)"># install</span><br/>npm i bits-qris<br/><br/><span style="color:var(--terminal-muted)">// convert</span><br/><span style="color:#ff7ab2">import</span> { convertQris } <span style="color:#ff7ab2">from</span> <span style="color:var(--terminal-green)">'bits-qris/core'</span><br/>convertQris(qris, { amount: <span style="color:var(--terminal-amber)">50000</span> })</div>
+            </div>
           </div>
         </div>
-        <div class="playground-card">
-          <h3>CLI — npx langsung jalan</h3>
-          <p>Tanpa install. Untuk kasir, otomasi, atau iseng di terminal.</p>
-          <div class="code-block">
-            <button class="copy" data-copy="npx">Copy</button>
-            <div id="codeNpx">npx bits-qris convert "000201..." --amount 50000<br/>npx bits-qris validate "000201..."<br/>npx bits-qris image --amount 25000 --out qris.png</div>
+        <div class="terminal" style="flex:1;display:flex;flex-direction:column">
+          <div class="terminal-bar">
+            <span class="terminal-title"><b>npx</b> — bits-qris</span>
+            <div class="terminal-actions"><button data-copy="npx">Copy</button></div>
+          </div>
+          <div class="terminal-body" style="padding:0;flex:1;display:flex;flex-direction:column">
+            <div style="padding:10px 12px 0;color:var(--terminal-muted);font-size:11px;line-height:1.5">Tanpa install. Untuk kasir, otomasi, atau iseng di terminal.</div>
+            <div class="code-block" style="flex:1;border:none;margin:0;border-radius:0;padding:10px 12px">
+              <div id="codeNpx">npx bits-qris convert "000201..." --amount 50000<br/>npx bits-qris validate "000201..."<br/>npx bits-qris image --amount 25000 --out qris.png</div>
+            </div>
           </div>
         </div>
-        <div style="display:flex; gap:8px; flex-wrap:wrap">
-          <a href="https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter" target="_blank" rel="noopener" class="btn secondary" style="flex:1;text-decoration:none">Docs di GitHub →</a>
-          <a href="https://www.npmjs.com/package/bits-qris" target="_blank" rel="noopener" class="btn" style="flex:1;text-decoration:none">Buka NPM →</a>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <a href="https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter" target="_blank" rel="noopener" class="btn secondary" style="flex:1;text-decoration:none;min-height:40px">Docs di GitHub →</a>
+          <a href="https://www.npmjs.com/package/bits-qris" target="_blank" rel="noopener" class="btn" style="flex:1;text-decoration:none;min-height:40px">Buka NPM →</a>
         </div>
       </div>
     </div>
@@ -370,50 +377,48 @@ function render() {
 
   <!-- STATS / OPEN SOURCE -->
   <section class="section" aria-labelledby="statsTitle">
-    <div class="section-head">
-      <div>
-        <div class="eyebrow" style="display:flex;align-items:center;gap:8px;white-space:nowrap;font-family:var(--mono)"><span aria-hidden="true" style="flex:1;height:1px;background:repeating-linear-gradient(to right, var(--terminal-border) 0 6px, transparent 6px 10px);min-width:24px;opacity:0.8"></span><span aria-hidden="true" style="color:var(--terminal-green)">┌─</span><span style="border:1px solid var(--terminal-border);background:var(--terminal-bg);color:var(--terminal-fg);padding:2px 8px;display:inline-flex;align-items:center;gap:6px"><span style="width:6px;height:6px;border-radius:50%;background:var(--terminal-green);box-shadow:0 0 6px color-mix(in srgb, var(--terminal-green) 60%, transparent)"></span>OPEN SOURCE</span><span aria-hidden="true" style="color:var(--terminal-green)">─┐</span><span aria-hidden="true" style="flex:1;height:1px;background:repeating-linear-gradient(to right, var(--terminal-border) 0 6px, transparent 6px 10px);min-width:24px;opacity:0.8"></span></div>
-        <h2 id="statsTitle">Dibuat untuk UMKM & Developer Indonesia</h2>
-      </div>
+    <div class="section-head" style="flex-direction:column;align-items:center;text-align:center;gap:10px">
+      <div class="eyebrow" style="display:flex;align-items:center;gap:8px;white-space:nowrap;font-family:var(--mono);width:100%;max-width:520px;justify-content:center"><span aria-hidden="true" style="flex:1;height:1px;background:repeating-linear-gradient(to right, var(--terminal-border) 0 6px, transparent 6px 10px);min-width:24px;opacity:0.8"></span><span aria-hidden="true" style="color:var(--terminal-green)">┌─</span><span style="border:1px solid var(--terminal-border);background:var(--terminal-bg);color:var(--terminal-fg);padding:2px 8px;display:inline-flex;align-items:center;gap:6px"><span style="width:6px;height:6px;border-radius:50%;background:var(--terminal-green);box-shadow:0 0 6px color-mix(in srgb, var(--terminal-green) 60%, transparent)"></span>OPEN SOURCE</span><span aria-hidden="true" style="color:var(--terminal-green)">─┐</span><span aria-hidden="true" style="flex:1;height:1px;background:repeating-linear-gradient(to right, var(--terminal-border) 0 6px, transparent 6px 10px);min-width:24px;opacity:0.8"></span></div>
+      <h2 id="statsTitle" style="margin:0">Dibuat untuk UMKM & Developer Indonesia</h2>
       <span class="ascii-label">★ STAR • FORK • CONTRIBUTE</span>
     </div>
     <div class="stats-grid">
       <div style="display:grid; gap:12px">
         <div class="stat-row">
-          <div class="stat"><span class="stat-icon">⬡</span><div><b>Version</b><strong>v${APP_VERSION}</strong></div></div>
-          <div class="stat"><span class="stat-icon">⚖</span><div><b>License</b><strong>MIT</strong></div></div>
-          <div class="stat"><span class="stat-icon">◐</span><div><b>Offline</b><strong>PWA • Workbox</strong></div></div>
+          <div class="stat"><span class="stat-icon">⬡</span><div><b>Versi Terkini</b><strong>v${APP_VERSION} • Stabil</strong></div></div>
+          <div class="stat"><span class="stat-icon">⚖</span><div><b>Bebas Pakai</b><strong>Gratis Selamanya</strong></div></div>
+          <div class="stat"><span class="stat-icon">◐</span><div><b>Tanpa Internet</b><strong>Offline • PWA</strong></div></div>
         </div>
         <div class="stat-row">
-          <div class="stat"><span class="stat-icon">▦</span><div><b>Stack</b><strong>Workers • Hono • Vite</strong></div></div>
-          <div class="stat"><span class="stat-icon">⬢</span><div><b>Fonts</b><strong>Instrument Serif + Mono</strong></div></div>
-          <div class="stat"><span class="stat-icon">♡</span><div><b>Funding</b><strong>Saweria</strong></div></div>
+          <div class="stat"><span class="stat-icon">▦</span><div><b>Instan & Andal</b><strong>Edge • Global</strong></div></div>
+          <div class="stat"><span class="stat-icon">⬢</span><div><b>Library Lengkap</b><strong>NPM • ESM • CJS</strong></div></div>
+          <div class="stat"><span class="stat-icon">♡</span><div><b>Gotong Royong</b><strong>Komunitas • Saweria</strong></div></div>
         </div>
         <div class="paper">
-          <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted)">Paper note — dari Banten untuk Indonesia</div>
-          <p style="margin:8px 0 0; line-height:1.6; color:var(--muted); font-size:13px">BITS QRIS lahir dari kebutuhan nyata: banyak UMKM hanya punya QRIS Static, tapi butuh QRIS Dynamic dengan nominal. Kami bikin konverter yang <b style="color:var(--fg)">akurat, gratis, dan bisa dipakai siapa saja</b> — di browser, di server, bahkan di terminal. No paywall. No tracker. Hanya paper + terminal.</p>
-          <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap">
-            <span class="chip">UMKM</span><span class="chip">Developer</span><span class="chip">Payment Gateway</span><span class="chip">Kasir</span>
+          <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted)">Dari Banten untuk Indonesia</div>
+          <p style="margin:8px 0 0; line-height:1.65; color:var(--muted); font-size:13px">Dibuat karena kebutuhan nyata: banyak UMKM cuma punya QRIS Static. Sekarang <b style="color:var(--fg)">konversi jadi Dynamic bisa di mana saja</b> — browser, server, bahkan terminal. Cepat, akurat, tanpa biaya dan tanpa iklan.</p>
+          <div style="margin-top:10px; display:flex; gap:6px; flex-wrap:wrap">
+            <span class="chip" style="font-size:10px">UMKM</span><span class="chip" style="font-size:10px">Warung</span><span class="chip" style="font-size:10px">Developer</span><span class="chip" style="font-size:10px">Kasir</span>
           </div>
         </div>
       </div>
 
-      <div class="cta-card">
-        <div class="ascii-label" style="background:rgba(255,255,255,0.12);border-color:rgba(255,255,255,0.3);color:#fff;width:fit-content" data-dark-invert>◆ OPEN SOURCE</div>
-        <h3>Bantu kami tetap gratis.<br/>Star & kontribusi?</h3>
-        <p>Kode terbuka di GitHub. Butuh fitur? Buka issue. Mau bantu? PR welcome. Atau traktir kami via Saweria — biar tetap semangat.</p>
-        <div class="cta-actions">
-          <a href="https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter" target="_blank" rel="noopener" class="btn-light">★ Star di GitHub</a>
-          <a href="https://saweria.co/bantenitsolutions" target="_blank" rel="noopener" class="btn-ghost-light">☕ Saweria</a>
+      <div class="paper">
+        <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted)">◆ Dukung Kami</div>
+        <h3 style="margin:8px 0 0;font-family:var(--serif);font-weight:400;font-size:19px;letter-spacing:-0.02em;line-height:1.1">Biar tetap gratis<br/>untuk semua.</h3>
+        <p style="margin:8px 0 0;line-height:1.65;color:var(--muted);font-size:13px">Kode terbuka, bebas pakai. Punya ide? Buka issue. Ingin bantu? Kirim PR. Atau cukup beri bintang dan traktir kopi — sangat berarti.</p>
+        <div class="cta-actions" style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+          <a href="https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter" target="_blank" rel="noopener" class="btn" style="flex:1;text-decoration:none;min-height:40px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> Star di GitHub</a>
+          <a href="https://saweria.co/bantenitsolutions" target="_blank" rel="noopener" class="btn secondary" style="flex:1;text-decoration:none;min-height:40px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg> Traktir Kopi</a>
         </div>
-        <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.08em;text-transform:uppercase;opacity:0.7;margin-top:4px">MIT • github.com/Banten-IT-Solutions/BITS-QRIS-Converter</div>
+        <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-top:8px">github.com/Banten-IT-Solutions/BITS-QRIS-Converter</div>
       </div>
     </div>
   </section>
 
   <footer class="foot">
-    <div>© 2026 BITS — Banten IT Solutions • Lisensi MIT • <a href="https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter">github.com/Banten-IT-Solutions/BITS-QRIS-Converter</a></div>
-    <div>Workers • Hono 4.13 • Vite 8 • <span id="footTheme" class="mono"></span></div>
+    <div>© 2026 BITS QRIS Converter — Banten IT Solutions • <a href="https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter">GitHub</a> • <a href="https://www.npmjs.com/package/bits-qris">NPM</a></div>
+    <div>Gratis • Aman • Open Source • Privasi Terjaga</div>
   </footer>
 
   <div id="toastContainer" aria-live="polite" aria-atomic="true"></div>
@@ -539,32 +544,27 @@ function render() {
     setTimeout(() => (btn.textContent = old), 1200);
   });
 
-  // playground copy
+  // playground copy — semua pakai helper copyText + toast biar konsisten & simetris
   const copyMap: Record<string, string> = {
     npm: `npm i bits-qris\nimport { convertQris } from 'bits-qris/core'\nconvertQris(qris, { amount: 50000 })`,
     npx: `npx bits-qris convert "000201..." --amount 50000\nnpx bits-qris validate "000201..."\nnpx bits-qris image --amount 25000 --out qris.png`,
   };
-  document.querySelectorAll<HTMLButtonElement>('.code-block .copy[data-copy]').forEach((b) => {
+  document.querySelectorAll<HTMLButtonElement>('.terminal-actions button[data-copy]').forEach((b) => {
     b.addEventListener('click', async () => {
       const k = b.dataset.copy!;
-      await navigator.clipboard.writeText(copyMap[k] || '');
+      const ok = await copyText(copyMap[k] || '');
       const old = b.textContent;
-      b.textContent = 'Copied';
+      b.textContent = ok ? 'Copied' : 'Gagal';
+      if (ok) showToast(k === 'npm' ? 'Perintah npm tersalin' : 'Perintah npx tersalin', 'success');
       setTimeout(() => (b.textContent = old!), 1200);
     });
   });
   document.getElementById('copyCurl')?.addEventListener('click', async () => {
-    await navigator.clipboard.writeText(`curl -s "https://qris.bits.co.id/api/convert?amount=50000&qris=000201010211..." | jq`);
+    const ok = await copyText(`curl -s "https://qris.bits.co.id/api/convert?amount=50000&qris=000201010211..." | jq`);
     const b = document.getElementById('copyCurl') as HTMLButtonElement;
     const old = b.textContent;
-    b.textContent = 'Copied';
-    setTimeout(() => (b.textContent = old!), 1200);
-  });
-  document.getElementById('copyCurl2')?.addEventListener('click', async () => {
-    await navigator.clipboard.writeText(`curl -s "https://qris.bits.co.id/api/convert?amount=50000&qris=000201010211..." | jq`);
-    const b = document.getElementById('copyCurl2') as HTMLButtonElement;
-    const old = b.textContent;
-    b.textContent = 'Copied';
+    b.textContent = ok ? 'Copied' : 'Gagal';
+    if (ok) showToast('Perintah curl tersalin', 'success');
     setTimeout(() => (b.textContent = old!), 1200);
   });
 
