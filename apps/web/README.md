@@ -46,6 +46,6 @@ npm run deploy --workspace=@bits/web # → qris.bits.co.id
 
 <div align="center">
 
-**BITS Web** · Node 24 LTS · `qris.bits.co.id`
+**BITS QRIS Converter** · **BITS Web** · `qris.bits.co.id` · Dibuat dengan ❤️ oleh <a href="https://banten-it-solutions.github.io"><strong>Banten IT Solutions</strong></a>
 
 </div>
