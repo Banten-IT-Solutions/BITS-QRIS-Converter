@@ -117,7 +117,7 @@ bits-qris/
 └── package.json
 ```
 
-## 📦 Instalasi — Satu Baris
+## 📦 Instalasi
 
 | Manager           | Perintah                                           |
 | ----------------- | -------------------------------------------------- |
@@ -388,7 +388,7 @@ console.log('Struk:', file); // output/BANTEN_IT_SOLUTIONS-...jpg
 
 ---
 
-## 🏗️ Arsitektur — Ringkas
+## 🏗️ Arsitektur
 
 ```text
 Static QRIS → parseTlv → validateQris → convertQris (inject 54/55/56/57, recalc CRC) → Dynamic String → makeFile (Jimp) / DataURL
@@ -396,7 +396,7 @@ Static QRIS → parseTlv → validateQris → convertQris (inject 54/55/56/57, r
 
 ---
 
-## 🛡️ Keamanan & Validasi — Terpercaya
+## 🛡️ Keamanan
 
 | Item            | Detail                                                             |
 | --------------- | ------------------------------------------------------------------ |

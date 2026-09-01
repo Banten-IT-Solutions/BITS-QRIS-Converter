@@ -7,7 +7,7 @@
 | `1.x`   | ✅ Active | Patch & security fix |
 | `<1.0`  | ❌ EOL    | Upgrade ke `1.x`     |
 
-## 🚨 Reporting a Vulnerability — Private
+## 🚨 Reporting
 
 > **Jangan buka Issue publik** untuk vulnerability — pakai channel private.
 
@@ -17,7 +17,7 @@
 | **2. Detail** | Sertakan deskripsi, PoC, dan dampak                            |
 | **3. Respon** | Kami respon dalam **48 jam** & fix dalam **7 hari** jika valid |
 
-## 🔒 Security Best Practices
+## 🔒 Best Practices
 
 | Praktik           | Detail                                                            |
 | ----------------- | ----------------------------------------------------------------- |

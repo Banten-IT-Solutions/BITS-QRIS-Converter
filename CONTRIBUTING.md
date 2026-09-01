@@ -10,7 +10,7 @@
 | **Package Manager** | `npm 10+`               | Wajib `npm ci` (jangan `npm install` biar lock konsisten) |
 | **OS**              | macOS / Linux / Windows | Tested di Ubuntu + Cloudflare Workers                     |
 
-## 🚀 Alur Kerja — 5 Langkah
+## 🚀 Alur Kerja
 
 ### 1️⃣ Fork & Clone
 
@@ -44,7 +44,7 @@ git commit -m "feat: tambah validasi QRIS v2"
 
 Push ke fork → buka PR → template otomatis terisi di `.github/pull_request_template.md` — isi checklist **Production Ready**.
 
-## 🪝 Pre-commit — Otomatis
+## 🪝 Pre-commit
 
 `husky` + `lint-staged` (`eslint --fix`, `prettier`) & `commitlint` — jika gagal, fix lalu `git add` lagi.
 
@@ -55,7 +55,7 @@ npm run build && npm run lint && npx tsc --noEmit
 node ./dist/cjs/cli.js --help
 ```
 
-## 📦 Publish — Hanya Maintainer
+## 📦 Publish
 
 ```bash
 npm version patch|minor|major
