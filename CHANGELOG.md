@@ -1,3 +1,9 @@
+## [1.4.0](https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/compare/v1.3.0...v1.4.0) (2026-09-01)
+
+### ✨ Features
+
+- **web:** polish install, toast and layout consistency ([1afcaf8](https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/commit/1afcaf87a017e5db03dc6bf9a23458d1e45b5d2b)), closes [#C8C0B0](https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/issues/C8C0B0) [#CBD5E1](https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/issues/CBD5E1) [#0F1217](https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/issues/0F1217)
+
 ## [1.3.0](https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/compare/v1.2.0...v1.3.0) (2026-09-01)
 
 ### ✨ Features
