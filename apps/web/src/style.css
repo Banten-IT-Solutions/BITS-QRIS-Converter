@@ -558,17 +558,28 @@ img { max-width: 100%; height: auto; }
 
 /* — PWA banner — */
 .pwa-banner {
-  display:none; border:1px solid var(--line-strong); background: var(--accent); color:#fff;
-  padding:10px 12px; font-size:13px; align-items:center; justify-content:space-between; gap:12px;
-  max-width: var(--max); margin: 0 auto;
+  display:none; border:1px solid var(--line-strong); background: var(--card); color: var(--fg);
+  padding:10px 12px; font-size:12px; font-family: var(--mono); letter-spacing:0.02em;
+  align-items:center; justify-content:space-between; gap:12px;
+  max-width: var(--max); margin: 8px auto; box-shadow: var(--shadow-paper);
 }
-[data-theme='dark'] .pwa-banner { background:#f5f1e8; color:#0a0c10; border-color:#f5f1e8; }
-.pwa-banner.show { display:flex; }
+.pwa-banner.show { display:flex; flex-wrap:wrap; }
+.pwa-banner span { display:flex; align-items:center; gap:8px; }
+.pwa-banner span::before {
+  content:''; width:6px; height:6px; border-radius:50%; background: var(--terminal-green);
+  box-shadow: 0 0 6px color-mix(in srgb, var(--terminal-green) 60%, transparent); flex-shrink:0;
+}
 .pwa-banner button {
-  background:#fff; color: var(--accent); border:1px solid var(--line-strong);
-  padding:8px 10px; font-size:12px; letter-spacing:0.06em; text-transform:uppercase; cursor:pointer; min-height:36px;
+  background: var(--card); color: var(--fg); border:1px solid var(--line-strong);
+  padding:7px 12px; font-family: var(--mono); font-size:11px; letter-spacing:0.06em;
+  text-transform:uppercase; cursor:pointer; min-height:32px; border-radius: var(--radius);
+  transition: background 0.15s, border-color 0.15s;
 }
-[data-theme='dark'] .pwa-banner button { background:#0a0c10; color:#f5f1e8; }
+.pwa-banner button:hover { background: var(--bg-soft); border-color: var(--line-strong); }
+.pwa-banner button.secondary {
+  background: transparent; border-color: var(--line); color: var(--muted);
+}
+.pwa-banner button.secondary:hover { background: var(--bg-soft); border-color: var(--line-strong); color: var(--fg); }
 
 /* — Responsive — */
 @media (max-width: 980px){

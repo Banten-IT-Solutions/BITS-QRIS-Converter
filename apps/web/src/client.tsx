@@ -97,10 +97,10 @@ function render() {
 
   document.querySelector('#app')!.innerHTML = `
   <div class="pwa-banner" id="pwaBanner">
-    <span>Pasang BITS QRIS — akses offline kapan saja</span>
-    <div style="display:flex;gap:8px">
+    <span>Akses Offline — Pasang BITS QRIS di Perangkat</span>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
       <button id="pwaInstall">Pasang</button>
-      <button id="pwaDismiss" style="background:transparent;color:inherit;border:1px solid currentColor">Nanti</button>
+      <button id="pwaDismiss" class="secondary">Nanti</button>
     </div>
   </div>
 
