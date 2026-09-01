@@ -93,6 +93,6 @@ Buka **Issue** dengan template di `.github/ISSUE_TEMPLATE/` — bug_report / fea
 
 <div align="center">
 
-**BITS QRIS Converter** · `classic × terminal × paper` · Node 24 LTS · Dibuat di Banten 🇮🇩
+**BITS QRIS Converter** · Node 24 LTS · Dibuat di Banten 🇮🇩
 
 </div>

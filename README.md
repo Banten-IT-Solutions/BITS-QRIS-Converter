@@ -30,15 +30,15 @@
 
 ## 🧭 Daftar Isi
 
-| Menu                                   | Deskripsi                                      |
-| -------------------------------------- | ---------------------------------------------- |
-| [✨ Features](#-features)              | Fitur utama — parser, converter, struk         |
-| [📦 Instalasi](#-instalasi)            | Cara pasang — npm/pnpm/bun/yarn                |
-| [⚡ Quick Start](#-quick-start)        | Mulai cepat — modern & legacy API              |
-| [🖨️ Cetak Struk](#️-cetak-struk)        | Generate struk JPG + QR                        |
-| [🌐 Web Demo](https://qris.bits.co.id) | Demo `classic × terminal × paper` — dark/light |
-| [💻 CLI](#-cli)                        | `npx bits-qris` interactive                    |
-| [📚 API Reference](#-api-reference)    | Core, Image, Shared                            |
+| Menu                                   | Deskripsi                              |
+| -------------------------------------- | -------------------------------------- |
+| [✨ Features](#-features)              | Fitur utama — parser, converter, struk |
+| [📦 Instalasi](#-instalasi)            | Cara pasang — npm/pnpm/bun/yarn        |
+| [⚡ Quick Start](#-quick-start)        | Mulai cepat — modern & legacy API      |
+| [🖨️ Cetak Struk](#️-cetak-struk)        | Generate struk JPG + QR                |
+| [🌐 Web Demo](https://qris.bits.co.id) | Demo — dark/light, install tabs        |
+| [💻 CLI](#-cli)                        | `npx bits-qris` interactive            |
+| [📚 API Reference](#-api-reference)    | Core, Image, Shared                    |
 
 ---
 

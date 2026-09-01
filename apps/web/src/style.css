@@ -1,5 +1,5 @@
-/* BITS QRIS Converter — classic × terminal × paper — OPSI B: light=paper, dark=ink
-   Light: terminal jadi kertas (paper) — Dark: terminal jadi ink (terminal pekat)
+/* BITS QRIS Converter — OPSI B: light paper, dark ink
+   Light: #FFFFFF paper — Dark: #06080C ink
 */
 
 :root {

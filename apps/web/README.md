@@ -1,6 +1,6 @@
 # 🌐 BITS Web — Hono + Vite + Cloudflare Workers
 
-> Demo production untuk `bits-qris` — **classic × terminal × paper**, edge-native, Node 24 LTS.
+> Demo production untuk `bits-qris` — edge-native, Node 24 LTS.
 
 ## Stack Latest (2026-08-31)
 
@@ -12,12 +12,10 @@
 
 ## Desain — Classic × Terminal × Paper
 
-- **Tema:** `classic` editorial + `terminal` mono + `paper` texture — Opsi B: light paper `#FFFFFF` / dark ink `#06080C` adaptif
-- **Palet:** kertas `#FFFBF5`, tinta `#0A0A0A`, garis `#C8C0B0` abu warm (tidak hitam pekat), aksen navy `#0B1D3A`
-- **Tipografi:** `Instrument Serif` (judul) + `JetBrains Mono` (terminal/QRIS) + system sans — bukan Inter generik
-- **Layout:** grid 12, border 1px, whitespace, paper cards + terminal windows, dark/light toggle via `data-theme`
-- **Prinsip:** editorial Swiss, high-contrast, handcrafted — terasa dibuat manusia, bukan `prompt: modern dashboard`
-- **Fitur:** install tabs (`npm/pnpm/bun/yarn/npx`), hero terminal typing, 3-step equal-height cards, toast paper, adaptive QR bg
+- **Palet:** kertas `#FFFBF5`, tinta `#0A0A0A`, garis `#C8C0B0` abu warm, aksen navy `#0B1D3A`
+- **Tipografi:** `Instrument Serif` (judul) + `JetBrains Mono` (kode) + system sans
+- **Layout:** grid 12, border 1px, whitespace, dark/light toggle via `data-theme`
+- **Fitur:** install tabs (`npm/pnpm/bun/yarn/npx`), hero terminal, 3-step cards, toast, adaptive QR
 
 ## 🚀 Dev — Cara Jalan
 
@@ -64,6 +62,6 @@ cd apps/web && npx wrangler deploy
 
 <div align="center">
 
-**BITS Web** · `classic × terminal × paper` · Node 24 LTS · `qris.bits.co.id`
+**BITS Web** · Node 24 LTS · `qris.bits.co.id`
 
 </div>

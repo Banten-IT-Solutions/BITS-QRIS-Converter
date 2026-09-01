@@ -31,6 +31,6 @@ Closes #
 
 <div align="center">
 
-**BITS QRIS Converter** · `classic × terminal × paper` · Node 24 LTS
+**BITS QRIS Converter** · Node 24 LTS · Production Ready
 
 </div>
