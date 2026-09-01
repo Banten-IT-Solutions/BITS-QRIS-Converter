@@ -4,7 +4,7 @@ Terima kasih sudah mau berkontribusi! 🎉
 
 ## 📋 Prasyarat
 
-- Node.js `>=16` (disarankan `20 LTS`)
+- Node.js `>=24` (LTS, disarankan `24.x` terbaru)
 - `npm ci` untuk install (jangan `npm install` biar lock konsisten)
 
 ## 🚀 Alur Kerja
