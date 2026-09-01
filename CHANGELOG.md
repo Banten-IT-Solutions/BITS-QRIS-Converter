@@ -1,3 +1,9 @@
+## [1.3.0](https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/compare/v1.2.0...v1.3.0) (2026-09-01)
+
+### ✨ Features
+
+- **web:** polish converter UX and playground layout ([619cc40](https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/commit/619cc40129ae5e25ddd9789493b051bdbb3a870c)), closes [#CBD5E1](https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/issues/CBD5E1) [#0F1217](https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/issues/0F1217)
+
 ## [1.2.0](https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/compare/v1.1.1...v1.2.0) (2026-09-01)
 
 ### ✨ Features
