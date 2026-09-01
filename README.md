@@ -210,16 +210,6 @@ await makeFile(staticQris, {
 });
 ```
 
-**Output Node.js:** QR 512×512 di-composite ke `assets/images/qris-receipt-template.png` (1080×1920) + teks `NMID`, `ID`, `Merchant Name`, `NNS | City`.
-
-| Font                            | File                                        | Fungsi                     |
-| ------------------------------- | ------------------------------------------- | -------------------------- |
-| `title-bebas-neue` (90)         | `assets/fonts/title-bebas-neue/...`         | Nama merchant pendek       |
-| `title-bebas-neue-compact` (60) | `assets/fonts/title-bebas-neue-compact/...` | Nama panjang >18 char      |
-| `body-roboto-large` (35)        | `assets/fonts/body-roboto-large/...`        | NMID & ID                  |
-| `body-roboto-medium`            | `assets/fonts/body-roboto-medium/...`       | Fallback                   |
-| `caption-roboto-small`          | `assets/fonts/caption-roboto-small/...`     | Footer `Dicetak oleh: NNS` |
-
 > Di **Browser** `makeFile` otomatis fallback ke `QR DataURL` (template butuh `fs`). Selalu pakai `{ base64: true }`.
 
 ---
@@ -398,66 +388,11 @@ console.log('Struk:', file); // output/BANTEN_IT_SOLUTIONS-...jpg
 
 ---
 
-## 🏗️ Arsitektur
+## 🏗️ Arsitektur — Ringkas
 
-```mermaid
-flowchart LR
-    A[Static QRIS] --> B(parseTlv)
-    B --> C{validateQris}
-    C -->|valid| D[convertQris<br/>inject 54/55/56/57<br/>recalc CRC]
-    D --> E[QRIS Dynamic String]
-    E --> F{makeFile?}
-    F -->|base64 false| G[Jimp<br/>template + fonts<br/>composite QR]
-    F -->|base64 true| H[DataURL<br/>qrcode]
-    G --> I[output/*.jpg]
-    H --> J[<img src>]
+```text
+Static QRIS → parseTlv → validateQris → convertQris (inject 54/55/56/57, recalc CRC) → Dynamic String → makeFile (Jimp) / DataURL
 ```
-
-**Struktur Project — Clean & Maintainable:**
-
-```
-bits-qris/
-├── src/
-│   ├── core/               # pure, no I/O
-│   │   ├── constants.ts    # TAG, REQUIRED_TAGS
-│   │   ├── types.ts        # TlvElement, QrisData
-│   │   ├── crc16.ts
-│   │   ├── parser.ts       # parseTlv, parseQris
-│   │   ├── converter.ts
-│   │   ├── validator.ts
-│   │   └── index.ts
-│   ├── shared/             # cross-cutting
-│   │   ├── errors.ts       # QrisError hierarchy
-│   │   └── format.ts       # Intl cache
-│   ├── image/
-│   │   ├── types.ts
-│   │   ├── merchant-info.ts
-│   │   ├── qr-renderer.ts
-│   │   ├── font-loader.ts  # cached Jimp
-│   │   ├── template-resolver.ts
-│   │   ├── receipt-generator.ts
-│   │   └── index.ts
-│   ├── cli/
-│   │   ├── constants.ts
-│   │   ├── parser.ts
-│   │   ├── commands.ts
-│   │   └── interactive.ts
-│   ├── index.ts            # public barrel (ESM+CJS)
-│   └── cli.ts              # bin wrapper
-├── assets/
-│   ├── images/qris-receipt-template.png  # 1080×1920
-│   └── fonts/              # kebab-case semantic
-│       ├── title-bebas-neue/
-│       ├── title-bebas-neue-compact/
-│       ├── body-roboto-large/
-│       ├── body-roboto-medium/
-│       └── caption-roboto-small/
-├── examples/
-├── dist/                   # build (esm+cjs)
-└── package.json
-```
-
-**Coding Standard:** `kebab-case` file, `PascalCase` type, `camelCase` function, `ESLint` + `Prettier`, `strict` TS, `pure functions`, `no any` kritis.
 
 ---
 
