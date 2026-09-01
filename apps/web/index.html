@@ -3,23 +3,91 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <meta name="theme-color" content="#0B1D3A" />
-    <meta name="color-scheme" content="light" />
+    <meta name="theme-color" content="#FFFBF5" id="themeColor" />
+    <meta name="color-scheme" content="light dark" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="apple-mobile-web-app-title" content="BITS QRIS" />
-    <title>BITS QRIS — Static → Dynamic</title>
-    <meta name="description" content="Convert QRIS Static ke Dynamic — parser EMVCo, validator CRC, dan generator QR presisi. Offline-capable PWA." />
+    <title>BITS QRIS Converter — Ubah QRIS Static ke Dynamic Online, Gratis</title>
+    <meta
+      name="description"
+      content="Butuh QRIS Dynamic? Ubah QRIS Static ke Dynamic online, gratis dan instan. Cukup tempel string QRIS atau upload foto, tentukan nominal, selesai. Akurat, aman, tanpa ribet."
+    />
+    <meta
+      name="keywords"
+      content="QRIS converter, QRIS static ke dynamic, QRIS dinamis, konversi QRIS online, ubah QRIS static, pembayaran QRIS, BITS, Indonesia, merchant QRIS"
+    />
+    <meta name="robots" content="index, follow" />
+    <meta name="author" content="Banten IT Solutions" />
+    <meta
+      property="og:title"
+      content="BITS QRIS Converter — Ubah QRIS Static ke Dynamic Online, Gratis"
+    />
+    <meta
+      property="og:description"
+      content="Butuh QRIS Dynamic? Ubah QRIS Static ke Dynamic online, gratis dan instan. Cukup tempel atau upload foto, tentukan nominal, selesai."
+    />
+    <meta property="og:url" content="https://qris.bits.co.id" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://qris.bits.co.id/pwa-512x512.png" />
+    <meta property="og:image:width" content="512" />
+    <meta property="og:image:height" content="512" />
+    <meta property="og:locale" content="id_ID" />
+    <meta name="twitter:card" content="summary" />
+    <meta
+      name="twitter:title"
+      content="BITS QRIS Converter — Ubah QRIS Static ke Dynamic Online, Gratis"
+    />
+    <meta
+      name="twitter:description"
+      content="Butuh QRIS Dynamic? Ubah QRIS Static ke Dynamic online, gratis dan instan. Cukup tempel atau upload foto, tentukan nominal, selesai."
+    />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/pwa-192x192.png" />
     <link rel="manifest" href="/manifest.webmanifest" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="canonical" href="https://qris.bits.co.id" />
+    <script>
+      // Early theme — prevent FOUC, respect saved pref + system
+      try {
+        var s = localStorage.getItem('bits-theme');
+        var m = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        var t = s || (m ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', t);
+        document.documentElement.style.colorScheme = t;
+        var meta = document.getElementById('themeColor');
+        if (meta) meta.content = t === 'dark' ? '#0A0C10' : '#FFFBF5';
+      } catch (e) {}
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "BITS QRIS Converter",
+        "url": "https://qris.bits.co.id",
+        "description": "Ubah QRIS Static ke Dynamic online gratis. Cukup tempel string QRIS atau upload foto, tentukan nominal, selesai.",
+        "applicationCategory": "Utility",
+        "operatingSystem": "All",
+        "browserRequirements": "Requires JavaScript",
+        "author": {
+          "@type": "Organization",
+          "name": "Banten IT Solutions",
+          "url": "https://bits.co.id"
+        },
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "IDR"
+        }
+      }
+    </script>
   </head>
   <body>
     <div id="app"></div>
     <script type="module" src="/src/client.tsx"></script>
-    <!-- Cloudflare Web Analytics (ganti token di Cloudflare Dashboard → Web Analytics) -->
-    <!-- <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "YOUR_TOKEN"}'></script> -->
   </body>
 </html>

@@ -15,16 +15,20 @@ app.get('/api/convert', async (c) => {
   const type = c.req.query('type') as 'fixed' | 'percentage' | undefined;
 
   if (!qris || !amount) {
-    return c.json({ error: 'qris & amount required' }, 400);
+    return c.json({ error: 'Parameter qris dan amount wajib diisi' }, 400);
   }
 
   const amountNum = Number(amount);
-  if (Number.isNaN(amountNum) || amountNum <= 0) return c.json({ error: 'invalid amount' }, 400);
+  if (Number.isNaN(amountNum) || amountNum <= 0)
+    return c.json({ error: 'Nominal tidak valid — harus angka lebih dari 0' }, 400);
 
   const v = validateQris(qris);
   if (!v.valid) return c.json({ valid: false, errors: v.errors }, 400);
 
-  const feeObj = fee && Number(fee) > 0 ? { type: type === 'percentage' ? 'percentage' : 'fixed' as const, value: Number(fee) } : undefined;
+  const feeObj =
+    fee && Number(fee) > 0
+      ? { type: type === 'percentage' ? 'percentage' : ('fixed' as const), value: Number(fee) }
+      : undefined;
 
   try {
     const dynamic = convertQris(qris, { amount: amountNum, fee: feeObj });
@@ -35,7 +39,9 @@ app.get('/api/convert', async (c) => {
   }
 });
 
-app.get('/api/health', (c) => c.json({ ok: true, worker: 'bits-qris', at: new Date().toISOString() }));
+app.get('/api/health', (c) =>
+  c.json({ ok: true, worker: 'bits-qris', status: 'healthy', at: new Date().toISOString() }),
+);
 
 // Fallback to static assets (Vite client) — untuk Cloudflare Workers Assets
 app.get('*', async (c) => {
