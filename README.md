@@ -390,8 +390,31 @@ console.log('Struk:', file); // output/BANTEN_IT_SOLUTIONS-...jpg
 
 ## 🏗️ Arsitektur
 
-```text
-Static QRIS → parseTlv → validateQris → convertQris (inject 54/55/56/57, recalc CRC) → Dynamic String → makeFile (Jimp) / DataURL
+```mermaid
+flowchart LR
+  subgraph Core["src/core/ — Pure JS, no I/O"]
+    A[parseTlv] --> B[validateQris]
+    B --> C[convertQris]
+  end
+
+  subgraph Image["src/image/ — Jimp"]
+    D[makeFile]
+  end
+
+  subgraph Web["apps/web/ — Hono + Vite + Workers"]
+    E[client.tsx<br/>vanilla TS UI]
+    F[index.ts<br/>/api/convert]
+    G[style.css<br/>design tokens]
+  end
+
+  subgraph CLI["src/cli/"]
+    H[bits-qris CLI]
+  end
+
+  C -->|Dynamic String| D
+  C -->|Dynamic String| F
+  F --> E
+  F --> G
 ```
 
 ---

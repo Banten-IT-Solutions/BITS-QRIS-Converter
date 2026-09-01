@@ -146,7 +146,7 @@ npx tsc --noEmit -p apps/web/tsconfig.json  # optional
 
 ## 📚 Docs to Keep Sync (jangan lupa update)
 
-- `README.md` — Features, Instalasi (5 tabs), Quick Start, Architecture 1-line, Node 24 badge
+- `README.md` — Features, Instalasi (5 tabs), Quick Start, Mermaid architecture diagram, Node 24 badge
 - `apps/web/README.md` — Stack, Design, Dev 5-step, API table
 - `CONTRIBUTING.md` — Prasyarat Node 24, 5-step workflow
 - `SECURITY.md` — Supported Versions, Reporting table
