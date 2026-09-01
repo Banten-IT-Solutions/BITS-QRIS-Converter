@@ -1,79 +1,98 @@
-# Contributing to BITS-QRIS-Converter
+# 🤝 Contributing to BITS QRIS Converter
 
-Terima kasih sudah mau berkontribusi! 🎉
+> Terima kasih sudah mau berkontribusi! Dibuat di Banten, untuk Indonesia 🇮🇩
 
 ## 📋 Prasyarat
 
-- Node.js `>=24` (LTS, disarankan `24.x` terbaru)
-- `npm ci` untuk install (jangan `npm install` biar lock konsisten)
+| Kebutuhan           | Versi                   | Catatan                                                   |
+| ------------------- | ----------------------- | --------------------------------------------------------- |
+| **Node.js**         | `>=24` LTS              | Disarankan `24.x` terbaru — cek `node -v`                 |
+| **Package Manager** | `npm 10+`               | Wajib `npm ci` (jangan `npm install` biar lock konsisten) |
+| **OS**              | macOS / Linux / Windows | Tested di Ubuntu + Cloudflare Workers                     |
 
-## 🚀 Alur Kerja
+## 🚀 Alur Kerja — 5 Langkah
 
-1. Fork & clone
+### 1️⃣ Fork & Clone
 
-   ```bash
-   git clone https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter.git
-   cd qris-converter
-   npm ci
-   ```
+```bash
+git clone https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter.git
+cd BITS-QRIS-Converter
+npm ci
+```
 
-2. Buat branch
+### 2️⃣ Buat Branch
 
-   ```bash
-   git checkout -b feat/keren
-   ```
+```bash
+git checkout -b feat/keren
+# contoh: feat/validasi-v2, fix/crc-edge, docs/landing-update
+```
 
-3. Code — ikuti standard:
-   - `kebab-case` file, `PascalCase` type, `camelCase` function
-   - `npm run lint` & `npx tsc --noEmit` harus 0
-   - `npm run build` harus lolos, `makeFile` manual test
+### 3️⃣ Code — Ikuti Standard
 
-4. Commit — Conventional Commits (di-enforce `commitlint`)
+| Aturan       | Contoh                                               |
+| ------------ | ---------------------------------------------------- |
+| **File**     | `kebab-case` → `qr-renderer.ts`                      |
+| **Type**     | `PascalCase` → `QrisData`                            |
+| **Function** | `camelCase` → `convertQris`                          |
+| **Check**    | `npm run lint` & `npx tsc --noEmit` harus **0**      |
+| **Build**    | `npm run build` harus lolos + `makeFile` manual test |
 
-   ```bash
-   git commit -m "feat: tambah validasi QRIS v2"
-   # type: feat, fix, docs, style, refactor, perf, test, chore, ci, build, revert
-   ```
+### 4️⃣ Commit — Conventional Commits
 
-5. Push & PR — template sudah ada di `.github/pull_request_template.md`
+```bash
+git commit -m "feat: tambah validasi QRIS v2"
+# type: feat, fix, docs, style, refactor, perf, test, chore, ci, build, revert
+```
 
-## 🪝 Pre-commit Hook
+> Di-enforce oleh `commitlint` + `husky` — lihat log jika ditolak.
 
-Husky + lint-staged jalan otomatis saat `git commit`:
+### 5️⃣ Push & PR
 
-- `eslint --fix` + `prettier --write` pada `src/**/*.{ts,js}`
-- `commitlint` cek format commit
+Push ke fork → buka PR → template otomatis terisi di `.github/pull_request_template.md` — isi checklist **Production Ready**.
 
-Jika hook gagal, fix dan `git add` lagi.
+## 🪝 Pre-commit Hook — Otomatis
 
-Bypass darurat (jangan sering):
+| Hook                    | Aksi                                                        |
+| ----------------------- | ----------------------------------------------------------- |
+| **Husky + lint-staged** | `eslint --fix` + `prettier --write` pada `src/**/*.{ts,js}` |
+| **commitlint**          | Cek format commit harus Conventional                        |
+
+Jika hook gagal → fix → `git add` lagi. Bypass darurat (jangan sering):
 
 ```bash
 git commit --no-verify -m "chore: wip"
 ```
 
-## 🧪 Testing
+## 🧪 Testing — Checklist
 
 ```bash
-npm run build
-npm run lint
+npm run build              # dual ESM/CJS + copy assets
+npm run lint               # tsc --noEmit
 npx eslint src --ext .ts --max-warnings 0
-npx tsc --noEmit
+npx tsc --noEmit           # 0 error
 # manual
 node --input-type=module -e "import('./dist/esm/index.js').then(m=>m.convertQris)"
 node ./dist/cjs/cli.js --help
+# web
+npm run build --workspace=@bits/web && npx vite preview --host
 ```
 
-## 📦 Publish
-
-Hanya maintainer:
+## 📦 Publish — Hanya Maintainer
 
 ```bash
 npm version patch|minor|major
 git push --follow-tags
-# atau push tag v1.0.1 → GitHub Actions Release otomatis publish ke NPM
+# atau push tag v1.0.1 → GitHub Actions Release otomatis publish ke NPM (semantic-release)
 ```
 
 ## ❓ Butuh Bantuan?
 
-Buka Issue dengan template yang ada di `.github/ISSUE_TEMPLATE/`.
+Buka **Issue** dengan template di `.github/ISSUE_TEMPLATE/` — bug_report / feature_request sudah siap.
+
+---
+
+<div align="center">
+
+**BITS QRIS Converter** · `classic × terminal × paper` · Node 24 LTS · Dibuat di Banten 🇮🇩
+
+</div>

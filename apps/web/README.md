@@ -1,6 +1,6 @@
-# BITS Web — Hono + Vite + Cloudflare Workers
+# 🌐 BITS Web — Hono + Vite + Cloudflare Workers
 
-Demo production untuk `bits-qris` — **modern, edge-native, bukan AI Slop**.
+> Demo production untuk `bits-qris` — **classic × terminal × paper**, edge-native, Node 24 LTS.
 
 ## Stack Latest (2026-08-31)
 
@@ -19,33 +19,51 @@ Demo production untuk `bits-qris` — **modern, edge-native, bukan AI Slop**.
 - **Prinsip:** editorial Swiss, high-contrast, handcrafted — terasa dibuat manusia, bukan `prompt: modern dashboard`
 - **Fitur:** install tabs (`npm/pnpm/bun/yarn/npx`), hero terminal typing, 3-step equal-height cards, toast paper, adaptive QR bg
 
-## Dev
+## 🚀 Dev — Cara Jalan
 
 ```bash
-# dari root
-npm install                 # install workspaces (root + apps/web)
-npm run dev --workspace=@bits/web   # vite + wrangler dev (http://localhost:5173)
+# 1. Install (Node 24 LTS)
+npm ci                         # dari root — install workspaces (root + apps/web)
+
+# 2. Build core dulu (wajib 1x)
+npm run build                  # → dist/cjs + dist/esm (biar bits-qris kebaca)
+
+# 3. Jalankan web (Vite + Workers)
+npm run dev --workspace=@bits/web   # → http://localhost:5173
 # atau
 cd apps/web && npm run dev
 
-# build
-npm run build --workspace=@bits/web  # → dist/client + dist/bits_qris_web
+# 4. Preview production
+npm run build --workspace=@bits/web
+npx vite preview --host --port 4173  # → http://127.0.0.1:4173
 
-# deploy ke Cloudflare
-npm run deploy --workspace=@bits/web # → wrangler deploy
+# 5. Deploy ke Cloudflare
+npm run deploy --workspace=@bits/web # → wrangler deploy (qris.bits.co.id)
 # atau
 cd apps/web && npx wrangler deploy
 ```
 
-## API
+## 🔌 API
 
-- `GET /api/convert?qris=...&amount=50000&fee=1000&type=fixed` → `{dynamic, qrDataUrl}`
-- `GET /api/health` → `{ok:true}`
+| Endpoint                                                     | Deskripsi                                      |
+| ------------------------------------------------------------ | ---------------------------------------------- |
+| `GET /api/convert?qris=...&amount=50000&fee=1000&type=fixed` | Convert → `{dynamic, qrDataUrl, valid}`        |
+| `GET /api/health`                                            | Health check → `{ok:true, worker:"bits-qris"}` |
 
-Core `convertQris` jalan di Workers (pure JS). `makeFile` (Jimp) **tidak** dipakai di edge — pakai `makeQrDataUrl` (5KB).
+> Core `convertQris` jalan di Workers (pure JS). `makeFile` (Jimp) **tidak** dipakai di edge — pakai `makeQrDataUrl` (5KB).
 
-## Deploy Cloudflare
+## ☁️ Deploy Cloudflare
 
-1. `wrangler login`
-2. `npm run deploy --workspace=@bits/web`
-3. Set `compatibility_date = "2026-08-31"` di `wrangler.jsonc` (sudah)
+| Langkah       | Perintah                                                        |
+| ------------- | --------------------------------------------------------------- |
+| **1. Login**  | `wrangler login`                                                |
+| **2. Deploy** | `npm run deploy --workspace=@bits/web` → `qris.bits.co.id`      |
+| **3. Config** | `compatibility_date = "2026-08-31"` di `wrangler.jsonc` (sudah) |
+
+---
+
+<div align="center">
+
+**BITS Web** · `classic × terminal × paper` · Node 24 LTS · `qris.bits.co.id`
+
+</div>

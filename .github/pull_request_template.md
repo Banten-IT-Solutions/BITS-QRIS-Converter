@@ -1,25 +1,36 @@
-## Deskripsi
+## 📝 Deskripsi
 
-Jelaskan perubahan apa yang dilakukan.
+Jelaskan perubahan apa yang dilakukan — ringkas, jelas, dan fokus ke _why_ bukan cuma _what_.
 
-## Jenis Perubahan
+## 🏷️ Jenis Perubahan
 
-- [ ] Bug fix
-- [ ] Fitur baru
-- [ ] Breaking change
-- [ ] Dokumentasi
-- [ ] Chore / Refactor
+- [ ] 🐛 Bug fix
+- [ ] ✨ Fitur baru
+- [ ] 💥 Breaking change
+- [ ] 📚 Dokumentasi
+- [ ] 🧹 Chore / Refactor
 
-## Checklist
+## ✅ Checklist — Production Ready?
 
-- [ ] `npm run build` lolos
-- [ ] `npx tsc --noEmit` lolos
-- [ ] `npx eslint src --ext .ts` lolos (0 warning)
-- [ ] Test manual `makeFile` / CLI masih jalan
-- [ ] Update `README.md` jika perlu
+- [ ] 🏗️ `npm run build` lolos (dual ESM/CJS)
+- [ ] 🔍 `npx tsc --noEmit` lolos (0 error)
+- [ ] 🧹 `npx eslint src --ext .ts` lolos (0 warning)
+- [ ] 🧪 Test manual `makeFile` / `CLI` masih jalan
+- [ ] 📖 Update `README.md` / docs jika perlu
+- [ ] 🎨 Cek `light/dark` & `responsive` untuk perubahan UI
 
-## Screenshots (jika ada)
+## 🖼️ Screenshots / Demo (jika ada UI)
 
-## Issue Terkait
+> Drag & drop gambar atau link `https://qris.bits.co.id` preview
+
+## 🔗 Issue Terkait
 
 Closes #
+
+---
+
+<div align="center">
+
+**BITS QRIS Converter** · `classic × terminal × paper` · Node 24 LTS
+
+</div>
