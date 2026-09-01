@@ -1,3 +1,22 @@
+## [1.5.0](https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/compare/v1.4.0...v1.5.0) (2026-09-01)
+
+### ✨ Features
+
+- **web:** make PWA banner consistent and adaptive ([105f123](https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/commit/105f12348c131a0009f170b2ca69b8bd13e9bb45))
+
+### 📚 Docs
+
+- clean *.md — remove non-essential text for concise docs ([cb48903](https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/commit/cb489039476a433629b1090f1cc645d75f2e179c))
+- clean README — remove non-essential text for concise professional docs ([3654630](https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/commit/3654630f158084ae8ccb8f5662e458e677ac0a4a))
+- fix Features table header (3 col -> 2 col) ([0a473bb](https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/commit/0a473bbdccb8949344bab5d374861f94effef59b))
+- make all *.md iconic, neat and professional ([64e1e0a](https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/commit/64e1e0a9a4d2f7696673c4444b6c94df35bba719))
+- make apps/web README footer consistent with root README ([2530c76](https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/commit/2530c760c88d0a357a0e4f23a31c206c690b9976))
+- make README iconic, neat and professional ([74e7aa5](https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/commit/74e7aa572dc736c323982f79055ad36950e404de))
+- remove classic x terminal x paper for clean professional tone ([f899922](https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/commit/f8999221dab636c811c5675e987def33f31f8d94))
+- shorten all titles for concise professional headings ([baa3899](https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/commit/baa38990ec06c0ee63c796f6b30e6af433aa01e9))
+- simplify Features title to simple like Instalasi ([46773d9](https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/commit/46773d9353f64d02794f504ee6eaca3751f30574))
+- sync all *.md to Node 24 LTS and classic terminal paper theme ([b70c5d2](https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/commit/b70c5d2fe8d40b988b7b2b796bda117a363cbf2e)), closes [#FFFFFF](https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/issues/FFFFFF) [#06080C](https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/issues/06080C) [#E8E0D6](https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/issues/E8E0D6) [#C8C0B0](https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/issues/C8C0B0)
+
 ## [1.4.0](https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/compare/v1.3.0...v1.4.0) (2026-09-01)
 
 ### ✨ Features
