@@ -44,17 +44,17 @@
 
 ## ✨ Features
 
-| Icon | Feature | Description |
-| -------------------- | ---------------------------------------------------------------------------------- |
-| 🔍 **Parser TLV** | Decode QRIS → `QrisData` — merchant, kota, MCC, currency, amount, fee (EMVCo) |
-| 🔄 **Static → Dynamic** | Inject `amount` & `fee` (fixed/percentage), recalculate **CRC16-CCITT** `0x1021` |
-| ✅ **Validator** | Cek `000201`, length, CRC, 8 required tags + merchant `26–51` |
-| 🖨️ **Cetak Struk** | Composite QR → `qris-receipt-template.png` (1080×1920) + overlay `NMID/ID/nama/NNS` |
-| 🌐 **Browser Ready** | `makeFile(...,{base64:true})` → DataURL, tanpa `fs` |
-| 📦 **Dual Build** | `dist/cjs` + `dist/esm` + `types` — tree-shakeable |
-| 💻 **CLI** | `npx bits-qris` interactive atau `--convert --validate --parse` |
-| 📱 **PWA** | Offline-capable, `manifest` + `sw.js` (Workbox), installable — dark/light |
-| 🗂️ **Aset Clean** | `kebab-case` semantik (`title-bebas-neue`, `body-roboto-large`) |
+| Feature                 | Description                                                                         |
+| ----------------------- | ----------------------------------------------------------------------------------- |
+| 🔍 **Parser TLV**       | Decode QRIS → `QrisData` — merchant, kota, MCC, currency, amount, fee (EMVCo)       |
+| 🔄 **Static → Dynamic** | Inject `amount` & `fee` (fixed/percentage), recalculate **CRC16-CCITT** `0x1021`    |
+| ✅ **Validator**        | Cek `000201`, length, CRC, 8 required tags + merchant `26–51`                       |
+| 🖨️ **Cetak Struk**      | Composite QR → `qris-receipt-template.png` (1080×1920) + overlay `NMID/ID/nama/NNS` |
+| 🌐 **Browser Ready**    | `makeFile(...,{base64:true})` → DataURL, tanpa `fs`                                 |
+| 📦 **Dual Build**       | `dist/cjs` + `dist/esm` + `types` — tree-shakeable                                  |
+| 💻 **CLI**              | `npx bits-qris` interactive atau `--convert --validate --parse`                     |
+| 📱 **PWA**              | Offline-capable, `manifest` + `sw.js` (Workbox), installable — dark/light           |
+| 🗂️ **Aset Clean**       | `kebab-case` semantik (`title-bebas-neue`, `body-roboto-large`)                     |
 
 ## 🛠️ Tech Stack
 
