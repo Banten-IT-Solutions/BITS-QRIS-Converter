@@ -27,15 +27,9 @@ git checkout -b feat/keren
 # contoh: feat/validasi-v2, fix/crc-edge, docs/landing-update
 ```
 
-### 3️⃣ Code — Ikuti Standard
+### 3️⃣ Code — Standard
 
-| Aturan       | Contoh                                               |
-| ------------ | ---------------------------------------------------- |
-| **File**     | `kebab-case` → `qr-renderer.ts`                      |
-| **Type**     | `PascalCase` → `QrisData`                            |
-| **Function** | `camelCase` → `convertQris`                          |
-| **Check**    | `npm run lint` & `npx tsc --noEmit` harus **0**      |
-| **Build**    | `npm run build` harus lolos + `makeFile` manual test |
+`kebab-case` file, `PascalCase` type, `camelCase` function — `npm run lint` & `npx tsc --noEmit` harus **0**.
 
 ### 4️⃣ Commit — Conventional Commits
 
@@ -50,31 +44,15 @@ git commit -m "feat: tambah validasi QRIS v2"
 
 Push ke fork → buka PR → template otomatis terisi di `.github/pull_request_template.md` — isi checklist **Production Ready**.
 
-## 🪝 Pre-commit Hook — Otomatis
+## 🪝 Pre-commit — Otomatis
 
-| Hook                    | Aksi                                                        |
-| ----------------------- | ----------------------------------------------------------- |
-| **Husky + lint-staged** | `eslint --fix` + `prettier --write` pada `src/**/*.{ts,js}` |
-| **commitlint**          | Cek format commit harus Conventional                        |
+`husky` + `lint-staged` (`eslint --fix`, `prettier`) & `commitlint` — jika gagal, fix lalu `git add` lagi.
 
-Jika hook gagal → fix → `git add` lagi. Bypass darurat (jangan sering):
+## 🧪 Testing
 
 ```bash
-git commit --no-verify -m "chore: wip"
-```
-
-## 🧪 Testing — Checklist
-
-```bash
-npm run build              # dual ESM/CJS + copy assets
-npm run lint               # tsc --noEmit
-npx eslint src --ext .ts --max-warnings 0
-npx tsc --noEmit           # 0 error
-# manual
-node --input-type=module -e "import('./dist/esm/index.js').then(m=>m.convertQris)"
+npm run build && npm run lint && npx tsc --noEmit
 node ./dist/cjs/cli.js --help
-# web
-npm run build --workspace=@bits/web && npx vite preview --host
 ```
 
 ## 📦 Publish — Hanya Maintainer

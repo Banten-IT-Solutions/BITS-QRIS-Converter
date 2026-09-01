@@ -10,35 +10,19 @@
 - **Wrangler 4.127.1** — deploy Workers
 - **TypeScript 6.0.3**, **Node 24** types (LTS)
 
-## Desain — Classic × Terminal × Paper
+## 🎨 Desain
 
-- **Palet:** kertas `#FFFBF5`, tinta `#0A0A0A`, garis `#C8C0B0` abu warm, aksen navy `#0B1D3A`
-- **Tipografi:** `Instrument Serif` (judul) + `JetBrains Mono` (kode) + system sans
-- **Layout:** grid 12, border 1px, whitespace, dark/light toggle via `data-theme`
-- **Fitur:** install tabs (`npm/pnpm/bun/yarn/npx`), hero terminal, 3-step cards, toast, adaptive QR
+- Palet `#FFFBF5` / `#0A0A0A` / `#C8C0B0`, tipografi `Instrument Serif` + `JetBrains Mono`
+- Dark/light via `data-theme`, install tabs, hero terminal, toast paper
 
-## 🚀 Dev — Cara Jalan
+## 🚀 Dev
 
 ```bash
-# 1. Install (Node 24 LTS)
-npm ci                         # dari root — install workspaces (root + apps/web)
-
-# 2. Build core dulu (wajib 1x)
-npm run build                  # → dist/cjs + dist/esm (biar bits-qris kebaca)
-
-# 3. Jalankan web (Vite + Workers)
+npm ci                         # install workspaces
+npm run build                  # build core 1x (dist/cjs + esm)
 npm run dev --workspace=@bits/web   # → http://localhost:5173
-# atau
-cd apps/web && npm run dev
-
-# 4. Preview production
-npm run build --workspace=@bits/web
-npx vite preview --host --port 4173  # → http://127.0.0.1:4173
-
-# 5. Deploy ke Cloudflare
-npm run deploy --workspace=@bits/web # → wrangler deploy (qris.bits.co.id)
-# atau
-cd apps/web && npx wrangler deploy
+npm run build --workspace=@bits/web && npx vite preview --host  # preview
+npm run deploy --workspace=@bits/web # → qris.bits.co.id
 ```
 
 ## 🔌 API
