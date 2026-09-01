@@ -18,7 +18,7 @@
     <img src="https://img.shields.io/badge/Hono-4.13-E36002?style=flat&logo=hono&logoColor=white" alt="Hono" />
     <img src="https://img.shields.io/badge/Vite-8-646CFF?style=flat&logo=vite&logoColor=white" alt="Vite" />
     <img src="https://img.shields.io/badge/Cloudflare%20Workers-F38020?style=flat&logo=cloudflare&logoColor=white" alt="Cloudflare Workers" />
-    <img src="https://img.shields.io/badge/Node-22-339933?style=flat&logo=node.js&logoColor=white" alt="Node" />
+    <img src="https://img.shields.io/badge/Node-24-339933?style=flat&logo=node.js&logoColor=white" alt="Node" />
     <img src="https://img.shields.io/badge/jimp-1.6-000000?style=flat" alt="jimp" />
     <img src="https://img.shields.io/badge/license-MIT-1F2937?style=flat" alt="MIT" />
     <a href="https://saweria.co/bantenitsolutions"><img src="https://img.shields.io/badge/Saweria-Donate-ffae00?style=flat&logo=heart&logoColor=white" alt="Saweria" /></a>
@@ -45,7 +45,7 @@
 
 | Layer           | Technology                                                               |
 | --------------- | ------------------------------------------------------------------------ |
-| **Language**    | TypeScript 6.0, Node 22                                                  |
+| **Language**    | TypeScript 6.0, Node 24 LTS                                              |
 | **QR Generate** | `qrcode` 1.5.4                                                           |
 | **Image**       | `jimp` 1.6.1                                                             |
 | **Web Demo**    | Hono 4.13, Vite 8, `vite-plugin-pwa` 1.3, `@cloudflare/vite-plugin` 1.54 |
@@ -113,7 +113,7 @@ npm i bits-qris
 node -e "import('bits-qris').then(m=>console.log(Object.keys(m).slice(0,5)))"
 ```
 
-**Requirements:** Node.js `>=16`, modern browser (ES2022).
+**Requirements:** Node.js `>=24` (LTS), modern browser (ES2022).
 
 ---
 
