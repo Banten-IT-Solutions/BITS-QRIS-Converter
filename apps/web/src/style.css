@@ -556,24 +556,23 @@ img { max-width: 100%; height: auto; }
 @keyframes toastIn { from { opacity: 0; transform: translateY(8px) translateX(-50%); } to { opacity: 1; transform: translateY(0) translateX(-50%); } }
 @keyframes toastOut { from { opacity: 1; } to { opacity: 0; transform: translateY(-4px); } }
 
-/* — PWA banner — */
+/* — PWA banner — bottom sheet floating */
 .pwa-banner {
-  display:none; border:1px solid var(--line-strong); background: var(--card); color: var(--fg);
-  padding:10px 12px; font-size:12px; font-family: var(--mono); letter-spacing:0.02em;
+  display:none; position:fixed; bottom:16px; left:50%; transform:translateX(-50%);
+  z-index:40; width:calc(100% - 32px); max-width:380px;
+  border:1px solid var(--line-strong); background: var(--card); color: var(--fg);
+  padding:12px; box-shadow: 0 8px 24px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.08);
   align-items:center; justify-content:space-between; gap:12px;
-  max-width: var(--max); margin: 8px auto; box-shadow: var(--shadow-paper);
+  animation: pwaIn 0.24s ease-out;
 }
-.pwa-banner.show { display:flex; flex-wrap:wrap; }
-.pwa-banner span { display:flex; align-items:center; gap:8px; }
-.pwa-banner span::before {
-  content:''; width:6px; height:6px; border-radius:50%; background: var(--terminal-green);
-  box-shadow: 0 0 6px color-mix(in srgb, var(--terminal-green) 60%, transparent); flex-shrink:0;
-}
+.pwa-banner.show { display:flex; }
+@keyframes pwaIn { from { opacity:0; transform:translate(-50%, 8px); } to { opacity:1; transform:translate(-50%, 0); } }
 .pwa-banner button {
   background: var(--card); color: var(--fg); border:1px solid var(--line-strong);
   padding:7px 12px; font-family: var(--mono); font-size:11px; letter-spacing:0.06em;
   text-transform:uppercase; cursor:pointer; min-height:32px; border-radius: var(--radius);
   transition: background 0.15s, border-color 0.15s;
+  white-space:nowrap;
 }
 .pwa-banner button:hover { background: var(--bg-soft); border-color: var(--line-strong); }
 .pwa-banner button.secondary {

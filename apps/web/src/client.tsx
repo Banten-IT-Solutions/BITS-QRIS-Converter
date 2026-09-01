@@ -96,11 +96,17 @@ function render() {
   })();
 
   document.querySelector('#app')!.innerHTML = `
-  <div class="pwa-banner" id="pwaBanner">
-    <span>Akses Offline — Pasang BITS QRIS di Perangkat</span>
-    <div style="display:flex;gap:8px;flex-wrap:wrap">
+  <div class="pwa-banner" id="pwaBanner" role="dialog" aria-label="Pasang aplikasi">
+    <div style="display:flex;gap:10px;align-items:center;min-width:0">
+      <div style="width:36px;height:36px;border:1px solid var(--line-strong);background:var(--bg-soft);display:grid;place-items:center;flex-shrink:0;font-size:16px" aria-hidden="true">⬡</div>
+      <div style="min-width:0">
+        <div style="font-family:var(--serif);font-size:13px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Akses Offline</div>
+        <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);margin-top:1px">Pasang BITS QRIS di perangkat</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;flex-shrink:0">
       <button id="pwaInstall">Pasang</button>
-      <button id="pwaDismiss" class="secondary">Nanti</button>
+      <button id="pwaDismiss" class="secondary" aria-label="Tutup">✕</button>
     </div>
   </div>
 
