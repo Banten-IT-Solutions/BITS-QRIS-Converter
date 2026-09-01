@@ -176,6 +176,31 @@ function render() {
     </div>
   </section>
 
+  <!-- INSTALL -->
+  <section class="section" id="install" aria-labelledby="installTitle">
+    <div class="section-head" style="flex-direction:column;align-items:center;text-align:center;gap:10px">
+      <div class="eyebrow" style="display:flex;align-items:center;gap:8px;white-space:nowrap;font-family:var(--mono);width:100%;max-width:520px;justify-content:center"><span aria-hidden="true" style="flex:1;height:1px;background:repeating-linear-gradient(to right, var(--terminal-border) 0 6px, transparent 6px 10px);min-width:24px;opacity:0.8"></span><span aria-hidden="true" style="color:var(--terminal-green)">┌─</span><span style="border:1px solid var(--terminal-border);background:var(--terminal-bg);color:var(--terminal-fg);padding:2px 8px;display:inline-flex;align-items:center;gap:6px"><span style="width:6px;height:6px;border-radius:50%;background:var(--terminal-green);box-shadow:0 0 6px color-mix(in srgb, var(--terminal-green) 60%, transparent)"></span>INSTALASI</span><span aria-hidden="true" style="color:var(--terminal-green)">─┐</span><span aria-hidden="true" style="flex:1;height:1px;background:repeating-linear-gradient(to right, var(--terminal-border) 0 6px, transparent 6px 10px);min-width:24px;opacity:0.8"></span></div>
+      <h2 id="installTitle" style="margin:0">Pasang dalam Satu Baris</h2>
+      <span class="ascii-label">npm • pnpm • bun • yarn • npx</span>
+    </div>
+    <div class="terminal" style="max-width:680px;margin:0 auto">
+      <div class="terminal-bar" style="flex-wrap:wrap;gap:8px">
+        <span class="terminal-title"><b>install</b> — bits-qris</span>
+        <span style="font-family:var(--mono);font-size:10px;color:var(--terminal-muted);margin-left:auto">macOS • Linux • Windows</span>
+      </div>
+      <div style="padding:10px 12px;background:var(--terminal-bg-soft);border-bottom:1px solid var(--terminal-border)">
+        <div class="install-tabs" role="tablist" aria-label="Package manager">
+          <button class="install-tab install-tab--active" role="tab" aria-selected="true" data-install="npm">npm</button>
+          <button class="install-tab" role="tab" aria-selected="false" data-install="pnpm">pnpm</button>
+          <button class="install-tab" role="tab" aria-selected="false" data-install="bun">bun</button>
+          <button class="install-tab" role="tab" aria-selected="false" data-install="yarn">yarn</button>
+          <button class="install-tab" role="tab" aria-selected="false" data-install="npx">npx</button>
+        </div>
+        <div class="install-code" id="installCode"><span id="installText">npm i bits-qris</span><button class="copy" id="copyInstall">Copy</button></div>
+      </div>
+    </div>
+  </section>
+
   <!-- HOW IT WORKS -->
   <section class="section" aria-labelledby="howTitle">
     <div class="section-head">
@@ -555,7 +580,7 @@ function render() {
       const ok = await copyText(copyMap[k] || '');
       const old = b.textContent;
       b.textContent = ok ? 'Copied' : 'Gagal';
-      if (ok) showToast(k === 'npm' ? 'Perintah npm tersalin' : 'Perintah npx tersalin', 'success');
+      if (ok) showToast(k === 'npm' ? '📦 Perintah npm tersalin' : '⚡ Perintah npx tersalin', 'success');
       setTimeout(() => (b.textContent = old!), 1200);
     });
   });
@@ -564,7 +589,38 @@ function render() {
     const b = document.getElementById('copyCurl') as HTMLButtonElement;
     const old = b.textContent;
     b.textContent = ok ? 'Copied' : 'Gagal';
-    if (ok) showToast('Perintah curl tersalin', 'success');
+    if (ok) showToast('🔗 Perintah curl tersalin', 'success');
+    setTimeout(() => (b.textContent = old!), 1200);
+  });
+
+  // install tabs
+  const installMap: Record<string, string> = {
+    npm: 'npm i bits-qris',
+    pnpm: 'pnpm add bits-qris',
+    bun: 'bun add bits-qris',
+    yarn: 'yarn add bits-qris',
+    npx: 'npx bits-qris convert "000201..." --amount 50000',
+  };
+  document.querySelectorAll<HTMLButtonElement>('.install-tab').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.install-tab').forEach((b) => {
+        b.classList.remove('install-tab--active');
+        b.setAttribute('aria-selected', 'false');
+      });
+      btn.classList.add('install-tab--active');
+      btn.setAttribute('aria-selected', 'true');
+      const key = btn.dataset.install!;
+      const txt = document.getElementById('installText');
+      if (txt) txt.textContent = installMap[key] || '';
+    });
+  });
+  document.getElementById('copyInstall')?.addEventListener('click', async () => {
+    const txt = document.getElementById('installText')?.textContent?.trim() || '';
+    const ok = await copyText(txt);
+    const b = document.getElementById('copyInstall') as HTMLButtonElement;
+    const old = b.textContent;
+    b.textContent = ok ? 'Copied' : 'Gagal';
+    if (ok) showToast('📥 Perintah instalasi tersalin', 'success');
     setTimeout(() => (b.textContent = old!), 1200);
   });
 
@@ -602,10 +658,10 @@ function render() {
     const ok = await copyText(txt);
     if (ok) {
       ($('#copySample') as HTMLButtonElement).textContent = 'Tersalin';
-      showToast('Contoh kode tersalin', 'success');
+      showToast('✨ Contoh kode tersalin', 'success');
       setTimeout(() => (($('#copySample') as HTMLButtonElement).textContent = 'Salin'), 1200);
     } else {
-      showToast('Gagal menyalin', 'error');
+      showToast('⚠️ Gagal menyalin', 'error');
     }
   });
 
@@ -686,16 +742,16 @@ function render() {
   copyStringBtn.addEventListener('click', async () => {
     const t = (outStringEl.textContent || '').trim();
     if (!t || t === '—') {
-      showToast('Belum ada kode untuk disalin', 'error');
+      showToast('⚠️ Belum ada kode untuk disalin', 'error');
       return;
     }
     const ok = await copyText(t);
     if (ok) {
       copyStringBtn.textContent = 'Tersalin';
-      showToast('Kode QRIS tersalin', 'success');
+      showToast('📋 Kode QRIS tersalin', 'success');
       setTimeout(() => (copyStringBtn.textContent = 'Salin Kode'), 1200);
     } else {
-      showToast('Gagal menyalin — coba manual', 'error');
+      showToast('⚠️ Gagal menyalin — coba manual', 'error');
     }
   });
 
@@ -763,7 +819,7 @@ function render() {
       }
       downloadBtn.disabled = false;
       errorEl.innerHTML = '';
-      showToast('✓ Berhasil — QRIS Dynamic siap digunakan', 'success');
+      showToast('✨ Berhasil — QRIS Dynamic siap digunakan', 'success');
       // also auto show terminal output if not yet
       if (termOut) termOut.style.display = 'block';
     } catch (e) {
