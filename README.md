@@ -1,5 +1,6 @@
 <div align="center">
-  <h1>BITS QRIS Converter</h1>
+
+  <h1>⚡ BITS QRIS Converter</h1>
   <p>
     <a href="https://qris.bits.co.id">
       <img src="https://img.shields.io/badge/qris.bits.co.id-Online-00C853?style=for-the-badge&logo=cloudflare&logoColor=white" alt="qris.bits.co.id Online" />
@@ -27,19 +28,33 @@
 
 ---
 
-## ✨ Features
+## 🧭 Daftar Isi
 
-| Feature              | Description                                                                        |
+| Menu                                   | Deskripsi                                      |
+| -------------------------------------- | ---------------------------------------------- |
+| [✨ Features](#-features)              | Fitur utama — parser, converter, struk         |
+| [📦 Instalasi](#-instalasi)            | Cara pasang — npm/pnpm/bun/yarn                |
+| [⚡ Quick Start](#-quick-start)        | Mulai cepat — modern & legacy API              |
+| [🖨️ Cetak Struk](#️-cetak-struk)        | Generate struk JPG + QR                        |
+| [🌐 Web Demo](https://qris.bits.co.id) | Demo `classic × terminal × paper` — dark/light |
+| [💻 CLI](#-cli)                        | `npx bits-qris` interactive                    |
+| [📚 API Reference](#-api-reference)    | Core, Image, Shared                            |
+
+---
+
+## ✨ Features — Hybrid Terbaik
+
+| Icon | Feature | Description |
 | -------------------- | ---------------------------------------------------------------------------------- |
-| **Parser TLV**       | Decode QRIS ke `QrisData` — merchant, kota, MCC, currency, amount, fee (EMVCo)     |
-| **Static → Dynamic** | Inject amount & fee (fixed/percentage), recalculate CRC16-CCITT `0x1021`           |
-| **Validator**        | Cek prefix `000201`, length, CRC, 8 required tags + merchant 26–51                 |
-| **Cetak Struk**      | Composite QR ke `qris-receipt-template.png` (1080×1920) + overlay NMID/ID/nama/NNS |
-| **Browser Ready**    | `makeFile(...,{base64:true})` → DataURL, tanpa `fs`                                |
-| **Dual Build**       | `dist/cjs` + `dist/esm` + `types`, tree-shakeable                                  |
-| **CLI**              | `npx bits-qris` interactive atau `--convert --validate --parse`                    |
-| **PWA**              | Offline-capable, `manifest` + `sw.js` (Workbox), installable                       |
-| **Aset Clean**       | `kebab-case` semantik (`title-bebas-neue`, `body-roboto-large`)                    |
+| 🔍 **Parser TLV** | Decode QRIS → `QrisData` — merchant, kota, MCC, currency, amount, fee (EMVCo) |
+| 🔄 **Static → Dynamic** | Inject `amount` & `fee` (fixed/percentage), recalculate **CRC16-CCITT** `0x1021` |
+| ✅ **Validator** | Cek `000201`, length, CRC, 8 required tags + merchant `26–51` |
+| 🖨️ **Cetak Struk** | Composite QR → `qris-receipt-template.png` (1080×1920) + overlay `NMID/ID/nama/NNS` |
+| 🌐 **Browser Ready** | `makeFile(...,{base64:true})` → DataURL, tanpa `fs` |
+| 📦 **Dual Build** | `dist/cjs` + `dist/esm` + `types` — tree-shakeable |
+| 💻 **CLI** | `npx bits-qris` interactive atau `--convert --validate --parse` |
+| 📱 **PWA** | Offline-capable, `manifest` + `sw.js` (Workbox), installable — dark/light |
+| 🗂️ **Aset Clean** | `kebab-case` semantik (`title-bebas-neue`, `body-roboto-large`) |
 
 ## 🛠️ Tech Stack
 
@@ -102,18 +117,22 @@ bits-qris/
 └── package.json
 ```
 
-## 📦 Instalasi
+## 📦 Instalasi — Satu Baris
+
+| Manager           | Perintah                                           |
+| ----------------- | -------------------------------------------------- |
+| **npm**           | `npm i bits-qris`                                  |
+| **pnpm**          | `pnpm add bits-qris`                               |
+| **bun**           | `bun add bits-qris`                                |
+| **yarn**          | `yarn add bits-qris`                               |
+| **tanpa install** | `npx bits-qris convert "000201..." --amount 50000` |
 
 ```bash
-npm i bits-qris
-# yarn add bits-qris
-# pnpm add bits-qris
-
 # cek instalasi
 node -e "import('bits-qris').then(m=>console.log(Object.keys(m).slice(0,5)))"
 ```
 
-**Requirements:** Node.js `>=24` (LTS), modern browser (ES2022).
+> **Requirements:** Node.js `>=24` (LTS) · ESM + CJS + Types · `qrcode` 1.5 + `jimp` 1.6
 
 ---
 
@@ -442,12 +461,14 @@ bits-qris/
 
 ---
 
-## 🛡️ Keamanan & Validasi
+## 🛡️ Keamanan & Validasi — Terpercaya
 
-- CRC16-CCITT `0x1021` init `0xFFFF` — sesuai EMVCo
-- Validasi 8 required tags + merchant 26–51 + CRC mismatch
-- `jimp@1.6.1` (0 vuln) bukan `0.16.1` vulnerable
-- Tidak pernah `eval`, tidak `split("5802ID")` fragile
+| Item            | Detail                                                             |
+| --------------- | ------------------------------------------------------------------ |
+| **CRC16-CCITT** | `0x1021` init `0xFFFF` — sesuai EMVCo                              |
+| **Validasi**    | 8 required tags + merchant `26–51` + CRC mismatch                  |
+| **Aman**        | `jimp@1.6.1` (0 vuln) — bukan `0.16.1` vulnerable                  |
+| **No eval**     | Tidak pernah `eval` / `split("5802ID")` fragile — parser TLV murni |
 
 ---
 
