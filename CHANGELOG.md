@@ -1,3 +1,9 @@
+## [1.2.0](https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/compare/v1.1.1...v1.2.0) (2026-09-01)
+
+### ✨ Features
+
+- **web:** classic terminal paper landing with dark/light toggle ([3b8240b](https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/commit/3b8240bd6c3e73bf7ab616fa30c667762cfadd5c)), closes [#FFFFFF](https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/issues/FFFFFF) [#06080C](https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/issues/06080C)
+
 ## [1.1.1](https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/compare/v1.1.0...v1.1.1) (2026-08-31)
 
 ### 🐛 Bug Fixes
