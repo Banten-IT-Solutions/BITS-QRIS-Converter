@@ -9,6 +9,10 @@ updates:
       time: '03:00'
       timezone: 'Asia/Jakarta'
     open-pull-requests-limit: 10
+    # Lock TS to 6.x — TS 7 (tsgo) not adopted yet
+    ignore:
+      - dependency-name: 'typescript'
+        versions: ['>=7']
     groups:
       dev-dependencies:
         patterns:
