@@ -24,12 +24,17 @@ export function parseTlv(data: string): TlvElement[] {
 
     const tag = data.substring(position, position + 2);
     const lengthStr = data.substring(position + 2, position + 4);
+
+    if (!/^\d{2}$/.test(lengthStr)) {
+      throw new QrisParseError(
+        `Invalid TLV: non-numeric length "${lengthStr}" at position ${position} (tag ${tag})`,
+      );
+    }
+
     const length = Number.parseInt(lengthStr, 10);
 
-    if (Number.isNaN(length) || position + 4 + length > data.length) {
-      throw new QrisParseError(
-        `Invalid TLV: corrupt length "${lengthStr}" at position ${position} (tag ${tag})`,
-      );
+    if (position + 4 + length > data.length) {
+      throw new QrisParseError(`Invalid TLV: truncated value at position ${position} (tag ${tag})`);
     }
 
     const value = data.substring(position + 4, position + 4 + length);

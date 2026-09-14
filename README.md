@@ -305,8 +305,6 @@ npm run qris:demo
 | `makeString(qris, opts)`  | `string, opts`           | `string`          | Alias legacy+modern            |
 | `getMerchantInfo(qris)`   | `string`                 | `MerchantInfo`    | NMID, printer, NNS             |
 
-**Deprecated uppercase alias tetap ada** untuk kompatibilitas: `parseQRIS`, `convertQRIS`, `validateQRIS`, `calculateCRC16`.
-
 ```typescript
 type ConvertOptions = {
   amount: number | string;
@@ -330,13 +328,11 @@ type QrisData = {
 
 ### Image
 
-| Fungsi                        | Params           | Return                               |
-| ----------------------------- | ---------------- | ------------------------------------ |
-| `makeFile(qris, opts)`        | `ImageOptions`   | `Promise<string>` — path atau base64 |
-| `makeImage` / `generateStruk` | —                | alias `makeFile`                     |
-| `makeQrDataUrl(qris, opts)`   | `QrOnlyOptions`  | `Promise<string>` DataURL            |
-| `makeQrBuffer(qris, opts)`    | `QrOnlyOptions`  | `Promise<Buffer>`                    |
-| `formatRupiah(v)`             | `number\|string` | `string` `Rp 50.000`                 |
+| Fungsi                      | Params          | Return                               |
+| --------------------------- | --------------- | ------------------------------------ |
+| `makeFile(qris, opts)`      | `ImageOptions`  | `Promise<string>` — path atau base64 |
+| `makeQrDataUrl(qris, opts)` | `QrOnlyOptions` | `Promise<string>` DataURL            |
+| `makeQrBuffer(qris, opts)`  | `QrOnlyOptions` | `Promise<Buffer>`                    |
 
 ```typescript
 type ImageOptions = ConvertOptions & {
@@ -356,7 +352,6 @@ import {
   QrisParseError,
   QrisConvertError,
   QrisImageError,
-  formatRupiah,
   padLength,
   sanitizeFilename,
 } from 'bits-qris';

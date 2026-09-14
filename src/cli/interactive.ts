@@ -43,9 +43,9 @@ export async function runInteractive(): Promise<void> {
     }
 
     const amountString = await ask('\n[?] Input nominal (Rupiah): ');
-    const amount = Number.parseInt(amountString, 10);
-    if (Number.isNaN(amount) || amount <= 0) {
-      console.log('[✗] Invalid amount.');
+    const amount = Number(amountString);
+    if (!Number.isFinite(amount) || amount <= 0 || !Number.isInteger(amount)) {
+      console.log('[✗] Invalid amount — harus angka bulat lebih dari 0.');
       readline.close();
       process.exit(1);
     }
@@ -55,13 +55,20 @@ export async function runInteractive(): Promise<void> {
 
     if (useFeeAnswer.toLowerCase() === 'y') {
       const feeType = await ask('[?] Fixed or Percentage? (f/p): ');
-      if (feeType.toLowerCase() === 'f') {
-        const feeValue = await ask('[?] Fee amount (Rupiah): ');
-        fee = { type: 'fixed', value: Number.parseFloat(feeValue) };
-      } else {
-        const feeValue = await ask('[?] Fee percentage: ');
-        fee = { type: 'percentage', value: Number.parseFloat(feeValue) };
+      const isFixed = feeType.toLowerCase() === 'f';
+      const feeValueStr = await ask(isFixed ? '[?] Fee amount (Rupiah): ' : '[?] Fee percentage: ');
+      const feeValue = Number.parseFloat(feeValueStr);
+      if (!Number.isFinite(feeValue) || feeValue <= 0) {
+        console.log('[✗] Invalid fee.');
+        readline.close();
+        process.exit(1);
       }
+      if (isFixed && !Number.isInteger(feeValue)) {
+        console.log('[✗] Fixed fee harus angka bulat.');
+        readline.close();
+        process.exit(1);
+      }
+      fee = { type: isFixed ? 'fixed' : 'percentage', value: feeValue };
     }
 
     const result = convertQris(qris, { amount, fee });

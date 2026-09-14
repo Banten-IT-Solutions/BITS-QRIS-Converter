@@ -1,6 +1,6 @@
 import './style.css';
 import { convertQris, parseQris, validateQris } from 'bits-qris/core';
-import { makeQrDataUrl } from 'bits-qris/image/qr-renderer';
+import { renderQrDataUrl } from 'bits-qris/image/qr-renderer';
 import { registerSW } from 'virtual:pwa-register';
 
 // version dinamis — single source of truth dari root package.json via Vite define
@@ -837,7 +837,7 @@ function render() {
       cityEl.textContent = parsed.merchantCity || '';
       openApiBtn.href = `/api/convert?amount=${amount}&qris=${encodeURIComponent(qris)}${fee ? `&fee=${fee.value}&type=${fee.type}` : ''}`;
 
-      const dataUrl = await makeQrDataUrl(qris, { amount, fee });
+      const dataUrl = await renderQrDataUrl(dynamic);
       lastDataUrl = dataUrl;
       qrWrap.innerHTML = `<img alt="QRIS Dynamic" src="${dataUrl}" />`;
       const sb = document.getElementById('statusBadge') as HTMLDivElement | null;

@@ -27,3 +27,13 @@ export function calculateCrc16(data: string): string {
 
   return (crc & 0xffff).toString(16).toUpperCase().padStart(4, '0');
 }
+
+/**
+ * Validate QRIS CRC — compare trailing 4-char CRC against recomputed value
+ */
+export function isCrcValid(qris: string): boolean {
+  if (qris.length < 4) return false;
+  const withoutCrc = qris.slice(0, -4);
+  const declared = qris.slice(-4).toUpperCase();
+  return calculateCrc16(withoutCrc) === declared;
+}

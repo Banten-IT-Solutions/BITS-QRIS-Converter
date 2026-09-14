@@ -112,6 +112,14 @@ function insertAmountAndFee(
 
   if (!fee || Number(fee.value) <= 0) return;
 
+  const feeNumber = Number(fee.value);
+  if (!Number.isFinite(feeNumber)) {
+    throw new QrisConvertError(`Invalid fee: must be a finite number. Got: ${fee.value}`);
+  }
+  if (fee.type === 'fixed' && !Number.isInteger(feeNumber)) {
+    throw new QrisConvertError(`Invalid fixed fee: must be whole number. Got: ${fee.value}`);
+  }
+
   const feeValue = String(fee.value);
 
   if (fee.type === 'fixed') {

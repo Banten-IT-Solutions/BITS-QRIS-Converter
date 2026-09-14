@@ -14,12 +14,6 @@ export class QrisError extends Error {
   }
 }
 
-export class QrisValidationError extends QrisError {
-  constructor(message: string) {
-    super(message, 'QRIS_VALIDATION_ERROR');
-  }
-}
-
 export class QrisParseError extends QrisError {
   constructor(message: string) {
     super(message, 'QRIS_PARSE_ERROR');

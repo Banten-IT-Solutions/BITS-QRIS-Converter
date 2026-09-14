@@ -2,7 +2,8 @@
  * CLI constants
  */
 
-export const CLI_VERSION = '1.0.0';
+// keep in sync with package.json "version"
+export const CLI_VERSION = '1.5.0';
 export const CLI_NAME = 'bits-qris';
 
 export const HELP_TEXT = `

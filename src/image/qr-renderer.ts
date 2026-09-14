@@ -22,12 +22,12 @@ export function makeString(
 }
 
 /**
- * Generate QR code as DataURL (lightweight, no template, works in Node & Browser)
+ * Render an already-converted (dynamic) QRIS string as DataURL — skip re-conversion
  */
-export async function makeQrDataUrl(qris: string, options: QrOnlyOptions): Promise<string> {
-  const normalized = normalizeLegacyOptions(options);
-  const dynamicQris = convertQris(qris, normalized);
-
+export function renderQrDataUrl(
+  dynamicQris: string,
+  options: Pick<QrOnlyOptions, 'margin' | 'width' | 'colorDark' | 'colorLight'> = {},
+): Promise<string> {
   return QRCode.toDataURL(dynamicQris, {
     margin: options.margin ?? 2,
     width: options.width ?? 512,
@@ -36,6 +36,14 @@ export async function makeQrDataUrl(qris: string, options: QrOnlyOptions): Promi
       light: options.colorLight ?? '#FFFFFF',
     },
   });
+}
+
+/**
+ * Generate QR code as DataURL (lightweight, no template, works in Node & Browser)
+ */
+export async function makeQrDataUrl(qris: string, options: QrOnlyOptions): Promise<string> {
+  const normalized = normalizeLegacyOptions(options);
+  return renderQrDataUrl(convertQris(qris, normalized), options);
 }
 
 /**

@@ -3,7 +3,7 @@
  * Improved & null-safe — replaces fragile regex-only approach
  */
 
-import { calculateCrc16 } from '../core/crc16.js';
+import { isCrcValid } from '../core/crc16.js';
 import { parseQris } from '../core/parser.js';
 import type { MerchantInfo } from '../core/types.js';
 
@@ -16,7 +16,7 @@ export function getMerchantInfo(qris: string): MerchantInfo {
   const merchantCity = parsed.merchantCity || '';
   const printer = extractPrinter(qris);
   const nns = extractNns(qris);
-  const crcIsValid = validateCrc(qris);
+  const crcIsValid = isCrcValid(qris);
 
   return {
     nmid,
@@ -57,11 +57,4 @@ function extractNns(qris: string): string {
   const nnsData = qris.match(/(?<=0118).+?(?=ID)/g);
   if (!nnsData || nnsData.length === 0) return 'UNKNOWN';
   return nnsData[nnsData.length - 1].substring(0, 8);
-}
-
-function validateCrc(qris: string): boolean {
-  if (qris.length < 4) return false;
-  const withoutCrc = qris.slice(0, -4);
-  const declared = qris.slice(-4).toUpperCase();
-  return calculateCrc16(withoutCrc) === declared;
 }

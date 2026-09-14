@@ -33,13 +33,7 @@ export { makeFile } from './image/receipt-generator.js';
 export type { ImageOptions, QrOnlyOptions } from './image/types.js';
 
 export { padLength, sanitizeFilename } from './shared/format.js';
-export {
-  QrisConvertError,
-  QrisError,
-  QrisImageError,
-  QrisParseError,
-  QrisValidationError,
-} from './shared/errors.js';
+export { QrisConvertError, QrisError, QrisImageError, QrisParseError } from './shared/errors.js';
 
 export { normalizeLegacyOptions } from './image/utils.js';
 

@@ -1,6 +1,6 @@
 import { Hono } from 'hono';
 import { convertQris, validateQris } from 'bits-qris/core';
-import { makeQrDataUrl } from 'bits-qris/image/qr-renderer';
+import { renderQrDataUrl } from 'bits-qris/image/qr-renderer';
 
 type Bindings = {
   ASSETS: { fetch: (input: RequestInfo, init?: RequestInit) => Promise<Response> };
@@ -34,7 +34,7 @@ app.get('/api/convert', async (c) => {
 
   try {
     const dynamic = convertQris(qris, { amount: amountNum, fee: feeObj });
-    const qrDataUrl = await makeQrDataUrl(qris, { amount: amountNum, fee: feeObj });
+    const qrDataUrl = await renderQrDataUrl(dynamic);
     return c.json({ dynamic, qrDataUrl, valid: true });
   } catch (e) {
     return c.json({ error: (e as Error).message }, 400);
