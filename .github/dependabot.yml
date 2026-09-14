@@ -13,6 +13,8 @@ updates:
     ignore:
       - dependency-name: 'typescript'
         versions: ['>=7']
+      - dependency-name: 'conventional-changelog-conventionalcommits'
+        versions: ['>=9']
     groups:
       dev-dependencies:
         patterns:
