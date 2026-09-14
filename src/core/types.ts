@@ -12,9 +12,6 @@ export interface TlvElement {
   children?: TlvElement[];
 }
 
-/** @deprecated Use TlvElement — kept for backward compatibility */
-export type TLV = TlvElement;
-
 /** Parsed QRIS data — human-friendly */
 export interface QrisData {
   version: string;
@@ -35,9 +32,6 @@ export interface QrisData {
   raw: TlvElement[];
 }
 
-/** @deprecated Use QrisData */
-export type QRISData = QrisData;
-
 export interface MerchantAccountInfo {
   tag: string;
   globallyUniqueId: string;
@@ -54,13 +48,6 @@ export interface ConvertOptions {
     type: FeeType;
     value: number | string;
   };
-}
-
-/** Legacy options — qris-dinamis 1.x compatibility */
-export interface LegacyConvertOptions {
-  nominal: string | number;
-  taxtype?: 'p' | 'r';
-  fee?: string | number;
 }
 
 export interface ValidationResult {

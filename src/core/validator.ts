@@ -79,15 +79,9 @@ export function validateQris(qrisString: string): ValidationResult {
   return { valid: errors.length === 0, errors };
 }
 
-/** @deprecated Use validateQris */
-export const validateQRIS = validateQris;
-
 /**
  * Boolean shortcut for validation
  */
 export function isValidQris(qrisString: string): boolean {
   return validateQris(qrisString).valid;
 }
-
-/** @deprecated Use isValidQris */
-export const isValidQRIS = isValidQris;

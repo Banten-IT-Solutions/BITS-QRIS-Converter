@@ -1,6 +1,6 @@
 /**
  * Receipt image generator — composes QR onto template with merchant overlay
- * Main entry: makeFile (also aliased as makeImage / generateStruk)
+ * Main entry: makeFile
  */
 
 import QRCode from 'qrcode';
@@ -153,7 +153,3 @@ async function generateNodeReceipt(
   await templateImage.write(outputPath as unknown as string);
   return outputPath;
 }
-
-/** Aliases — keep backward compatibility */
-export const makeImage = makeFile;
-export const generateStruk = makeFile;

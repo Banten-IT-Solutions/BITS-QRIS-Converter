@@ -102,9 +102,6 @@ export function convertQris(qrisString: string, options: ConvertOptions): string
   return `${crcInput}${crc}`;
 }
 
-/** @deprecated Use convertQris */
-export const convertQRIS = convertQris;
-
 function insertAmountAndFee(
   target: TlvElement[],
   amountNumber: number,
@@ -126,27 +123,4 @@ function insertAmountAndFee(
     );
     target.push(createTlv(TAG.FEE_PERCENTAGE, feeValue, 'Value of Convenience Fee (%)'));
   }
-}
-
-/**
- * Legacy wrapper — qris-dinamis 1.x compatibility: makeString(qris,{nominal,taxtype,fee})
- */
-export function makeStringLegacy(
-  qris: string,
-  options: { nominal: string | number; taxtype?: 'p' | 'r'; fee?: string | number },
-): string {
-  const amount = options.nominal;
-  let fee: ConvertOptions['fee'] | undefined;
-
-  if (options.fee && String(options.fee) !== '0' && String(options.fee).trim() !== '') {
-    const feeNumber = Number(options.fee);
-    if (!Number.isNaN(feeNumber) && feeNumber > 0) {
-      fee = {
-        type: options.taxtype === 'r' ? 'fixed' : 'percentage',
-        value: feeNumber,
-      };
-    }
-  }
-
-  return convertQris(qris, { amount, fee });
 }

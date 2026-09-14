@@ -7,8 +7,7 @@ import { QrisParseError } from '../shared/errors.js';
 import { NESTED_TAGS, TAG_NAMES } from './constants.js';
 import type { MerchantAccountInfo, QrisData, TlvElement } from './types.js';
 
-// Re-export for backward compat
-export type { TlvElement, TLV, QrisData, QRISData } from './types.js';
+export type { TlvElement, QrisData } from './types.js';
 
 /**
  * Parse raw TLV string into array of TlvElement
@@ -48,9 +47,6 @@ export function parseTlv(data: string): TlvElement[] {
 
   return elements;
 }
-
-/** @deprecated Use parseTlv */
-export const parseTLV = parseTlv;
 
 /**
  * Parse QRIS string into structured QrisData
@@ -107,6 +103,3 @@ export function parseQris(qrisString: string): QrisData {
     raw,
   };
 }
-
-/** @deprecated Use parseQris */
-export const parseQRIS = parseQris;

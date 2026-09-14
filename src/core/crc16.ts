@@ -27,9 +27,3 @@ export function calculateCrc16(data: string): string {
 
   return (crc & 0xffff).toString(16).toUpperCase().padStart(4, '0');
 }
-
-/** @deprecated Use calculateCrc16 */
-export const calculateCRC16 = calculateCrc16;
-
-/** @deprecated Use calculateCrc16 */
-export const toCRC16 = calculateCrc16;

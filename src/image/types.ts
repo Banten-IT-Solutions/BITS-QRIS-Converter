@@ -32,6 +32,3 @@ export interface QrOnlyOptions extends ConvertOptions {
   colorDark?: string;
   colorLight?: string;
 }
-
-/** @deprecated Use QrOnlyOptions */
-export type QROnlyOptions = QrOnlyOptions;

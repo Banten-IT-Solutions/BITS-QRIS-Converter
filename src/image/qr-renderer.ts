@@ -38,9 +38,6 @@ export async function makeQrDataUrl(qris: string, options: QrOnlyOptions): Promi
   });
 }
 
-/** @deprecated Use makeQrDataUrl */
-export const makeQRDataURL = makeQrDataUrl;
-
 /**
  * Generate QR code as Buffer (Node.js)
  */
@@ -58,9 +55,6 @@ export async function makeQrBuffer(qris: string, options: QrOnlyOptions): Promis
     type: 'png',
   });
 }
-
-/** @deprecated Use makeQrBuffer */
-export const makeQRBuffer = makeQrBuffer;
 
 /**
  * Browser-only helper — QR DataURL without Jimp
