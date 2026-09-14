@@ -1,3 +1,29 @@
+## [2.0.0](https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/compare/v1.5.0...v2.0.0) (2026-09-14)
+
+### ⚠ BREAKING CHANGES
+
+- remove deprecated aliases and legacy exports
+
+removed functions: calculateCRC16, toCRC16, parseTLV, parseQRIS, convertQRIS, validateQRIS, isValidQRIS, makeQRDataURL, makeQRBuffer, makeImage, generateStruk, makeStringLegacy, formatRupiah
+removed types: TLV, QRISData, QROnlyOptions, LegacyConvertOptions
+
+canonical names stay: calculateCrc16, parseTlv, parseQris, convertQris, validateQris, isValidQris, makeQrDataUrl, makeQrBuffer, makeFile
+legacy options schema (nominal/taxtype/fee) still supported via makeString/makeFile/normalizeLegacyOptions
+
+### ✨ Features
+
+- drop deprecated v1.x aliases and legacy API ([bd7ffeb](https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/commit/bd7ffeb83a6fbdc1b7af5d5fb11f1351fbfb981a))
+
+### 🐛 Bug Fixes
+
+- harden amount validation and TLV parsing, slim web bundle ([6ce9278](https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/commit/6ce927868f49c4d0b9a271b921b77febbfbffc8d))
+- harden fee validation, dedup CRC, avoid double-convert ([58a16e6](https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/commit/58a16e6ee851ba455a05d020f4794057d491cdd1))
+
+### 📚 Docs
+
+- make AGENTS.md AI Agents friendly ([ce5b2bd](https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/commit/ce5b2bdc81f9a51f0f3bb06c4b11e294582b717c))
+- replace text architecture with mermaid diagram ([31f58ea](https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/commit/31f58ea1fe15b7af531c31c53bd341136be0bb40))
+
 ## [1.5.0](https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/compare/v1.4.0...v1.5.0) (2026-09-01)
 
 ### ✨ Features
