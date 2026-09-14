@@ -35,7 +35,6 @@ export const TIP_INDICATOR = {
 } as const;
 
 // CRC
-export const CRC_TAG = '63';
 export const CRC_PLACEHOLDER = '6304';
 export const CRC_POLYNOMIAL = 0x1021;
 export const CRC_INIT = 0xffff;
@@ -60,10 +59,6 @@ export const REQUIRED_TAGS = [
   { tag: TAG.MERCHANT_CITY, name: 'Merchant City' },
   { tag: TAG.CRC, name: 'CRC' },
 ] as const;
-
-// Payload format
-export const PAYLOAD_FORMAT_INDICATOR_VALUE = '01';
-export const PAYLOAD_PREFIX = '000201';
 
 // Human-readable tag names (EMVCo spec)
 export const TAG_NAMES: Readonly<Record<string, string>> = Object.freeze({

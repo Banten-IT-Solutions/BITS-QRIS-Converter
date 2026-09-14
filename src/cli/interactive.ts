@@ -100,6 +100,3 @@ export async function runInteractive(): Promise<void> {
     throw error;
   }
 }
-
-/** @deprecated Use runInteractive */
-export const runInteractiveSafe = runInteractive;
