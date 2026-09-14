@@ -6,7 +6,7 @@
 import { calculateCrc16 } from './crc16.js';
 import { REQUIRED_TAGS } from './constants.js';
 import { parseTlv } from './parser.js';
-import type { ValidationResult } from './types.js';
+import type { TlvElement, ValidationResult } from './types.js';
 
 const MIN_QRIS_LENGTH = 20;
 const PAYLOAD_PREFIX = '000201';
@@ -41,7 +41,13 @@ export function validateQris(qrisString: string): ValidationResult {
     errors.push(`CRC mismatch: expected ${calculatedCrc}, got ${declaredCrc.toUpperCase()}`);
   }
 
-  const elements = parseTlv(normalized);
+  let elements: TlvElement[];
+  try {
+    elements = parseTlv(normalized);
+  } catch (error) {
+    errors.push(`Failed to parse QRIS: ${(error as Error).message}`);
+    return { valid: false, errors };
+  }
 
   if (elements.length === 0) {
     errors.push('Failed to parse any TLV elements');

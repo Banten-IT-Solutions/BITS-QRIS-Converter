@@ -16,7 +16,7 @@ export function parseConvertArgs(args: string[]): ConvertCliArgs | null {
   const qris = args[1];
   const amount = Number(args[2]);
 
-  if (Number.isNaN(amount) || amount <= 0) {
+  if (!Number.isFinite(amount) || amount <= 0) {
     throw new Error(`Invalid amount: ${args[2]}`);
   }
 
@@ -26,7 +26,7 @@ export function parseConvertArgs(args: string[]): ConvertCliArgs | null {
 
   if (feeIndex !== -1 && args[feeIndex + 1]) {
     const feeValue = Number(args[feeIndex + 1]);
-    if (Number.isNaN(feeValue) || feeValue < 0)
+    if (!Number.isFinite(feeValue) || feeValue < 0)
       throw new Error(`Invalid fee: ${args[feeIndex + 1]}`);
     const typeRaw = typeIndex !== -1 ? args[typeIndex + 1] : 'fixed';
     fee = {

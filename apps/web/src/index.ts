@@ -1,8 +1,9 @@
 import { Hono } from 'hono';
-import { convertQris, validateQris, makeQrDataUrl } from 'bits-qris';
+import { convertQris, validateQris } from 'bits-qris/core';
+import { makeQrDataUrl } from 'bits-qris/image/qr-renderer';
 
 type Bindings = {
-  ASSETS: Fetcher;
+  ASSETS: { fetch: (input: RequestInfo, init?: RequestInit) => Promise<Response> };
 };
 
 const app = new Hono<{ Bindings: Bindings }>();
@@ -19,15 +20,16 @@ app.get('/api/convert', async (c) => {
   }
 
   const amountNum = Number(amount);
-  if (Number.isNaN(amountNum) || amountNum <= 0)
-    return c.json({ error: 'Nominal tidak valid — harus angka lebih dari 0' }, 400);
+  if (!Number.isFinite(amountNum) || amountNum <= 0 || !Number.isInteger(amountNum))
+    return c.json({ error: 'Nominal tidak valid — harus angka bulat lebih dari 0' }, 400);
 
   const v = validateQris(qris);
   if (!v.valid) return c.json({ valid: false, errors: v.errors }, 400);
 
-  const feeObj =
-    fee && Number(fee) > 0
-      ? { type: type === 'percentage' ? 'percentage' : ('fixed' as const), value: Number(fee) }
+  const feeNum = Number(fee);
+  const feeObj: { type: 'fixed' | 'percentage'; value: number } | undefined =
+    fee && Number.isFinite(feeNum) && feeNum > 0
+      ? { type: type === 'percentage' ? 'percentage' : 'fixed', value: feeNum }
       : undefined;
 
   try {
@@ -45,7 +47,6 @@ app.get('/api/health', (c) =>
 
 // Fallback to static assets (Vite client) — untuk Cloudflare Workers Assets
 app.get('*', async (c) => {
-  // @ts-ignore — ASSETS binding dari wrangler
   if (c.env?.ASSETS) {
     return c.env.ASSETS.fetch(c.req.raw);
   }

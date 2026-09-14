@@ -49,9 +49,12 @@ export async function makeQrBuffer(qris: string, options: QrOnlyOptions): Promis
   const dynamicQris = convertQris(qris, normalized);
 
   return QRCode.toBuffer(dynamicQris, {
-    margin: 2,
-    scale: 10,
-    width: 512,
+    margin: options.margin ?? 2,
+    width: options.width ?? 512,
+    color: {
+      dark: options.colorDark ?? '#000000',
+      light: options.colorLight ?? '#FFFFFF',
+    },
     type: 'png',
   });
 }
@@ -67,8 +70,8 @@ export async function generateBrowserQr(qris: string, options: ImageOptions): Pr
   const dynamicQris = convertQris(qris, normalized);
 
   return QRCode.toDataURL(dynamicQris, {
-    margin: 2,
-    scale: 10,
-    width: 512,
+    margin: options.margin ?? 2,
+    scale: options.scale ?? 10,
+    width: options.width ?? 512,
   });
 }

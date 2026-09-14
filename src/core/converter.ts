@@ -38,8 +38,14 @@ function validateAmount(amount: ConvertOptions['amount']): number {
 
   const numericAmount = Number(amount);
 
-  if (Number.isNaN(numericAmount) || numericAmount <= 0) {
+  if (!Number.isFinite(numericAmount) || numericAmount <= 0) {
     throw new QrisConvertError(`Invalid amount: must be positive number. Got: ${amount}`);
+  }
+
+  if (!Number.isInteger(numericAmount)) {
+    throw new QrisConvertError(
+      `Invalid amount: must be whole number (no decimals). Got: ${amount}`,
+    );
   }
 
   return numericAmount;
@@ -104,7 +110,7 @@ function insertAmountAndFee(
   amountNumber: number,
   fee: ConvertOptions['fee'],
 ): void {
-  const amountString = String(Math.trunc(amountNumber));
+  const amountString = String(amountNumber);
   target.push(createTlv(TAG.TRANSACTION_AMOUNT, amountString, 'Transaction Amount'));
 
   if (!fee || Number(fee.value) <= 0) return;

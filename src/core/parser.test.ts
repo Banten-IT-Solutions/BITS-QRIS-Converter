@@ -1,9 +1,11 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
 import { parseTlv, parseQris } from './parser.js';
+import { calculateCrc16 } from './crc16.js';
 
-const SAMPLE_QRIS =
+const QRIS_PAYLOAD =
   '00020101021126560014ID.CO.QRIS.WWW0115ID10231625260990215ID10231625260995204581253033605802ID5914TOKO BITS JAYA6007JAKARTA6105123456304';
+const SAMPLE_QRIS = `${QRIS_PAYLOAD}${calculateCrc16(QRIS_PAYLOAD)}`;
 
 describe('parseTlv', () => {
   it('should parse TLV elements', () => {

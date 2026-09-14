@@ -3,6 +3,7 @@
  * Single Responsibility: parse raw string → structured data
  */
 
+import { QrisParseError } from '../shared/errors.js';
 import { NESTED_TAGS, TAG_NAMES } from './constants.js';
 import type { MerchantAccountInfo, QrisData, TlvElement } from './types.js';
 
@@ -18,13 +19,19 @@ export function parseTlv(data: string): TlvElement[] {
   let position = 0;
 
   while (position < data.length) {
-    if (position + 4 > data.length) break;
+    if (position + 4 > data.length) {
+      throw new QrisParseError(`Invalid TLV: truncated header at position ${position}`);
+    }
 
     const tag = data.substring(position, position + 2);
     const lengthStr = data.substring(position + 2, position + 4);
     const length = Number.parseInt(lengthStr, 10);
 
-    if (Number.isNaN(length) || position + 4 + length > data.length) break;
+    if (Number.isNaN(length) || position + 4 + length > data.length) {
+      throw new QrisParseError(
+        `Invalid TLV: corrupt length "${lengthStr}" at position ${position} (tag ${tag})`,
+      );
+    }
 
     const value = data.substring(position + 4, position + 4 + length);
     const name = TAG_NAMES[tag] ?? `Unknown (${tag})`;

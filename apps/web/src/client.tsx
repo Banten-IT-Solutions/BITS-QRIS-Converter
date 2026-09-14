@@ -24,7 +24,12 @@ window.addEventListener('appinstalled', () => {
 // --- helpers: decode QR image via jsQR (loaded via CDN) ---
 declare global {
   interface Window {
-    jsQR: (data: Uint8ClampedArray, w: number, h: number, opts?: unknown) => { data: string } | null;
+    jsQR?: (
+      data: Uint8ClampedArray,
+      w: number,
+      h: number,
+      opts?: unknown,
+    ) => { data: string } | null;
   }
 }
 
@@ -42,22 +47,27 @@ function loadJsQR(): Promise<void> {
 async function decodeImage(file: File): Promise<string> {
   await loadJsQR();
   const url = URL.createObjectURL(file);
-  const img = new Image();
-  img.src = url;
-  await new Promise<void>((res, rej) => {
-    img.onload = () => res();
-    img.onerror = () => rej(new Error('image load failed'));
-  });
-  const c = document.createElement('canvas');
-  c.width = img.naturalWidth;
-  c.height = img.naturalHeight;
-  const ctx = c.getContext('2d', { willReadFrequently: true })!;
-  ctx.drawImage(img, 0, 0);
-  const data = ctx.getImageData(0, 0, c.width, c.height);
-  const code = window.jsQR(data.data, data.width, data.height, { inversionAttempts: 'dontInvert' });
-  URL.revokeObjectURL(url);
-  if (!code) throw new Error('QR tidak terbaca — pastikan foto QRIS cukup jelas dan tidak buram');
-  return code.data;
+  try {
+    const img = new Image();
+    img.src = url;
+    await new Promise<void>((res, rej) => {
+      img.onload = () => res();
+      img.onerror = () => rej(new Error('image load failed'));
+    });
+    const c = document.createElement('canvas');
+    c.width = img.naturalWidth;
+    c.height = img.naturalHeight;
+    const ctx = c.getContext('2d', { willReadFrequently: true })!;
+    ctx.drawImage(img, 0, 0);
+    const data = ctx.getImageData(0, 0, c.width, c.height);
+    const code = window.jsQR!(data.data, data.width, data.height, {
+      inversionAttempts: 'dontInvert',
+    });
+    if (!code) throw new Error('QR tidak terbaca — pastikan foto QRIS cukup jelas dan tidak buram');
+    return code.data;
+  } finally {
+    URL.revokeObjectURL(url);
+  }
 }
 
 // --- theme ---
@@ -520,7 +530,8 @@ function render() {
   const termDynamic = document.getElementById('termDynamic') as HTMLDivElement;
   const termCrc = document.getElementById('termCrc') as HTMLSpanElement;
 
-  const sample = '00020101021126560014ID.CO.QRIS.WWW0115ID10231625260990215ID10231625260995204581253033605802ID5919BANTEN IT SOLUTIONS6006SERANG6304DA44';
+  const sample =
+    '00020101021126560014ID.CO.QRIS.WWW0115ID10231625260990215ID10231625260995204581253033605802ID5919BANTEN IT SOLUTIONS6006SERANG6304DA44';
   let dynamicSample = sample;
   try {
     dynamicSample = convertQris(sample, { amount: 25000 });
@@ -568,10 +579,11 @@ function render() {
   document.getElementById('termReplay')?.addEventListener('click', startTyping);
   document.getElementById('termCopy')?.addEventListener('click', async () => {
     const txt = `${fullCmd}\n✓ ${termDynamic.textContent || dynamicSample}`;
-    await navigator.clipboard.writeText(txt);
+    const ok = await copyText(txt);
     const btn = document.getElementById('termCopy') as HTMLButtonElement;
     const old = btn.textContent;
-    btn.textContent = 'Copied';
+    btn.textContent = ok ? 'Copied' : 'Gagal';
+    if (ok) showToast('✨ Isi terminal tersalin', 'success');
     setTimeout(() => (btn.textContent = old), 1200);
   });
 
@@ -580,18 +592,26 @@ function render() {
     npm: `npm i bits-qris\nimport { convertQris } from 'bits-qris/core'\nconvertQris(qris, { amount: 50000 })`,
     npx: `npx bits-qris convert "000201..." --amount 50000\nnpx bits-qris validate "000201..."\nnpx bits-qris image --amount 25000 --out qris.png`,
   };
-  document.querySelectorAll<HTMLButtonElement>('.terminal-actions button[data-copy]').forEach((b) => {
-    b.addEventListener('click', async () => {
-      const k = b.dataset.copy!;
-      const ok = await copyText(copyMap[k] || '');
-      const old = b.textContent;
-      b.textContent = ok ? 'Copied' : 'Gagal';
-      if (ok) showToast(k === 'npm' ? '📦 Perintah npm tersalin' : '⚡ Perintah npx tersalin', 'success');
-      setTimeout(() => (b.textContent = old!), 1200);
+  document
+    .querySelectorAll<HTMLButtonElement>('.terminal-actions button[data-copy]')
+    .forEach((b) => {
+      b.addEventListener('click', async () => {
+        const k = b.dataset.copy!;
+        const ok = await copyText(copyMap[k] || '');
+        const old = b.textContent;
+        b.textContent = ok ? 'Copied' : 'Gagal';
+        if (ok)
+          showToast(
+            k === 'npm' ? '📦 Perintah npm tersalin' : '⚡ Perintah npx tersalin',
+            'success',
+          );
+        setTimeout(() => (b.textContent = old!), 1200);
+      });
     });
-  });
   document.getElementById('copyCurl')?.addEventListener('click', async () => {
-    const ok = await copyText(`curl -s "https://qris.bits.co.id/api/convert?amount=50000&qris=000201010211..." | jq`);
+    const ok = await copyText(
+      `curl -s "https://qris.bits.co.id/api/convert?amount=50000&qris=000201010211..." | jq`,
+    );
     const b = document.getElementById('copyCurl') as HTMLButtonElement;
     const old = b.textContent;
     b.textContent = ok ? 'Copied' : 'Gagal';
@@ -714,7 +734,8 @@ function render() {
     feeField.style.display = 'none';
     errorEl.innerHTML = '';
     outStringEl.textContent = '—';
-    qrWrap.innerHTML = '<div class="qr-empty"><strong style="color:var(--fg);font-family:var(--serif);font-size:14px;font-weight:400">QR Belum Tersedia</strong><br><span style="color:var(--muted)">Hasil konversi akan muncul di sini</span></div>';
+    qrWrap.innerHTML =
+      '<div class="qr-empty"><strong style="color:var(--fg);font-family:var(--serif);font-size:14px;font-weight:400">QR Belum Tersedia</strong><br><span style="color:var(--muted)">Hasil konversi akan muncul di sini</span></div>';
     merchantEl.textContent = '—';
     cityEl.textContent = '—';
     const sbClear = document.getElementById('statusBadge') as HTMLDivElement | null;
@@ -740,7 +761,9 @@ function render() {
       document.body.appendChild(ta);
       ta.select();
       let ok = false;
-      try { ok = document.execCommand('copy'); } catch {}
+      try {
+        ok = document.execCommand('copy');
+      } catch {}
       ta.remove();
       return ok;
     }
