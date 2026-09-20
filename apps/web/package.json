@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "bits-qris": "file:../..",
-    "hono": "^4.13.7"
+    "hono": "^4.13.8"
   },
   "devDependencies": {
     "@cloudflare/vite-plugin": "^1.55.0",
