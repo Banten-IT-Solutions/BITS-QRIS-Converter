@@ -28,7 +28,13 @@ export type {
 export * from './core/constants.js';
 
 export { getMerchantInfo } from './image/merchant-info.js';
-export { generateBrowserQr, makeQrBuffer, makeQrDataUrl, makeString } from './image/qr-renderer.js';
+export {
+  generateBrowserQr,
+  makeQrBuffer,
+  makeQrDataUrl,
+  makeQrSvg,
+  makeString,
+} from './image/qr-renderer.js';
 export { makeFile } from './image/receipt-generator.js';
 export type { ImageOptions, QrOnlyOptions } from './image/types.js';
 
@@ -43,7 +49,7 @@ import { convertQris } from './core/converter.js';
 import { parseQris, parseTlv } from './core/parser.js';
 import { isValidQris, validateQris } from './core/validator.js';
 import { getMerchantInfo } from './image/merchant-info.js';
-import { makeString, makeQrBuffer, makeQrDataUrl } from './image/qr-renderer.js';
+import { makeString, makeQrBuffer, makeQrDataUrl, makeQrSvg } from './image/qr-renderer.js';
 import { makeFile as makeFileReceipt } from './image/receipt-generator.js';
 
 const BitsQris = {
@@ -58,6 +64,7 @@ const BitsQris = {
   makeFile: makeFileReceipt,
   makeQrDataUrl,
   makeQrBuffer,
+  makeQrSvg,
 } as const;
 
 export default BitsQris;

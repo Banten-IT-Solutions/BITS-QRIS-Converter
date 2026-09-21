@@ -65,6 +65,13 @@ export async function makeQrBuffer(qris: string, options: QrOnlyOptions): Promis
 }
 
 /**
+ * Render payload as SVG string — pure, Workers-safe (no fs)
+ */
+export function makeQrSvg(payload: string): Promise<string> {
+  return QRCode.toString(payload, { type: 'svg', margin: 1, width: 512 });
+}
+
+/**
  * Browser-only helper — QR DataURL without Jimp
  */
 export async function generateBrowserQr(qris: string, options: ImageOptions): Promise<string> {
