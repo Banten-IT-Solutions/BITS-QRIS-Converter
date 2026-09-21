@@ -27,6 +27,14 @@ describe('parseTlv', () => {
     assert.ok(tag26.children);
     assert.ok(tag26.children.length > 0);
   });
+
+  it('should throw for non-2-digit tag', () => {
+    assert.throws(() => parseTlv('AB0201'), /invalid tag "AB" at position 0/);
+  });
+
+  it('should throw for non-ASCII payload', () => {
+    assert.throws(() => parseTlv('00020101é'), /non-ASCII/);
+  });
 });
 
 describe('parseQris', () => {

@@ -39,4 +39,64 @@ describe('convertQris', () => {
   it('should throw for empty qris', () => {
     assert.throws(() => convertQris('', { amount: 50000 }), /qris.*required/i);
   });
+
+  it('should emit canonical fee value for exponent string', () => {
+    const dynamic = convertQris(VALID_QRIS, {
+      amount: 50000,
+      fee: { type: 'fixed', value: '1e2' },
+    });
+    assert.ok(dynamic.includes('5603100'), `Expected 5603100 in ${dynamic}`);
+    assert.ok(!dynamic.includes('1e2'), `Raw fee leaked into ${dynamic}`);
+  });
+
+  it('should throw for exponent amount beyond integer range', () => {
+    assert.throws(() => convertQris(VALID_QRIS, { amount: 1e21 }), /exceeds QRIS max/);
+  });
+
+  it('should throw for amount above 15 digits', () => {
+    assert.throws(() => convertQris(VALID_QRIS, { amount: 1_000_000_000_000_000 }), /exceeds/);
+    assert.throws(() => convertQris(VALID_QRIS, { amount: '1e2' }), /plain digits/);
+  });
+
+  it('should throw for negative and zero fee', () => {
+    assert.throws(
+      () => convertQris(VALID_QRIS, { amount: 50000, fee: { type: 'fixed', value: -100 } }),
+      /Invalid fee: must be positive/,
+    );
+    assert.throws(
+      () => convertQris(VALID_QRIS, { amount: 50000, fee: { type: 'fixed', value: 0 } }),
+      /Invalid fee: must be positive/,
+    );
+  });
+
+  it('should throw for invalid fee type', () => {
+    const badFee = { type: 'bogus', value: 100 } as unknown as {
+      type: 'fixed' | 'percentage';
+      value: number;
+    };
+    assert.throws(
+      () => convertQris(VALID_QRIS, { amount: 50000, fee: badFee }),
+      /Invalid fee type/,
+    );
+  });
+
+  it('should throw for non-ASCII payload', () => {
+    assert.throws(
+      () => convertQris(`${VALID_QRIS.slice(0, -4)}é${VALID_QRIS.slice(-3)}`, { amount: 50000 }),
+      /non-ASCII/,
+    );
+  });
+
+  it('should trim whitespace-padded qris', () => {
+    const dynamic = convertQris(`  ${VALID_QRIS}\n`, { amount: 50000 });
+    const validation = validateQris(dynamic);
+    assert.equal(validation.valid, true);
+  });
+
+  it('should throw QrisConvertError when options omitted', () => {
+    assert.throws(
+      () => convertQris(VALID_QRIS),
+      (error: unknown) => error instanceof Error && error.name === 'QrisConvertError',
+    );
+  });
 });

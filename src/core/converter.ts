@@ -31,9 +31,17 @@ function createTlv(tag: string, value: string, name = ''): TlvElement {
   return { tag, name, length: value.length, value };
 }
 
-function validateAmount(amount: ConvertOptions['amount']): number {
+const MAX_QRIS_AMOUNT = 999_999_999_999_999; // 15 digits — QRIS max
+
+function validateAmount(amount: ConvertOptions['amount'] | undefined): number {
   if (amount === undefined || amount === null || String(amount).trim() === '') {
     throw new QrisConvertError('Parameter "amount" / "nominal" is required.');
+  }
+
+  if (typeof amount === 'string' && !/^\d+$/.test(amount.trim())) {
+    throw new QrisConvertError(
+      `Invalid amount: must be plain digits (no exponent/decimal). Got: ${amount}`,
+    );
   }
 
   const numericAmount = Number(amount);
@@ -48,18 +56,30 @@ function validateAmount(amount: ConvertOptions['amount']): number {
     );
   }
 
+  if (numericAmount > MAX_QRIS_AMOUNT) {
+    throw new QrisConvertError(
+      `Invalid amount: exceeds QRIS max ${MAX_QRIS_AMOUNT} (15 digits). Got: ${amount}`,
+    );
+  }
+
   return numericAmount;
 }
 
 /**
  * Convert static QRIS → dynamic by injecting amount & optional fee
  */
-export function convertQris(qrisString: string, options: ConvertOptions): string {
+export function convertQris(qrisString: string, options?: ConvertOptions): string {
   if (!qrisString) {
     throw new QrisConvertError('Parameter "qris" is required.');
   }
 
-  const amountNumber = validateAmount(options.amount);
+  qrisString = qrisString.trim();
+
+  if (/[\u0080-\uFFFF]/.test(qrisString)) {
+    throw new QrisParseError('non-ASCII payload not supported');
+  }
+
+  const amountNumber = validateAmount(options?.amount);
   const elements = parseTlv(qrisString);
 
   if (elements.length === 0) {
@@ -84,7 +104,7 @@ export function convertQris(qrisString: string, options: ConvertOptions): string
     }
 
     if (element.tag === TAG.COUNTRY_CODE && !amountInserted) {
-      insertAmountAndFee(result, amountNumber, options.fee);
+      insertAmountAndFee(result, amountNumber, options?.fee);
       amountInserted = true;
     }
 
@@ -92,7 +112,7 @@ export function convertQris(qrisString: string, options: ConvertOptions): string
   }
 
   if (!amountInserted) {
-    insertAmountAndFee(result, amountNumber, options.fee);
+    insertAmountAndFee(result, amountNumber, options?.fee);
   }
 
   const withoutCrc = buildTlvString(result);
@@ -110,17 +130,26 @@ function insertAmountAndFee(
   const amountString = String(amountNumber);
   target.push(createTlv(TAG.TRANSACTION_AMOUNT, amountString, 'Transaction Amount'));
 
-  if (!fee || Number(fee.value) <= 0) return;
+  if (!fee) return;
+
+  if (fee.type !== 'fixed' && fee.type !== 'percentage') {
+    throw new QrisConvertError(
+      `Invalid fee type: must be "fixed" or "percentage". Got: ${String(fee.type)}`,
+    );
+  }
 
   const feeNumber = Number(fee.value);
   if (!Number.isFinite(feeNumber)) {
     throw new QrisConvertError(`Invalid fee: must be a finite number. Got: ${fee.value}`);
   }
+  if (feeNumber <= 0) {
+    throw new QrisConvertError(`Invalid fee: must be positive number. Got: ${fee.value}`);
+  }
   if (fee.type === 'fixed' && !Number.isInteger(feeNumber)) {
     throw new QrisConvertError(`Invalid fixed fee: must be whole number. Got: ${fee.value}`);
   }
 
-  const feeValue = String(fee.value);
+  const feeValue = String(feeNumber);
 
   if (fee.type === 'fixed') {
     target.push(createTlv(TAG.TIP_INDICATOR, TIP_INDICATOR.FIXED, 'Tip or Convenience Indicator'));

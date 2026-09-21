@@ -14,6 +14,10 @@ export type { TlvElement, QrisData } from './types.js';
  * Robust EMVCo parser — tidak pakai split fragile
  */
 export function parseTlv(data: string): TlvElement[] {
+  if (/[\u0080-\uFFFF]/.test(data)) {
+    throw new QrisParseError('non-ASCII payload not supported');
+  }
+
   const elements: TlvElement[] = [];
   let position = 0;
 
@@ -24,6 +28,10 @@ export function parseTlv(data: string): TlvElement[] {
 
     const tag = data.substring(position, position + 2);
     const lengthStr = data.substring(position + 2, position + 4);
+
+    if (!/^\d{2}$/.test(tag)) {
+      throw new QrisParseError(`Invalid TLV: invalid tag "${tag}" at position ${position}`);
+    }
 
     if (!/^\d{2}$/.test(lengthStr)) {
       throw new QrisParseError(
