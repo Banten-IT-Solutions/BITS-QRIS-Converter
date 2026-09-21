@@ -4,12 +4,27 @@
  */
 
 import fs from 'node:fs';
+import path from 'node:path';
+import { MODULE_ASSETS_DIR } from './module-dir.js';
 
 type LoadFontFunction = (path: string) => Promise<unknown>;
 
 // Cache Jimp + loadFont singletons
 let jimpCache: unknown = null;
 let loadFontCache: LoadFontFunction | null = null;
+
+// Cache parsed fonts keyed by resolved path — avoid re-reading disk per receipt
+const fontCache = new Map<string, Promise<unknown>>();
+
+function loadFontCached(fontPath: string): Promise<unknown> {
+  let cached = fontCache.get(fontPath);
+  if (!cached) {
+    cached = getLoadFont().then((loadFont) => loadFont(fontPath));
+    fontCache.set(fontPath, cached);
+    cached.catch(() => fontCache.delete(fontPath));
+  }
+  return cached;
+}
 
 async function getJimp(): Promise<unknown> {
   if (jimpCache) return jimpCache;
@@ -54,7 +69,6 @@ export interface LoadedFonts {
  * Returns null fonts if custom fonts not found — caller should handle fallback (QR-only)
  */
 export async function loadReceiptFonts(merchantName: string): Promise<LoadedFonts> {
-  const loadFont = await getLoadFont();
   const isLongName = merchantName.length > 18;
   const isVeryLong = merchantName.length > 28;
 
@@ -68,9 +82,18 @@ export async function loadReceiptFonts(merchantName: string): Promise<LoadedFont
 
   const smallFontPath = 'assets/fonts/caption-roboto-small/caption-roboto-small.fnt';
 
-  const titleCandidates = [titleFontPath, `dist/${titleFontPath}`];
-  const midCandidates = [midFontPath, `dist/${midFontPath}`];
-  const smallCandidates = [smallFontPath, `dist/${smallFontPath}`];
+  const candidatesFor = (relativePath: string): string[] =>
+    [
+      MODULE_ASSETS_DIR
+        ? path.join(MODULE_ASSETS_DIR, relativePath.slice('assets/'.length))
+        : undefined,
+      relativePath,
+      `dist/${relativePath}`,
+    ].filter((candidate): candidate is string => Boolean(candidate));
+
+  const titleCandidates = candidatesFor(titleFontPath);
+  const midCandidates = candidatesFor(midFontPath);
+  const smallCandidates = candidatesFor(smallFontPath);
 
   const titlePath = findExistingPath(titleCandidates);
   const midPath = findExistingPath(midCandidates);
@@ -82,9 +105,9 @@ export async function loadReceiptFonts(merchantName: string): Promise<LoadedFont
 
   try {
     const [title, mid, small] = await Promise.all([
-      loadFont(titlePath),
-      loadFont(midPath),
-      loadFont(smallPath),
+      loadFontCached(titlePath),
+      loadFontCached(midPath),
+      loadFontCached(smallPath),
     ]);
     return { title, mid, small };
   } catch (error) {

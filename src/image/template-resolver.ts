@@ -5,13 +5,16 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
+import { MODULE_ASSETS_DIR } from './module-dir.js';
 
-const DEFAULT_TEMPLATE = 'assets/images/qris-receipt-template.png';
-const DIST_TEMPLATE = 'dist/assets/images/qris-receipt-template.png';
+const TEMPLATE_NAME = 'images/qris-receipt-template.png';
+const DEFAULT_TEMPLATE = `assets/${TEMPLATE_NAME}`;
+const DIST_TEMPLATE = `dist/assets/${TEMPLATE_NAME}`;
 
 export function resolveTemplatePath(customPath?: string): string {
   const candidates: string[] = [
     customPath,
+    MODULE_ASSETS_DIR ? path.join(MODULE_ASSETS_DIR, TEMPLATE_NAME) : undefined,
     DEFAULT_TEMPLATE,
     DIST_TEMPLATE,
     path.join(process.cwd(), DEFAULT_TEMPLATE),

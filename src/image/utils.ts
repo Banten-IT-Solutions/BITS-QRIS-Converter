@@ -1,6 +1,6 @@
 /**
  * Legacy compatibility helper — normalize qris-dinamis 1.x options
- * @deprecated Use ConvertOptions directly; this shim will be removed in v2
+ * @deprecated Use ConvertOptions directly; this shim will be removed in v3
  */
 
 import type { ConvertOptions } from '../core/types.js';
