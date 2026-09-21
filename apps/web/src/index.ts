@@ -18,10 +18,15 @@ app.get('/api/convert', async (c) => {
   if (!qris || !amount) {
     return c.json({ error: 'Parameter qris dan amount wajib diisi' }, 400);
   }
+  if (qris.length > 1000) {
+    return c.json({ error: 'Payload qris terlalu panjang — maksimal 1000 karakter' }, 400);
+  }
 
   const amountNum = Number(amount);
   if (!Number.isFinite(amountNum) || amountNum <= 0 || !Number.isInteger(amountNum))
     return c.json({ error: 'Nominal tidak valid — harus angka bulat lebih dari 0' }, 400);
+  if (amountNum > 999_999_999_999_999)
+    return c.json({ error: 'Nominal terlalu besar — maksimal 999999999999999' }, 400);
 
   const v = validateQris(qris);
   if (!v.valid) return c.json({ valid: false, errors: v.errors }, 400);

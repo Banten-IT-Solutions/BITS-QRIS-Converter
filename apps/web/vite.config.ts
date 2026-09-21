@@ -19,7 +19,7 @@ export default defineConfig({
         short_name: 'BITS QRIS',
         description:
           'Ubah QRIS Static ke Dynamic gratis dan instan. Cukup tempel atau upload foto QRIS, tentukan nominal, selesai.',
-        theme_color: '#0B1D3A',
+        theme_color: '#0A0C10',
         background_color: '#FFFBF5',
         display: 'standalone',
         display_override: ['window-controls-overlay'],
@@ -56,11 +56,6 @@ export default defineConfig({
               cacheName: 'google-fonts-cache',
               expiration: { maxEntries: 10, maxAgeSeconds: 60 * 60 * 24 * 365 },
             },
-          },
-          {
-            urlPattern: /^https:\/\/cdn\.jsdelivr\.net\/.*/i,
-            handler: 'StaleWhileRevalidate',
-            options: { cacheName: 'jsdelivr-cache' },
           },
         ],
       },

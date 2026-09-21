@@ -14,6 +14,7 @@
 
 - Palet `#FFFBF5` / `#0A0A0A` / `#C8C0B0`, tipografi `Instrument Serif` + `JetBrains Mono`
 - Dark/light via `data-theme`, install tabs, hero terminal, toast paper
+- Riwayat konversi lokal (`localStorage`, maks 10, dedupe payload), export QR PNG + SVG, decode foto QR offline via jsQR bundled
 
 ## 🚀 Dev
 

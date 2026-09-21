@@ -1,6 +1,7 @@
 import './style.css';
 import { convertQris, parseQris, validateQris } from 'bits-qris/core';
-import { renderQrDataUrl } from 'bits-qris/image/qr-renderer';
+import { makeQrSvg, renderQrDataUrl } from 'bits-qris/image/qr-renderer';
+import jsQR from 'jsqr';
 import { registerSW } from 'virtual:pwa-register';
 
 // version dinamis — single source of truth dari root package.json via Vite define
@@ -21,31 +22,12 @@ window.addEventListener('appinstalled', () => {
   document.getElementById('pwaBanner')?.classList.remove('show');
 });
 
-// --- helpers: decode QR image via jsQR (loaded via CDN) ---
-declare global {
-  interface Window {
-    jsQR?: (
-      data: Uint8ClampedArray,
-      w: number,
-      h: number,
-      opts?: unknown,
-    ) => { data: string } | null;
-  }
-}
-
-function loadJsQR(): Promise<void> {
-  if (window.jsQR) return Promise.resolve();
-  return new Promise((resolve, reject) => {
-    const s = document.createElement('script');
-    s.src = 'https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js';
-    s.onload = () => resolve();
-    s.onerror = () => reject(new Error('jsQR load failed'));
-    document.head.appendChild(s);
-  });
-}
+// --- helpers: decode QR image via jsQR (bundled — offline-safe) ---
+const MAX_IMAGE_BYTES = 10 * 1024 * 1024; // 10MB
+const MAX_DECODE_DIM = 2048;
 
 async function decodeImage(file: File): Promise<string> {
-  await loadJsQR();
+  if (file.size > MAX_IMAGE_BYTES) throw new Error('File terlalu besar — maksimal 10MB');
   const url = URL.createObjectURL(file);
   try {
     const img = new Image();
@@ -54,13 +36,14 @@ async function decodeImage(file: File): Promise<string> {
       img.onload = () => res();
       img.onerror = () => rej(new Error('image load failed'));
     });
+    const scale = Math.min(1, MAX_DECODE_DIM / Math.max(img.naturalWidth, img.naturalHeight));
     const c = document.createElement('canvas');
-    c.width = img.naturalWidth;
-    c.height = img.naturalHeight;
+    c.width = Math.max(1, Math.round(img.naturalWidth * scale));
+    c.height = Math.max(1, Math.round(img.naturalHeight * scale));
     const ctx = c.getContext('2d', { willReadFrequently: true })!;
-    ctx.drawImage(img, 0, 0);
+    ctx.drawImage(img, 0, 0, c.width, c.height);
     const data = ctx.getImageData(0, 0, c.width, c.height);
-    const code = window.jsQR!(data.data, data.width, data.height, {
+    const code = jsQR(data.data, data.width, data.height, {
       inversionAttempts: 'dontInvert',
     });
     if (!code) throw new Error('QR tidak terbaca — pastikan foto QRIS cukup jelas dan tidak buram');
@@ -166,9 +149,9 @@ function render() {
           <button id="termReplay" aria-label="Replay typing">Replay</button>
         </div>
       </div>
-      <div class="terminal-body" id="termBody" aria-live="polite">
-        <div class="terminal-line"><span class="terminal-prompt">$</span><span class="terminal-cmd" id="termCmd"></span><span class="terminal-cursor" id="termCursor"></span></div>
-        <div id="termOut" style="display:none">
+      <div class="terminal-body" id="termBody">
+        <div class="terminal-line" aria-hidden="true"><span class="terminal-prompt">$</span><span class="terminal-cmd" id="termCmd"></span><span class="terminal-cursor" id="termCursor"></span></div>
+        <div id="termOut" style="display:none" aria-live="polite">
           <div class="terminal-output">
             <div><span class="terminal-success">✓</span> parsing TLV — tag 00…63</div>
             <div><span class="terminal-success">✓</span> CRC valid — merchant: <b style="color:var(--terminal-fg)">BANTEN IT SOLUTIONS</b> • SERANG</div>
@@ -205,12 +188,12 @@ function render() {
         <span style="font-family:var(--mono);font-size:10px;color:var(--terminal-muted);margin-left:auto">macOS • Linux • Windows</span>
       </div>
       <div style="padding:10px 12px;background:var(--terminal-bg-soft);border-bottom:1px solid var(--terminal-border)">
-        <div class="install-tabs" role="tablist" aria-label="Package manager">
-          <button class="install-tab install-tab--active" role="tab" aria-selected="true" data-install="npm">npm</button>
-          <button class="install-tab" role="tab" aria-selected="false" data-install="pnpm">pnpm</button>
-          <button class="install-tab" role="tab" aria-selected="false" data-install="bun">bun</button>
-          <button class="install-tab" role="tab" aria-selected="false" data-install="yarn">yarn</button>
-          <button class="install-tab" role="tab" aria-selected="false" data-install="npx">npx</button>
+        <div class="install-tabs" aria-label="Package manager">
+          <button type="button" class="install-tab install-tab--active" aria-pressed="true" data-install="npm">npm</button>
+          <button type="button" class="install-tab" aria-pressed="false" data-install="pnpm">pnpm</button>
+          <button type="button" class="install-tab" aria-pressed="false" data-install="bun">bun</button>
+          <button type="button" class="install-tab" aria-pressed="false" data-install="yarn">yarn</button>
+          <button type="button" class="install-tab" aria-pressed="false" data-install="npx">npx</button>
         </div>
         <div class="install-code" id="installCode"><span id="installText">npm i bits-qris</span><button class="copy" id="copyInstall">Copy</button></div>
       </div>
@@ -345,10 +328,16 @@ function render() {
         <div style="display:none"><div class="code" id="outString">—</div></div>
         <div class="actions" style="gap:8px;margin-top:6px">
           <button class="btn secondary" id="downloadPng" disabled style="min-height:40px;padding:8px 10px;flex:1;white-space:nowrap">Unduh QR (PNG)</button>
+          <button class="btn secondary" id="downloadSvg" disabled style="min-height:40px;padding:8px 10px;flex:1;white-space:nowrap">⬇ SVG</button>
           <button class="btn secondary" id="copyString" style="min-height:40px;padding:8px 10px;flex:1;white-space:nowrap">Salin Kode</button>
           <a class="btn secondary" id="openApi" target="_blank" rel="noopener" style="min-height:40px;padding:8px 10px;flex:1;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;white-space:nowrap">Coba via API →</a>
         </div>
       </div>
+    </section>
+
+    <section class="card" id="historyCard" aria-labelledby="historyTitle" style="display:none;grid-column:1/-1">
+      <div class="card-head"><h2 id="historyTitle">Riwayat</h2><button type="button" id="historyClear" class="btn secondary" style="min-height:32px;padding:4px 10px;font-size:11px;white-space:nowrap">Hapus</button></div>
+      <div id="historyList" style="display:grid;gap:8px"></div>
     </section>
   </main>
 
@@ -479,11 +468,7 @@ function render() {
   (document.getElementById('themeToggle') as HTMLButtonElement)?.addEventListener('click', () => {
     const cur = document.documentElement.getAttribute('data-theme') as 'light' | 'dark';
     applyTheme(cur === 'dark' ? 'light' : 'dark');
-    const foot = document.getElementById('footTheme');
-    if (foot) foot.textContent = document.documentElement.getAttribute('data-theme') + ' mode';
   });
-  const footTheme = document.getElementById('footTheme');
-  if (footTheme) footTheme.textContent = initialTheme + ' mode';
 
   // --- toast ---
   function showToast(msg: string, type: 'success' | 'error' = 'success') {
@@ -631,10 +616,10 @@ function render() {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.install-tab').forEach((b) => {
         b.classList.remove('install-tab--active');
-        b.setAttribute('aria-selected', 'false');
+        b.setAttribute('aria-pressed', 'false');
       });
       btn.classList.add('install-tab--active');
-      btn.setAttribute('aria-selected', 'true');
+      btn.setAttribute('aria-pressed', 'true');
       const key = btn.dataset.install!;
       const txt = document.getElementById('installText');
       if (txt) txt.textContent = installMap[key] || '';
@@ -665,9 +650,21 @@ function render() {
   const qrWrap = $('#qrWrap') as HTMLDivElement;
   const copyStringBtn = $('#copyString') as HTMLButtonElement;
   const downloadBtn = $('#downloadPng') as HTMLButtonElement;
+  const downloadSvgBtn = $('#downloadSvg') as HTMLButtonElement;
   const openApiBtn = $('#openApi') as HTMLAnchorElement;
 
   let lastDataUrl = '';
+  let lastDynamic = '';
+  let lastAmount = 0;
+
+  // render pesan error via textContent — aman dari XSS (error validator mengandung input user)
+  function showFieldError(msgs: string[]) {
+    errorEl.textContent = '';
+    const div = document.createElement('div');
+    div.className = 'alert';
+    div.textContent = msgs.join('\n');
+    errorEl.appendChild(div);
+  }
 
   feeTypeEl.addEventListener('change', () => {
     feeField.style.display = feeTypeEl.value ? 'grid' : 'none';
@@ -691,18 +688,28 @@ function render() {
     }
   });
 
+  let decodeSeq = 0;
   fileEl.addEventListener('change', async () => {
     const f = fileEl.files?.[0];
     if (!f) return;
+    const seq = ++decodeSeq;
     statusEl.textContent = '⏳ Mendecode QR...';
     try {
       const data = await decodeImage(f);
+      if (seq !== decodeSeq) return;
       qrisEl.value = data;
       statusEl.innerHTML =
         '<span class="ok" style="display:inline-block">✓ QR berhasil dibaca</span>';
-      errorEl.innerHTML = '';
+      errorEl.textContent = '';
     } catch (e) {
-      statusEl.innerHTML = `<span class="alert" style="display:inline-block">${(e as Error).message}</span>`;
+      if (seq !== decodeSeq) return;
+      statusEl.textContent = '';
+      const span = document.createElement('span');
+      span.className = 'alert';
+      span.style.display = 'inline-block';
+      span.textContent = (e as Error).message;
+      statusEl.appendChild(span);
+      showToast(`⚠️ ${(e as Error).message}`, 'error');
     }
   });
 
@@ -741,7 +748,10 @@ function render() {
     const sbClear = document.getElementById('statusBadge') as HTMLDivElement | null;
     if (sbClear) sbClear.style.display = 'none';
     lastDataUrl = '';
+    lastDynamic = '';
+    lastAmount = 0;
     downloadBtn.disabled = true;
+    downloadSvgBtn.disabled = true;
     statusEl.textContent = '';
   });
 
@@ -792,12 +802,120 @@ function render() {
     a.click();
   });
 
+  downloadSvgBtn.addEventListener('click', async () => {
+    if (!lastDynamic) return;
+    try {
+      const svg = await makeQrSvg(lastDynamic);
+      const url = URL.createObjectURL(new Blob([svg], { type: 'image/svg+xml' }));
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `qris-${lastAmount}.svg`;
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(url), 0);
+    } catch (e) {
+      showToast(`⚠️ Gagal membuat SVG — ${(e as Error).message}`, 'error');
+    }
+  });
+
   // hapus style error saat user mulai mengetik
   qrisEl.addEventListener('input', () => qrisEl.classList.remove('field-error'));
   amountEl.addEventListener('input', () => amountEl.classList.remove('field-error'));
 
+  // --- riwayat konversi (localStorage) ---
+  type HistoryEntry = {
+    payload: string;
+    qris: string;
+    amount: number;
+    fee?: number;
+    type?: 'fixed' | 'percentage';
+    ts: number;
+  };
+  const HISTORY_KEY = 'bits-history';
+  const historyCard = $('#historyCard') as HTMLElement;
+  const historyList = $('#historyList') as HTMLDivElement;
+
+  function loadHistory(): HistoryEntry[] {
+    try {
+      const raw = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
+      return Array.isArray(raw) ? raw : [];
+    } catch {
+      return [];
+    }
+  }
+
+  function saveHistory(entries: HistoryEntry[]) {
+    try {
+      localStorage.setItem(HISTORY_KEY, JSON.stringify(entries.slice(0, 10)));
+    } catch {}
+  }
+
+  function renderHistory() {
+    const entries = loadHistory();
+    historyCard.style.display = entries.length ? '' : 'none';
+    historyList.textContent = '';
+    entries.forEach((h) => {
+      const row = document.createElement('div');
+      row.style.cssText =
+        'display:flex;gap:8px;align-items:center;flex-wrap:wrap;border:1px solid var(--line);padding:8px 10px;font-family:var(--mono);font-size:11px';
+
+      const info = document.createElement('div');
+      info.style.cssText = 'flex:1;min-width:160px;display:grid;gap:2px';
+      const amt = document.createElement('b');
+      amt.textContent = `Rp ${h.amount.toLocaleString('id-ID')}${h.fee ? ` + biaya ${h.type === 'percentage' ? h.fee + '%' : 'Rp ' + h.fee.toLocaleString('id-ID')}` : ''}`;
+      const prev = document.createElement('span');
+      prev.style.cssText =
+        'color:var(--muted);word-break:break-all;overflow:hidden;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical';
+      prev.textContent = h.payload;
+      info.append(amt, prev);
+
+      const copyBtn = document.createElement('button');
+      copyBtn.type = 'button';
+      copyBtn.className = 'btn secondary';
+      copyBtn.style.cssText = 'min-height:32px;padding:4px 10px;font-size:11px;white-space:nowrap';
+      copyBtn.textContent = 'Salin';
+      copyBtn.addEventListener('click', async () => {
+        const ok = await copyText(h.payload);
+        showToast(ok ? '📋 Kode QRIS tersalin' : '⚠️ Gagal menyalin', ok ? 'success' : 'error');
+      });
+
+      const useBtn = document.createElement('button');
+      useBtn.type = 'button';
+      useBtn.className = 'btn';
+      useBtn.style.cssText = 'min-height:32px;padding:4px 10px;font-size:11px;white-space:nowrap';
+      useBtn.textContent = 'Pakai';
+      useBtn.addEventListener('click', () => {
+        qrisEl.value = h.qris;
+        amountEl.value = String(h.amount);
+        feeTypeEl.value = h.type || '';
+        feeValueEl.value = h.fee ? String(h.fee) : '';
+        feeField.style.display = h.type ? 'grid' : 'none';
+        document
+          .getElementById('converter')
+          ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        qrisEl.focus();
+      });
+
+      row.append(info, copyBtn, useBtn);
+      historyList.appendChild(row);
+    });
+  }
+
+  function pushHistory(entry: HistoryEntry) {
+    const entries = loadHistory().filter((e) => e.payload !== entry.payload);
+    entries.unshift(entry);
+    saveHistory(entries);
+    renderHistory();
+  }
+
+  document.getElementById('historyClear')?.addEventListener('click', () => {
+    localStorage.removeItem(HISTORY_KEY);
+    renderHistory();
+    showToast('🗑 Riwayat dihapus', 'success');
+  });
+  renderHistory();
+
   ($('#convert') as HTMLButtonElement).addEventListener('click', async () => {
-    errorEl.innerHTML = '';
+    errorEl.textContent = '';
     qrisEl.classList.remove('field-error');
     amountEl.classList.remove('field-error');
     const qris = qrisEl.value.trim();
@@ -808,13 +926,13 @@ function render() {
       return;
     }
     if (!amount || amount <= 0) {
-      errorEl.innerHTML = '<div class="alert">Nominal harus lebih dari 0</div>';
+      showFieldError(['Nominal harus lebih dari 0']);
       return;
     }
 
     const v = validateQris(qris);
     if (!v.valid) {
-      errorEl.innerHTML = `<div class="alert">${v.errors.join('<br>')}</div>`;
+      showFieldError(v.errors);
       return;
     }
 
@@ -847,12 +965,23 @@ function render() {
         sb.style.display = 'inline-flex';
       }
       downloadBtn.disabled = false;
-      errorEl.innerHTML = '';
+      downloadSvgBtn.disabled = false;
+      lastDynamic = dynamic;
+      lastAmount = amount;
+      errorEl.textContent = '';
       showToast('✨ Berhasil — QRIS Dynamic siap digunakan', 'success');
+      pushHistory({
+        payload: dynamic,
+        qris,
+        amount,
+        fee: fee?.value,
+        type: fee?.type,
+        ts: Date.now(),
+      });
       // also auto show terminal output if not yet
       if (termOut) termOut.style.display = 'block';
     } catch (e) {
-      errorEl.innerHTML = `<div class="alert">${(e as Error).message}</div>`;
+      showFieldError([(e as Error).message]);
     }
   });
 }
