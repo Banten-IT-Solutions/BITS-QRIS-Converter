@@ -4,10 +4,10 @@
  * Keeps bin `bits-qris` working while core logic lives in src/cli/
  */
 
-import { handleParse, handleValidate, handleConvert } from './cli/commands.js';
+import { handleBatch, handleParse, handleValidate, handleConvert } from './cli/commands.js';
 import { HELP_TEXT } from './cli/constants.js';
 import { runInteractive } from './cli/interactive.js';
-import { parseConvertArgs } from './cli/parser.js';
+import { parseBatchArgs, parseConvertArgs } from './cli/parser.js';
 
 async function main(): Promise<void> {
   const args = process.argv.slice(2);
@@ -36,6 +36,18 @@ async function main(): Promise<void> {
       process.exit(1);
     }
     await handleConvert(parsed);
+    return;
+  }
+
+  if (args[0] === '--batch') {
+    const parsed = parseBatchArgs(args);
+    if (!parsed) {
+      console.error(
+        '[✗] Usage: bits-qris --batch <file> --amount <AMOUNT> [--fee <VALUE> --type <fixed|percentage>] [--image]',
+      );
+      process.exit(1);
+    }
+    await handleBatch(parsed);
     return;
   }
 

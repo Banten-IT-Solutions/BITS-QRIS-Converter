@@ -52,7 +52,7 @@
 | 🖨️ **Cetak Struk**      | Composite QR → `qris-receipt-template.png` (1080×1920) + overlay `NMID/ID/nama/NNS` |
 | 🌐 **Browser Ready**    | `makeFile(...,{base64:true})` → DataURL, tanpa `fs`                                 |
 | 📦 **Dual Build**       | `dist/cjs` + `dist/esm` + `types` — tree-shakeable                                  |
-| 💻 **CLI**              | `npx bits-qris` interactive atau `--convert --validate --parse`                     |
+| 💻 **CLI**              | `npx bits-qris` interactive atau `--convert --batch --validate --parse`             |
 | 📱 **PWA**              | Offline-capable, `manifest` + `sw.js` (Workbox), installable — dark/light           |
 | 🗂️ **Aset Clean**       | `kebab-case` semantik (`title-bebas-neue`, `body-roboto-large`)                     |
 
@@ -197,6 +197,10 @@ const base64 = await makeFile(staticQris, { amount: 75_000, base64: true });
 const qrDataUrl = await makeQrDataUrl(staticQris, { amount: 50_000 });
 console.log(qrDataUrl.slice(0, 30)); // data:image/png;base64,iVBORw...
 
+// 3b. QR sebagai SVG string (pure, Workers-safe — tanpa fs)
+const svg = await makeQrSvg(dynamicQris);
+console.log(svg.slice(0, 20)); // <svg xmlns="http://...
+
 // 4. Info merchant untuk overlay kustom
 const merchant = getMerchantInfo(staticQris);
 console.log(merchant.nmid); // ID1023162526099
@@ -252,6 +256,14 @@ npx bits-qris --convert "000201010211..." 50000 --fee 1000 --type fixed --image 
 
 npx bits-qris --convert "000201010211..." 50000 --base64
 # [base64] data:image/jpeg;base64,/9j/4AAQSkZJRgABAQ...
+
+# Batch — satu QRIS per baris (skip baris kosong & komentar #), output JSONL
+npx bits-qris --batch list.txt --amount 10000
+# {"input":"...","valid":true,"dynamic":"..."}
+# {"input":"...","valid":false,"error":"CRC mismatch: ..."}
+
+# Batch + struk per baris valid → output/batch-<n>.jpg
+npx bits-qris --batch list.txt --amount 10000 --fee 1000 --type fixed --image
 
 npx bits-qris --help
 ```

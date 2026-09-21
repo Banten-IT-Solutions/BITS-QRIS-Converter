@@ -6,6 +6,7 @@ import { createInterface } from 'node:readline';
 import { writeFileSync } from 'node:fs';
 import { convertQris, parseQris, validateQris } from '../core/index.js';
 import { makeFile, makeQrDataUrl } from '../image/index.js';
+import { ensureOutputDirectory } from '../image/template-resolver.js';
 
 export async function runInteractive(): Promise<void> {
   const readline = createInterface({ input: process.stdin, output: process.stdout });
@@ -91,6 +92,7 @@ export async function runInteractive(): Promise<void> {
       const save = await ask('[?] Save base64 to file? (y/n): ');
       if (save.toLowerCase() === 'y') {
         const filePath = `output/qris-${Date.now()}.txt`;
+        ensureOutputDirectory(filePath);
         writeFileSync(filePath, base64 as string);
         console.log(`[✓] Saved to ${filePath}`);
       }
