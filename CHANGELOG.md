@@ -1,3 +1,16 @@
+## [2.1.0](https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/compare/v2.0.0...v2.1.0) (2026-09-21)
+
+### ✨ Features
+
+- **cli:** batch convert mode, pre-convert validation, arg hardening ([1bcda86](https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/commit/1bcda86906cdc038de600beb616fd6ebe0206ec2))
+- **lib:** add makeQrSvg export ([7a7918e](https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/commit/7a7918e1338b97260060743ec963176360b5ab6d))
+- **web:** svg export, conversion history, security hardening ([d99e1e5](https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/commit/d99e1e580c30816e71d0e406d671116eed8d9e7a))
+
+### 🐛 Bug Fixes
+
+- **core:** harden fee/amount validation, reject non-ASCII, trim input ([f9c3e4d](https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/commit/f9c3e4d7484403b1212995e26e93fbcb5163f94d))
+- **image:** resolve assets module-relative, cache fonts ([3344afd](https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/commit/3344afd4a8a82d0c12964f55528e81798c372728))
+
 ## [2.0.0](https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/compare/v1.5.0...v2.0.0) (2026-09-14)
 
 ### ⚠ BREAKING CHANGES

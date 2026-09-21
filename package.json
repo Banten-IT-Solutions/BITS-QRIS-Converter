@@ -1,6 +1,6 @@
 {
   "name": "bits-qris",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "QRIS Static → Dynamic converter — parse, validate, convert + cetak gambar struk. Hybrid terbaik: Core TLV presisi + Cetak Struk siap print.",
   "type": "commonjs",
   "sideEffects": false,
