@@ -1,3 +1,9 @@
+## [2.2.0](https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/compare/v2.1.1...v2.2.0) (2026-09-29)
+
+### ✨ Features
+
+- add per-IP rate limiting on /api/convert ([31ae607](https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/commit/31ae6073f7fe97017755c41cb8060aa5dc31606c))
+
 ## [2.1.1](https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/compare/v2.1.0...v2.1.1) (2026-09-29)
 
 ### 🐛 Bug Fixes
