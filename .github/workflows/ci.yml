@@ -62,6 +62,10 @@ jobs:
       - name: 🌐 Build web
         run: npm run build --workspace=@bits/web
 
+      # web tsc butuh dist/ (resolve `bits-qris/*`) — makanya di sini, bukan di job Lint
+      - name: 🔍 Types web
+        run: npm run lint:web
+
       - name: ✅ Verify
         run: |
           test -f dist/cjs/index.js
