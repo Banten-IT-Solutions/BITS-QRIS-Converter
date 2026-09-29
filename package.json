@@ -34,7 +34,6 @@
   },
   "files": [
     "dist",
-    "assets",
     "README.md",
     "LICENSE"
   ],
@@ -45,7 +44,8 @@
     "clean": "rm -rf dist",
     "copy:assets": "mkdir -p dist/assets && cp -r assets/* dist/assets/ 2>/dev/null || true; echo '{\"type\":\"module\"}' > dist/esm/package.json",
     "dev": "tsc -p tsconfig.json --watch",
-    "prepublishOnly": "npm run build",
+    "prepublishOnly": "npm run build && npm run clean:publish",
+    "clean:publish": "find dist -name '*.test.*' -delete",
     "test": "node --test \"dist/cjs/**/*.test.js\"",
     "cli": "tsx src/cli.ts",
     "lint": "tsc --noEmit",
