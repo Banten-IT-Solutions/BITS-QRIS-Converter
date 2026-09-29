@@ -427,12 +427,13 @@ flowchart LR
 
 ## 🛡️ Keamanan
 
-| Item            | Detail                                                             |
-| --------------- | ------------------------------------------------------------------ |
-| **CRC16-CCITT** | `0x1021` init `0xFFFF` — sesuai EMVCo                              |
-| **Validasi**    | 8 required tags + merchant `26–51` + CRC mismatch                  |
-| **Aman**        | `jimp@1.6.1` (0 vuln) — bukan `0.16.1` vulnerable                  |
-| **No eval**     | Tidak pernah `eval` / `split("5802ID")` fragile — parser TLV murni |
+| Item            | Detail                                                                                                       |
+| --------------- | ------------------------------------------------------------------------------------------------------------ |
+| **CRC16-CCITT** | `0x1021` init `0xFFFF` — sesuai EMVCo                                                                        |
+| **Validasi**    | 8 required tags + merchant `26–51` + CRC mismatch                                                            |
+| **Aman**        | `jimp@1.6.1` (0 vuln) — bukan `0.16.1` vulnerable                                                            |
+| **No eval**     | Tidak pernah `eval` / `split("5802ID")` fragile — parser TLV murni                                           |
+| **Rate limit**  | `/api/convert` 30 req/menit per IP via `CF-Connecting-IP` (tak bisa dipalsukan klien); `429` + `Retry-After` |
 
 ---
 
