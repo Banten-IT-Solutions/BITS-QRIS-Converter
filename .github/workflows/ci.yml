@@ -2,9 +2,9 @@ name: 🧪 CI
 
 on:
   push:
-    branches: [main, develop]
+    branches: [main]
   pull_request:
-    branches: [main, develop]
+    branches: [main]
   workflow_dispatch:
 
 concurrency:
@@ -14,13 +14,13 @@ concurrency:
 jobs:
   lint-and-typecheck:
     name: Lint & Typecheck
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: 📥 Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: 🟢 Node
-        uses: actions/setup-node@v7
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 24
           cache: npm
@@ -38,19 +38,19 @@ jobs:
         run: npm run lint
 
   build:
-    name: Build (Node ${{ matrix.node }})
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node: [24]
+    name: Build (Node 24)
+    runs-on: ubuntu-24.04
     steps:
+      # fetch-depth: 0 dibutuhkan agar gate deploy bisa `git diff` ke commit `before`
       - name: 📥 Checkout
-        uses: actions/checkout@v7
-
-      - name: 🟢 Node ${{ matrix.node }}
-        uses: actions/setup-node@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          node-version: ${{ matrix.node }}
+          fetch-depth: 0
+
+      - name: 🟢 Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
           cache: npm
 
       - name: 📦 Install
@@ -101,15 +101,59 @@ jobs:
             echo "✅ Size OK"
           fi
 
+      # Pengganti `paths:` di workflow deploy — workflow_run tidak mendukung paths,
+      # jadi guard-nya dihitung di sini (push event punya `before`) lalu dibawa via artifact.
+      - name: 🏁 Hitung gate deploy
+        if: github.event_name == 'push'
+        run: |
+          BEFORE="${{ github.event.before }}"
+          HEAD="${{ github.sha }}"
+
+          # Fail-safe: kalau apa pun tidak pasti, anggap perlu deploy —
+          # lebih baik deploy percuma daripada deploy terlewat diam-diam.
+          if [ -z "$BEFORE" ] || [ "$BEFORE" = "0000000000000000000000000000000000000000" ]; then
+            echo "true" > should-deploy
+            echo "should-deploy = true (push awal / force-push)"
+            exit 0
+          fi
+
+          # cat-file -e, bukan rev-parse --verify: yang terakhir mengembalikan
+          # rc=0 untuk SHA yang tidak ada (sudah diverifikasi).
+          if ! git cat-file -e "$BEFORE^{commit}" 2>/dev/null; then
+            echo "true" > should-deploy
+            echo "should-deploy = true (commit before tidak ditemukan — fail-safe)"
+            exit 0
+          fi
+
+          CHANGED=$(git diff --name-only "$BEFORE" "$HEAD")
+          if echo "$CHANGED" | grep -qE '^(apps/web/|src/|assets/|package\.json$|package-lock\.json$)'; then
+            echo "true" > should-deploy
+          else
+            echo "false" > should-deploy
+          fi
+          echo "should-deploy = $(cat should-deploy)"
+
+      - name: 📦 Upload artifact
+        if: github.event_name == 'push'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: build-dist
+          path: |
+            dist/
+            apps/web/dist/
+            should-deploy
+          retention-days: 1
+          if-no-files-found: error
+
   security:
     name: Security Audit
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: 📥 Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: 🟢 Node
-        uses: actions/setup-node@v7
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 24
           cache: npm

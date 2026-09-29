@@ -1,51 +1,65 @@
 name: ☁️ Deploy
 
+# Deploy dijalankan SETELAH 🧪 CI selesai sukses di main, memakai artifact build
+# dari CI (dist/ + apps/web/dist/) sehingga lib & web tidak di-build ulang.
+# Sebelumnya pakai `pull_request`/`push` + `paths:` — `workflow_run` tidak
+# mendukung `paths`, jadi guard-nya dihitung di CI lalu dibawa lewat artifact.
 on:
-  push:
+  workflow_run:
+    workflows: ['🧪 CI']
+    types: [completed]
     branches: [main]
-    paths:
-      - 'apps/web/**'
-      - 'src/**'
-      - 'assets/**'
-      - 'package.json'
-      - 'package-lock.json'
-      - '.github/workflows/deploy-cloudflare.yml'
   workflow_dispatch:
 
 concurrency:
-  group: deploy-cloudflare-${{ github.ref }}
+  group: deploy-cloudflare-${{ github.event.workflow_run.head_sha || github.sha }}
   cancel-in-progress: true
+
+permissions:
+  contents: read
+  actions: read # download artifact dari run CI lain
+  deployments: write
 
 jobs:
   deploy:
     name: Deploy to Cloudflare Workers
-    runs-on: ubuntu-latest
-    # Hanya deploy dari main — build web dicek di CI sebelum merge
-    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
-    permissions:
-      contents: read
-      deployments: write
+    runs-on: ubuntu-24.04
+    # Hanya deploy bila CI sukses, atau bila dijalankan manual
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
     steps:
       - name: 📥 Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      - name: 🟢 Node
-        uses: actions/setup-node@v7
+      - name: 📥 Download artifact
+        if: github.event_name == 'workflow_run'
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         with:
-          node-version: 24
-          cache: npm
+          name: build-dist
+          path: .
+          repository: ${{ github.repository }}
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      # Membaca guard path yang dihitung CI. Tanpa file (mis. dispatch manual)
+      # atau mode manual -> deploy.
+      - name: 🏁 Gate deploy
+        id: gate
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] || [ ! -f should-deploy ]; then
+            DEPLOY=true
+          else
+            DEPLOY=$(cat should-deploy)
+          fi
+          echo "deploy=$DEPLOY" >> "$GITHUB_OUTPUT"
+          echo "should-deploy: $DEPLOY"
 
       - name: 📦 Install
+        if: steps.gate.outputs.deploy == 'true'
         run: npm ci
 
-      - name: 🏗️ Build lib
-        run: npm run build
-
-      - name: 🌐 Build web
-        run: npm run build --workspace=@bits/web
-
       - name: ☁️ Deploy
-        uses: cloudflare/wrangler-action@v4
+        if: steps.gate.outputs.deploy == 'true'
+        uses: cloudflare/wrangler-action@953926a2e2182532811c01a25e53647d93bf07c0 # v4.1.3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
