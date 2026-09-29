@@ -1,3 +1,9 @@
+## [2.1.1](https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/compare/v2.1.0...v2.1.1) (2026-09-29)
+
+### 🐛 Bug Fixes
+
+- **ci:** split web type-check into build job, lint must not need dist ([71b2662](https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/commit/71b266234fa53cf59ffc58cec13295239f54ba40))
+
 ## [2.1.0](https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/compare/v2.0.0...v2.1.0) (2026-09-21)
 
 ### ✨ Features
