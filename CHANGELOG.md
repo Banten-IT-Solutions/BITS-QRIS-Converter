@@ -1,3 +1,16 @@
+## [3.0.0](https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/compare/v2.2.0...v3.0.0) (2026-09-29)
+
+### ⚠ BREAKING CHANGES
+
+- pemakaian bentuk opsi legacy `makeString(qris, {
+nominal, taxtype, fee })` akan throw. Ganti dengan `convertQris(qris,
+{ amount, fee: { type: 'fixed', value: 1000 } })`. Lihat bagian
+  "Migrasi ke v3" di README.
+
+### ✨ Features
+
+- remove legacy qris-dinamis 1.x compatibility layer ([c1e8c32](https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/commit/c1e8c3283ac8f512e8e3d6c9337122db1cdb160a))
+
 ## [2.2.0](https://github.com/Banten-IT-Solutions/BITS-QRIS-Converter/compare/v2.1.1...v2.2.0) (2026-09-29)
 
 ### ✨ Features
