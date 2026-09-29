@@ -1,6 +1,7 @@
 import { Hono } from 'hono';
 import { convertQris, validateQris } from 'bits-qris/core';
 import { renderQrDataUrl } from 'bits-qris/image/qr-renderer';
+import { convertRateLimiter, getRateLimitKey, RATE_LIMIT_MAX_REQUESTS } from './rate-limit.js';
 
 type Bindings = {
   ASSETS: { fetch: (input: RequestInfo, init?: RequestInit) => Promise<Response> };
@@ -10,6 +11,15 @@ const app = new Hono<{ Bindings: Bindings }>();
 
 // API — server-side convert (juga bisa dipakai oleh client)
 app.get('/api/convert', async (c) => {
+  const limit = convertRateLimiter.check(getRateLimitKey(c.req.raw.headers));
+  if (!limit.allowed) {
+    return c.json(
+      { error: `Terlalu banyak permintaan — coba lagi dalam ${limit.retryAfterSec} detik` },
+      429,
+      { 'Retry-After': String(limit.retryAfterSec) },
+    );
+  }
+
   const qris = c.req.query('qris');
   const amount = c.req.query('amount');
   const fee = c.req.query('fee');
@@ -40,8 +50,13 @@ app.get('/api/convert', async (c) => {
   try {
     const dynamic = convertQris(qris, { amount: amountNum, fee: feeObj });
     const qrDataUrl = await renderQrDataUrl(dynamic);
-    return c.json({ dynamic, qrDataUrl, valid: true });
+    return c.json({ dynamic, qrDataUrl, valid: true }, 200, {
+      'X-RateLimit-Limit': String(RATE_LIMIT_MAX_REQUESTS),
+      'X-RateLimit-Remaining': String(limit.remaining),
+      'X-RateLimit-Reset': String(Math.ceil(limit.resetAt / 1000)),
+    });
   } catch (e) {
+    console.error('Gagal mengonversi QRIS:', e);
     return c.json({ error: (e as Error).message }, 400);
   }
 });

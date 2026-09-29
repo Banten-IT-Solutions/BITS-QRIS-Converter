@@ -1,7 +1,8 @@
 import './style.css';
 import { convertQris, parseQris, validateQris } from 'bits-qris/core';
 import { makeQrSvg, renderQrDataUrl } from 'bits-qris/image/qr-renderer';
-import jsQR from 'jsqr';
+import { decodeImage } from './lib/decode';
+import { applyTheme, getInitialTheme } from './lib/theme';
 import { registerSW } from 'virtual:pwa-register';
 
 // version dinamis — single source of truth dari root package.json via Vite define
@@ -23,60 +24,6 @@ window.addEventListener('appinstalled', () => {
   document.getElementById('pwaBanner')?.classList.remove('show');
 });
 
-// --- helpers: decode QR image via jsQR (bundled — offline-safe) ---
-const MAX_IMAGE_BYTES = 10 * 1024 * 1024; // 10MB
-const MAX_DECODE_DIM = 2048;
-
-async function decodeImage(file: File): Promise<string> {
-  if (file.size > MAX_IMAGE_BYTES) throw new Error('File terlalu besar — maksimal 10MB');
-  const url = URL.createObjectURL(file);
-  try {
-    const img = new Image();
-    img.src = url;
-    await new Promise<void>((res, rej) => {
-      img.onload = () => res();
-      img.onerror = () => rej(new Error('image load failed'));
-    });
-    const scale = Math.min(1, MAX_DECODE_DIM / Math.max(img.naturalWidth, img.naturalHeight));
-    const c = document.createElement('canvas');
-    c.width = Math.max(1, Math.round(img.naturalWidth * scale));
-    c.height = Math.max(1, Math.round(img.naturalHeight * scale));
-    const ctx = c.getContext('2d', { willReadFrequently: true })!;
-    ctx.drawImage(img, 0, 0, c.width, c.height);
-    const data = ctx.getImageData(0, 0, c.width, c.height);
-    const code = jsQR(data.data, data.width, data.height, {
-      inversionAttempts: 'dontInvert',
-    });
-    if (!code) throw new Error('QR tidak terbaca — pastikan foto QRIS cukup jelas dan tidak buram');
-    return code.data;
-  } finally {
-    URL.revokeObjectURL(url);
-  }
-}
-
-// --- theme ---
-function getInitialTheme(): 'light' | 'dark' {
-  const saved = localStorage.getItem('bits-theme') as 'light' | 'dark' | null;
-  if (saved === 'light' || saved === 'dark') return saved;
-  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-}
-function applyTheme(t: 'light' | 'dark') {
-  document.documentElement.setAttribute('data-theme', t);
-  document.documentElement.style.colorScheme = t;
-  localStorage.setItem('bits-theme', t);
-  const meta = document.getElementById('themeColor') as HTMLMetaElement | null;
-  if (meta) meta.content = t === 'dark' ? '#0A0C10' : '#FFFBF5';
-  const btn = document.getElementById('themeToggle');
-  if (btn) {
-    btn.setAttribute('aria-label', t === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
-    btn.setAttribute('title', t === 'dark' ? 'Light mode' : 'Dark mode');
-    btn.innerHTML =
-      t === 'dark'
-        ? `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/></svg>`
-        : `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`;
-  }
-}
-
 // --- app ---
 const $ = <T extends Element>(s: string) => document.querySelector(s) as T;
 
@@ -85,6 +32,7 @@ function render() {
     try {
       return getInitialTheme();
     } catch {
+      // Gunakan tema terang jika preferensi browser tidak tersedia.
       return 'light' as const;
     }
   })();
@@ -780,7 +728,7 @@ function render() {
       try {
         ok = document.execCommand('copy');
       } catch {
-        // abaikan — theme/storage mungkin diblokir browser
+        // Abaikan; API clipboard dapat gagal meski tersedia.
       }
       ta.remove();
       return ok;
@@ -847,6 +795,7 @@ function render() {
       const raw = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
       return Array.isArray(raw) ? raw : [];
     } catch {
+      // Abaikan data riwayat lokal yang tidak valid.
       return [];
     }
   }

@@ -7,6 +7,9 @@ on:
     branches: [main]
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -14,7 +17,7 @@ concurrency:
 jobs:
   lint-and-typecheck:
     name: Lint & Typecheck
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest # ubuntu-latest migrasi ke Ubuntu 26 pada 2026-10-19 — pantau CI pada tanggal itu
     steps:
       - name: 📥 Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -39,7 +42,7 @@ jobs:
 
   build:
     name: Build (Node 24)
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     steps:
       # fetch-depth: 0 dibutuhkan agar gate deploy bisa `git diff` ke commit `before`
       - name: 📥 Checkout
@@ -151,7 +154,7 @@ jobs:
 
   security:
     name: Security Audit
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     steps:
       - name: 📥 Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
