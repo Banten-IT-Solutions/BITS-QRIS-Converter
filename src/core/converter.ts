@@ -69,6 +69,9 @@ function validateAmount(amount: ConvertOptions['amount'] | undefined): number {
  * Convert static QRIS → dynamic by injecting amount & optional fee
  */
 export function convertQris(qrisString: string, options?: ConvertOptions): string {
+  if (options && ('nominal' in options || 'taxtype' in options || 'feeLegacy' in options)) {
+    throw new QrisConvertError('Opsi legacy tidak didukung. Gunakan amount dan fee modern.');
+  }
   if (!qrisString) {
     throw new QrisConvertError('Parameter "qris" is required.');
   }

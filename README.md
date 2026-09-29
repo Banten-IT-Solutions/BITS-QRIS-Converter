@@ -163,15 +163,14 @@ const dynamic = convertQris(staticQris, {
 console.log(dynamic); // ...540550000...6304ABCD (CRC baru)
 ```
 
-### Legacy API (Kompatibel `qris-dinamis 1.x`)
+### Migrasi ke v3
 
-```typescript
-import { makeString, makeFile } from 'bits-qris';
+Bentuk opsi lama tidak lagi didukung; gunakan opsi modern berikut:
 
-// Tetap jalan
-const dynamic = makeString(staticQris, { nominal: '50000', taxtype: 'r', fee: '1000' });
-const file = await makeFile(staticQris, { nominal: '50000', base64: false });
-```
+- `nominal` → `amount`
+- `taxtype: 'r'` → `fee: { type: 'fixed', value: ... }`
+- `fee: '1000'` → `fee: { type: 'fixed', value: 1000 }`
+- `makeString` → `convertQris`
 
 ---
 
@@ -305,16 +304,16 @@ npm run qris:demo
 
 ### Core
 
-| Fungsi                    | Params                   | Return            | Deskripsi                      |
-| ------------------------- | ------------------------ | ----------------- | ------------------------------ |
-| `parseTlv(data)`          | `string`                 | `TlvElement[]`    | Low-level TLV EMVCo            |
-| `parseQris(qris)`         | `string`                 | `QrisData`        | Parse struktur lengkap         |
-| `validateQris(qris)`      | `string`                 | `{valid, errors}` | Validasi 8 required tags + CRC |
-| `isValidQris(qris)`       | `string`                 | `boolean`         | Shortcut                       |
-| `calculateCrc16(str)`     | `string`                 | `string`          | CRC16-CCITT `0x1021`           |
-| `convertQris(qris, opts)` | `string, ConvertOptions` | `string`          | **Static → Dynamic**           |
-| `makeString(qris, opts)`  | `string, opts`           | `string`          | Alias legacy+modern            |
-| `getMerchantInfo(qris)`   | `string`                 | `MerchantInfo`    | NMID, printer, NNS             |
+| Fungsi                    | Params                   | Return            | Deskripsi                        |
+| ------------------------- | ------------------------ | ----------------- | -------------------------------- |
+| `parseTlv(data)`          | `string`                 | `TlvElement[]`    | Low-level TLV EMVCo              |
+| `parseQris(qris)`         | `string`                 | `QrisData`        | Parse struktur lengkap           |
+| `validateQris(qris)`      | `string`                 | `{valid, errors}` | Validasi 8 required tags + CRC   |
+| `isValidQris(qris)`       | `string`                 | `boolean`         | Shortcut                         |
+| `calculateCrc16(str)`     | `string`                 | `string`          | CRC16-CCITT `0x1021`             |
+| `convertQris(qris, opts)` | `string, ConvertOptions` | `string`          | **Static → Dynamic**             |
+| `makeString(qris, opts)`  | `string, opts`           | `string`          | Alias modern untuk `convertQris` |
+| `getMerchantInfo(qris)`   | `string`                 | `MerchantInfo`    | NMID, printer, NNS               |
 
 ```typescript
 type ConvertOptions = {
@@ -347,8 +346,6 @@ type QrisData = {
 
 ```typescript
 type ImageOptions = ConvertOptions & {
-  nominal?: string | number; // legacy alias
-  taxtype?: 'p' | 'r';
   base64?: boolean; // default false
   path?: string;
   templatePath?: string; // default assets/images/qris-receipt-template.png

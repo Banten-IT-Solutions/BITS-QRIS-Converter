@@ -41,8 +41,6 @@ export type { ImageOptions, QrOnlyOptions } from './image/types.js';
 export { padLength, sanitizeFilename } from './shared/format.js';
 export { QrisConvertError, QrisError, QrisImageError, QrisParseError } from './shared/errors.js';
 
-export { normalizeLegacyOptions } from './image/utils.js';
-
 // Default export — named bundle for `import pkg from 'bits-qris'` compat
 import { calculateCrc16 } from './core/crc16.js';
 import { convertQris } from './core/converter.js';

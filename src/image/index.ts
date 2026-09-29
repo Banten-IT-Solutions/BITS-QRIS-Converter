@@ -12,4 +12,3 @@ export {
 } from './qr-renderer.js';
 export { makeFile } from './receipt-generator.js';
 export type { ImageOptions, QrOnlyOptions } from './types.js';
-export { normalizeLegacyOptions } from './utils.js';

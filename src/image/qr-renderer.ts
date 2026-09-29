@@ -6,19 +6,13 @@
 import QRCode from 'qrcode';
 import { convertQris } from '../core/converter.js';
 import type { ConvertOptions } from '../core/types.js';
-import { normalizeLegacyOptions } from './utils.js';
 import type { ImageOptions, QrOnlyOptions } from './types.js';
 
 /**
- * Generate QRIS dynamic string (alias for convertQris with legacy support)
+ * Generate QRIS dynamic string
  */
-export function makeString(
-  qris: string,
-  options:
-    ConvertOptions | { nominal: string | number; taxtype?: 'p' | 'r'; fee?: string | number },
-): string {
-  const normalized = normalizeLegacyOptions(options as ImageOptions | QrOnlyOptions);
-  return convertQris(qris, normalized);
+export function makeString(qris: string, options: ConvertOptions): string {
+  return convertQris(qris, options);
 }
 
 /**
@@ -42,16 +36,14 @@ export function renderQrDataUrl(
  * Generate QR code as DataURL (lightweight, no template, works in Node & Browser)
  */
 export async function makeQrDataUrl(qris: string, options: QrOnlyOptions): Promise<string> {
-  const normalized = normalizeLegacyOptions(options);
-  return renderQrDataUrl(convertQris(qris, normalized), options);
+  return renderQrDataUrl(convertQris(qris, options), options);
 }
 
 /**
  * Generate QR code as Buffer (Node.js)
  */
 export async function makeQrBuffer(qris: string, options: QrOnlyOptions): Promise<Buffer> {
-  const normalized = normalizeLegacyOptions(options);
-  const dynamicQris = convertQris(qris, normalized);
+  const dynamicQris = convertQris(qris, options);
 
   return QRCode.toBuffer(dynamicQris, {
     margin: options.margin ?? 2,
@@ -75,8 +67,7 @@ export function makeQrSvg(payload: string): Promise<string> {
  * Browser-only helper — QR DataURL without Jimp
  */
 export async function generateBrowserQr(qris: string, options: ImageOptions): Promise<string> {
-  const normalized = normalizeLegacyOptions(options);
-  const dynamicQris = convertQris(qris, normalized);
+  const dynamicQris = convertQris(qris, options);
 
   return QRCode.toDataURL(dynamicQris, {
     margin: options.margin ?? 2,

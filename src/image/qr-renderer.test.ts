@@ -31,12 +31,17 @@ describe('QR rendering', () => {
     assert.match(dataUrl, /^data:image\/png;base64,/);
   });
 
-  it('supports browser rendering and legacy conversion', async () => {
+  it('supports browser rendering and modern conversion', async () => {
     const browserDataUrl = await generateBrowserQr(QRIS_PAYLOAD, { amount: 1000 });
     assert.match(browserDataUrl, /^data:image\/png;base64,/);
-    const dynamic = makeString(QRIS_PAYLOAD, { nominal: 1000 });
+    const dynamic = makeString(QRIS_PAYLOAD, { amount: 1000 });
     assert.notEqual(dynamic, QRIS_PAYLOAD);
     assert.match(dynamic, /010212/);
+  });
+
+  it('rejects legacy option shapes', () => {
+    assert.throws(() => makeString(QRIS_PAYLOAD, { nominal: 1000 } as never));
+    assert.throws(() => makeString(QRIS_PAYLOAD, { amount: 1000, taxtype: 'r' } as never));
   });
 
   it('rejects invalid QRIS input', async () => {

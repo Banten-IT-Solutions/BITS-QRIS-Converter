@@ -11,7 +11,6 @@ import { getMerchantInfo } from './merchant-info.js';
 import { loadReceiptFonts, getJimpInstance } from './font-loader.js';
 import { ensureOutputDirectory, resolveTemplatePath } from './template-resolver.js';
 import { generateBrowserQr } from './qr-renderer.js';
-import { normalizeLegacyOptions } from './utils.js';
 import type { ImageOptions } from './types.js';
 
 function isBrowserEnvironment(): boolean {
@@ -25,12 +24,7 @@ export async function makeFile(
   qris: string,
   options: ImageOptions = {} as ImageOptions,
 ): Promise<string> {
-  const normalized = normalizeLegacyOptions(options);
-  const effectiveOptions: ImageOptions = {
-    ...options,
-    amount: normalized.amount,
-    fee: normalized.fee,
-  };
+  const effectiveOptions = options;
 
   if (isBrowserEnvironment()) {
     if (!effectiveOptions.base64) {
@@ -41,12 +35,12 @@ export async function makeFile(
     return generateBrowserQr(qris, effectiveOptions);
   }
 
-  return generateNodeReceipt(qris, normalized, effectiveOptions);
+  return generateNodeReceipt(qris, options, effectiveOptions);
 }
 
 async function generateNodeReceipt(
   qris: string,
-  normalized: ReturnType<typeof normalizeLegacyOptions>,
+  normalized: ImageOptions,
   effectiveOptions: ImageOptions,
 ): Promise<string> {
   const qrisDynamic = convertQris(qris, normalized);
