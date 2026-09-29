@@ -15,25 +15,25 @@ jobs:
     if: github.actor == 'dependabot[bot]'
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: 📥 Checkout
         uses: actions/checkout@v7
 
-      - name: Setup Node.js
+      - name: 🟢 Node
         uses: actions/setup-node@v7
         with:
           node-version: 24
           cache: npm
 
-      - name: Install
+      - name: 📦 Install
         run: npm ci
 
-      - name: Lint & Build
+      - name: 🏗️ Build
         run: |
           npm run lint:eslint -- --max-warnings 0
           npm run build
           npx tsc --noEmit
 
-      - name: Enable auto-merge (patch & minor)
+      - name: 🔀 Auto-merge
         run: gh pr merge --auto --squash "$PR_URL"
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}

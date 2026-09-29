@@ -30,25 +30,25 @@ jobs:
       contents: read
       deployments: write
     steps:
-      - name: Checkout
+      - name: 📥 Checkout
         uses: actions/checkout@v7
 
-      - name: Setup Node.js
+      - name: 🟢 Node
         uses: actions/setup-node@v7
         with:
           node-version: 24
           cache: npm
 
-      - name: Install dependencies
+      - name: 📦 Install
         run: npm ci
 
-      - name: Build library
+      - name: 🏗️ Build lib
         run: npm run build
 
-      - name: Build web
+      - name: 🌐 Build web
         run: npm run build --workspace=@bits/web
 
-      - name: Deploy to Cloudflare Workers (qris.bits.co.id)
+      - name: ☁️ Deploy
         uses: cloudflare/wrangler-action@v4
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -62,15 +62,25 @@ jobs:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-node@v7
+      - name: 📥 Checkout
+        uses: actions/checkout@v7
+
+      - name: 🟢 Node
+        uses: actions/setup-node@v7
         with:
           node-version: 24
           cache: npm
-      - run: npm ci
-      - run: npm run build
-      - run: npm run build --workspace=@bits/web
-      - name: Check build artifacts
+
+      - name: 📦 Install
+        run: npm ci
+
+      - name: 🏗️ Build lib
+        run: npm run build
+
+      - name: 🌐 Build web
+        run: npm run build --workspace=@bits/web
+
+      - name: 👀 Preview
         run: |
           ls -lh apps/web/dist/client/ 2>&1 | head -n 30
           test -f apps/web/dist/client/index.html

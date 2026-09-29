@@ -16,25 +16,25 @@ jobs:
     name: Lint & Typecheck
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: 📥 Checkout
         uses: actions/checkout@v7
 
-      - name: Setup Node.js
+      - name: 🟢 Node
         uses: actions/setup-node@v7
         with:
           node-version: 24
           cache: npm
 
-      - name: Install dependencies
+      - name: 📦 Install
         run: npm ci
 
-      - name: ESLint
+      - name: 🧹 Lint
         run: npm run lint:eslint -- --max-warnings 0
 
-      - name: Prettier check
+      - name: ✨ Format
         run: npm run format
 
-      - name: TypeCheck
+      - name: 🔍 Types
         run: npm run lint
 
   build:
@@ -44,22 +44,22 @@ jobs:
       matrix:
         node: [24]
     steps:
-      - name: Checkout
+      - name: 📥 Checkout
         uses: actions/checkout@v7
 
-      - name: Setup Node.js ${{ matrix.node }}
+      - name: 🟢 Node ${{ matrix.node }}
         uses: actions/setup-node@v7
         with:
           node-version: ${{ matrix.node }}
           cache: npm
 
-      - name: Install dependencies
+      - name: 📦 Install
         run: npm ci
 
-      - name: Build
+      - name: 🏗️ Build
         run: npm run build
 
-      - name: Verify dual build
+      - name: ✅ Verify
         run: |
           test -f dist/cjs/index.js
           test -f dist/esm/index.js
@@ -67,20 +67,20 @@ jobs:
           test -f dist/assets/images/qris-receipt-template.png
           echo "✅ Build artifacts ok"
 
-      - name: Test CLI
+      - name: 🖥️ CLI
         run: |
           node ./dist/cjs/cli.js --help
           node ./dist/cjs/cli.js --validate "00020101021126560014ID.CO.QRIS.WWW0115ID10231625260990215ID10231625260995204581253033605802ID5914TOKO BITS JAYA6007JAKARTA61051234563049BBB"
 
-      - name: Test imports (ESM & CJS)
+      - name: 🔗 Imports
         run: |
           node -e "const m=require('./dist/cjs/index.js'); if(!m.convertQris) throw new Error('CJS missing')"
           node --input-type=module -e "import('./dist/esm/index.js').then(m=>{if(!m.convertQris) throw new Error('ESM missing')})"
 
-      - name: Run unit tests
+      - name: 🧪 Test
         run: npm test
 
-      - name: Check pack size (fail if > 1.1MB)
+      - name: 📐 Size
         run: |
           npm pack --dry-run 2>&1 | tail -n 20
           SIZE_KB=$(npm pack --dry-run 2>&1 | grep "package size" | grep -oE "[0-9.]+ kB" | grep -oE "[0-9.]+")
@@ -100,9 +100,23 @@ jobs:
     name: Security Audit
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-node@v7
+      - name: 📥 Checkout
+        uses: actions/checkout@v7
+
+      - name: 🟢 Node
+        uses: actions/setup-node@v7
         with:
           node-version: 24
           cache: npm
-      - run: npm audit --audit-level=moderate
+
+      # Dependensi production (yang benar-benar terpublish ke konsumen npm)
+      # wajib bebas kerentanan moderate ke atas.
+      - name: 🛡️ Audit prod
+        run: npm audit --omit=dev --audit-level=moderate
+
+      # Seluruh dependency (termasuk dev) wajib bebas high/critical.
+      # moderate pada dev-dep ditoleransi karena ada kerentanan tak-terbaiki di
+      # bundled deps `npm` (ip-address@10.5.0, undici@6.28.0) yang tidak bisa
+      # di-upgrade bahkan di npm@12.1.0 — hanya dipakai saat publish.
+      - name: 🔐 Audit high+
+        run: npm audit --audit-level=high
