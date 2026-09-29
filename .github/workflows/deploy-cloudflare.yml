@@ -10,10 +10,6 @@ on:
       - 'package.json'
       - 'package-lock.json'
       - '.github/workflows/deploy-cloudflare.yml'
-  pull_request:
-    branches: [main]
-    paths:
-      - 'apps/web/**'
   workflow_dispatch:
 
 concurrency:
@@ -24,7 +20,7 @@ jobs:
   deploy:
     name: Deploy to Cloudflare Workers
     runs-on: ubuntu-latest
-    # Only deploy from main, PRs just build preview
+    # Hanya deploy dari main — build web dicek di CI sebelum merge
     if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     permissions:
       contents: read
@@ -56,33 +52,3 @@ jobs:
           workingDirectory: apps/web
           command: deploy --config wrangler.jsonc
           packageManager: npm
-
-  preview:
-    name: Preview Build (PR)
-    if: github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
-    steps:
-      - name: 📥 Checkout
-        uses: actions/checkout@v7
-
-      - name: 🟢 Node
-        uses: actions/setup-node@v7
-        with:
-          node-version: 24
-          cache: npm
-
-      - name: 📦 Install
-        run: npm ci
-
-      - name: 🏗️ Build lib
-        run: npm run build
-
-      - name: 🌐 Build web
-        run: npm run build --workspace=@bits/web
-
-      - name: 👀 Preview
-        run: |
-          ls -lh apps/web/dist/client/ 2>&1 | head -n 30
-          test -f apps/web/dist/client/index.html
-          test -f apps/web/dist/client/sw.js
-          echo "✅ Preview build OK — akan deploy ke Cloudflare Pages Preview jika di-merge"

@@ -59,12 +59,17 @@ jobs:
       - name: 🏗️ Build
         run: npm run build
 
+      - name: 🌐 Build web
+        run: npm run build --workspace=@bits/web
+
       - name: ✅ Verify
         run: |
           test -f dist/cjs/index.js
           test -f dist/esm/index.js
           test -f dist/esm/package.json
           test -f dist/assets/images/qris-receipt-template.png
+          test -f apps/web/dist/client/index.html
+          test -f apps/web/dist/client/sw.js
           echo "✅ Build artifacts ok"
 
       - name: 🖥️ CLI
