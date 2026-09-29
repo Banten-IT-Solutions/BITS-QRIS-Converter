@@ -5,6 +5,7 @@ import jsQR from 'jsqr';
 import { registerSW } from 'virtual:pwa-register';
 
 // version dinamis — single source of truth dari root package.json via Vite define
+// eslint-disable-next-line @typescript-eslint/naming-convention -- nama global ini dipaksa oleh Vite `define`, bukan pilihan penulis
 declare const __APP_VERSION__: string;
 const APP_VERSION: string = typeof __APP_VERSION__ !== 'undefined' ? __APP_VERSION__ : '1.1.1';
 
@@ -457,13 +458,17 @@ function render() {
   // theme init
   try {
     applyTheme(initialTheme);
-  } catch {}
+  } catch {
+    // abaikan — theme/storage mungkin diblokir browser
+  }
   // listen system changes if no explicit save
   try {
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
       if (!localStorage.getItem('bits-theme')) applyTheme(e.matches ? 'dark' : 'light');
     });
-  } catch {}
+  } catch {
+    // abaikan — theme/storage mungkin diblokir browser
+  }
 
   (document.getElementById('themeToggle') as HTMLButtonElement)?.addEventListener('click', () => {
     const cur = document.documentElement.getAttribute('data-theme') as 'light' | 'dark';
@@ -493,7 +498,6 @@ function render() {
     async () => {
       if (!deferredPrompt) return;
       (deferredPrompt as unknown as { prompt: () => void }).prompt();
-      // @ts-ignore
       const choice = await (
         deferredPrompt as unknown as { userChoice: Promise<{ outcome: string }> }
       ).userChoice;
@@ -522,7 +526,9 @@ function render() {
     dynamicSample = convertQris(sample, { amount: 25000 });
     termDynamic.textContent = dynamicSample;
     termCrc.textContent = dynamicSample.slice(-4) + ' — CRC ok';
-  } catch {}
+  } catch {
+    // abaikan — theme/storage mungkin diblokir browser
+  }
 
   const fullCmd = 'bits-qris convert --amount 25000 --qris 000201010211...';
   let typingTimer: number | null = null;
@@ -773,7 +779,9 @@ function render() {
       let ok = false;
       try {
         ok = document.execCommand('copy');
-      } catch {}
+      } catch {
+        // abaikan — theme/storage mungkin diblokir browser
+      }
       ta.remove();
       return ok;
     }
@@ -846,7 +854,9 @@ function render() {
   function saveHistory(entries: HistoryEntry[]) {
     try {
       localStorage.setItem(HISTORY_KEY, JSON.stringify(entries.slice(0, 10)));
-    } catch {}
+    } catch {
+      // abaikan — theme/storage mungkin diblokir browser
+    }
   }
 
   function renderHistory() {
