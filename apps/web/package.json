@@ -17,7 +17,7 @@
     "jsqr": "^1.4.0"
   },
   "devDependencies": {
-    "@cloudflare/vite-plugin": "^1.60.0",
+    "@cloudflare/vite-plugin": "^1.62.4",
     "@types/node": "^26.6.2",
     "typescript": "^6.0.3",
     "vite": "^8.3.1",
