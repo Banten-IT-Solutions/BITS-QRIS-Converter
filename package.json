@@ -105,7 +105,7 @@
     "husky": "^9.1.7",
     "lint-staged": "^17.4.1",
     "prettier": "^3.9.6",
-    "semantic-release": "^25.0.9",
+    "semantic-release": "^26.0.1",
     "tsx": "^4.23.13",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.69.0"
