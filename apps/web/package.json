@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "bits-qris": "file:../..",
-    "hono": "^4.13.18",
+    "hono": "^4.13.19",
     "jsqr": "^1.4.0"
   },
   "devDependencies": {
